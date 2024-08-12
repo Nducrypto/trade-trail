@@ -16,7 +16,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-// import {GOOGLEWEBCLIENTID, GOOGLEIOSCLIENTID} from '@env';
+import {GOOGLEWEBCLIENTID, GOOGLEIOSCLIENTID} from '@env';
 Feather.loadFont();
 Entypo.loadFont();
 EvilIcons.loadFont();
@@ -28,9 +28,7 @@ MaterialCommunityIcons.loadFont();
 MaterialIcons.loadFont();
 
 GoogleSignin.configure({
-  webClientId: '123',
-  iosClientId: '1234',
-  //   webClientId: GOOGLEWEBCLIENTID,
-  //   iosClientId: GOOGLEIOSCLIENTID,
+  webClientId: GOOGLEWEBCLIENTID,
+  iosClientId: GOOGLEIOSCLIENTID,
 }),
   AppRegistry.registerComponent(appName, () => App);
