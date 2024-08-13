@@ -3,5 +3,5 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const getStartedStorageKey = 'getStarted';
+const getStartedStorageKey = 'trade-trail-getStarted';
 export {wp, hp, getStartedStorageKey};
