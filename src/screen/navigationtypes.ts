@@ -1,20 +1,18 @@
 import {StackNavigationProp} from '@react-navigation/stack';
-// import { ProductInterface } from '../hook/useProduct';
+import {ProductInterface} from '../hook/useProducts';
 
 export type RootStackParamList = {
-  Sign_In: undefined;
-  Sign_Up: undefined;
-  Forgot_Password: undefined;
-  Home_Stack: undefined;
-  Profile_Stack: undefined;
-  Settings_Stack: undefined;
-  Add_Product: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
+  ForgotPassword: undefined;
+  HomeStack: undefined;
+  ProfileStack: undefined;
+  SettingsStack: undefined;
+  AddProduct: undefined;
   Product_List: undefined;
   Fashion: undefined;
   Beauty: undefined;
-  Search: {type?: string; category: string};
-  Product_Detail: undefined;
-  // ProductDetail: ProductInterface;
+  ProductDetail: ProductInterface;
   Chat: undefined;
   Cart: undefined;
   Profile: undefined;
