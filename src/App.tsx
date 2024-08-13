@@ -26,7 +26,7 @@ function HomeStack() {
         marginTop: 200,
         flex: 1,
       }}>
-      <Text>Hello</Text>
+      <Text>Welcome</Text>
     </View>
   );
 }
