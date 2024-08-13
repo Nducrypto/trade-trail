@@ -4,6 +4,7 @@ import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/Custo
 import MenuToggleIcon from './CustomDrawerContent/MenuToggleIcon';
 import GetStarted from './GetStarted/GetStarted';
 import Navbar from './Navbar/Navbar';
+import ProductDetail from './ProductDetail/ProductDetail';
 import Product from './ProductList/Product/Product';
 import ProductForm from './ProductList/ProductForm';
 import Products from './ProductList/Products/Products';
@@ -20,4 +21,5 @@ export {
   Product,
   ProductForm,
   HomeStack,
+  ProductDetail,
 };
