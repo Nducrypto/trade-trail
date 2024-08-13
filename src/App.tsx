@@ -10,26 +10,16 @@ import 'react-native-reanimated';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {StatusBar, Text, useColorScheme, View} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {screenNames} from './screen';
-import {CustomDrawerContent} from './components';
+import {CustomDrawerContent, HomeStack} from './components';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {wp} from './config/appConfig';
+import themes from './config/themes';
 
 const Drawer = createDrawerNavigator();
 
-function HomeStack() {
-  return (
-    <View
-      style={{
-        marginTop: 200,
-        flex: 1,
-      }}>
-      <Text>Welcome</Text>
-    </View>
-  );
-}
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -43,13 +33,12 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={props => <CustomDrawerContent {...props} />}
           screenOptions={{
             drawerStyle: {
-              backgroundColor: 'white',
+              backgroundColor: themes.COLORS.WHITE,
               width: wp('70%'),
             },
           }}
