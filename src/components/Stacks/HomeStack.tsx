@@ -6,6 +6,7 @@ import {
   GetStarted,
   Products,
   ProductForm,
+  ProductDetail,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -34,6 +35,18 @@ const HomeStack = () => {
       component: ProductForm,
       options: {
         title: 'Add Product',
+      },
+    },
+    {
+      name: screenNames.productDetail,
+      component: ProductDetail,
+      options: {
+        headerTitle: '',
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerRight: () => <Navbar color />,
       },
     },
   ];

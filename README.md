@@ -1,12 +1,5 @@
-firebase
-drawer
-get-started
 authentication
-custom-card
-navbar
 home
-productlist
-product-detail
 cart
 toast
 profile
