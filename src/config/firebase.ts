@@ -1,4 +1,4 @@
-import {initializeApp} from 'firebase/app';
+import {initializeApp, FirebaseError} from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -94,4 +94,5 @@ export {
   onSnapshot,
   signInWithCredential,
   GoogleAuthProvider,
+  FirebaseError,
 };

@@ -9,7 +9,7 @@ export type RootStackParamList = {
   ProfileStack: undefined;
   SettingsStack: undefined;
   AddProduct: undefined;
-  Product_List: undefined;
+  ProductList: undefined;
   Fashion: undefined;
   Beauty: undefined;
   ProductDetail: ProductInterface;

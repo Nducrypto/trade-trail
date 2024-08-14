@@ -8,6 +8,8 @@ import {
   ProductForm,
   ProductDetail,
   Profile,
+  SignIn,
+  SignUp,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -61,6 +63,30 @@ const HomeStack = () => {
           backgroundColor: 'indigo',
         },
         headerTintColor: themes.COLORS.WHITE,
+      },
+    },
+    {
+      name: screenNames.signIn,
+      component: SignIn,
+      options: {
+        title: '',
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerTintColor: 'white',
+      },
+    },
+    {
+      name: screenNames.signUp,
+      component: SignUp,
+      options: {
+        title: '',
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerTintColor: 'white',
       },
     },
   ];
