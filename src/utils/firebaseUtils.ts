@@ -1,16 +1,15 @@
 import * as firebase from '../config/firebase';
 import {USERS} from '@env';
 import {DynamicNavigationProps, RootStackParamList} from '../screen';
-// import { ProductInterface } from '../hook/useProduct';
-// import { OrderItem } from '../hook/useOrder';
+import {ProductInterface} from '../hook/useProducts';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {CollectionInterface} from '../hook/useUser';
 
 const usersRoute = USERS;
 
-// export const createInDatabase = async (url: string, requestData: Partial<ProductInterface|OrderItem>) => {
 export const createInDatabase = async (
   url: string,
-  requestData: Partial<{}>,
+  requestData: Partial<ProductInterface>,
 ) => {
   try {
     const productCollections = firebase.collection(firebase.firestore, url);
@@ -61,7 +60,7 @@ export async function signInWithGoogle(
     let userExists = false;
 
     for (const doc of userSnapshot.docs) {
-      const userData = doc?.data() as any;
+      const userData = doc?.data() as CollectionInterface;
       const userEmail = userData?.email;
       const emailExist = userEmail === fetchedData?.user.email;
       if (emailExist) {
@@ -78,10 +77,14 @@ export async function signInWithGoogle(
         role: 'Subscriber',
         joined: new Date().toString(),
         userName: fetchedData.user.displayName,
-        image: fetchedData.user.photoURL,
+        photos: [fetchedData.user.photoURL],
         phoneNumber: fetchedData.user.phoneNumber,
         bio: '',
-        address: '',
+        age: null,
+        friends: [],
+        comments: [],
+        city: '',
+        country: '',
       };
       await firebase.addDoc(userCollections, newUserData);
     }

@@ -8,7 +8,6 @@ import {
 import {useEffect} from 'react';
 import {AllProductState, ProductInterface} from '../hook/useProducts';
 import {removeInDatabase, createInDatabase} from '../utils/firebaseUtils';
-//   import {snackBarFailure,snackBarSuccess,SetSnackBarUpdate} from '../hook/useSnackbar';
 import {PRODUCTS} from '@env';
 import {useProducts} from '../hook/useProducts';
 
@@ -86,7 +85,7 @@ export const fetchAllProducts = () => {
     return () => {
       unsubscribe();
     };
-  }, [state]);
+  }, []);
 };
 
 type ProductUpdateFields = Partial<ProductInterface>;

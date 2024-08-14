@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  Image,
   ImageBackground,
   View,
   Text,
@@ -8,16 +7,16 @@ import {
   Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {hp, wp} from '../../config/appConfig';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {CustomButton} from '../index';
-
 import {ProductInterface} from '../../hook/useProducts';
 import {screenNames} from '../../screen';
 import {productDetailStyles} from './productDetailStyles';
 import {NavigationProps} from '../..//screen';
 import themes from '../../config/themes';
+import {Avatar} from '@rneui/themed';
+import {useUser} from '../../hook/useUser';
 
 const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('M');
@@ -25,7 +24,7 @@ const ProductDetail = () => {
   const navigation = useNavigation<NavigationProps>();
   const {params} = useRoute();
   const product = params as ProductInterface;
-  const currentUser = {picture: ''};
+  const {currentUser} = useUser();
   const cartItems = [{productId: '123'}];
   const savedForLaterItems = [{productId: '123'}];
   function handleAddToCart() {
@@ -132,14 +131,16 @@ const ProductDetail = () => {
 
           <View style={productDetailStyles.imgAndTextCon}>
             <View style={productDetailStyles.imgCon}>
-              {currentUser && currentUser.picture ? (
-                <Image
-                  source={{uri: currentUser.picture}}
-                  style={productDetailStyles.avatar}
-                />
-              ) : (
-                <FontAwesome name="user-circle" size={hp('6%')} color="gray" />
-              )}
+              <Avatar
+                size={hp('6.3%')}
+                rounded
+                source={{
+                  uri: currentUser ? currentUser.photos[0] : '',
+                }}
+                icon={{name: 'user', type: 'font-awesome'}}
+                containerStyle={{backgroundColor: 'gray'}}
+              />
+
               <View>
                 <Text style={productDetailStyles.sharedText}>
                   Ndubuisi Agbo
@@ -148,7 +149,7 @@ const ProductDetail = () => {
                   style={{
                     ...productDetailStyles.sharedText,
                     fontWeight: '400',
-                    color: 'grey',
+                    color: 'gray',
                   }}>
                   Seller
                 </Text>

@@ -1,3 +1,5 @@
+import SignIn from './Authentication/SignIn/SignIn';
+import SignUp from './Authentication/SignUp/SignUp';
 import CustomButton from './CustomButton/CustomButton';
 import ProductCard from './CustomCard/ProductCard';
 import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/CustomDrawerContent';
@@ -23,4 +25,6 @@ export {
   HomeStack,
   ProductDetail,
   Profile,
+  SignIn,
+  SignUp,
 };

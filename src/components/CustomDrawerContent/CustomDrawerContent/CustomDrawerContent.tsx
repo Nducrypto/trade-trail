@@ -14,21 +14,22 @@ import {
 } from '@react-navigation/drawer';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {auth, signOut} from '../../../config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import themes from '../../../config/themes';
 import {getStartedStorageKey} from '../../../config/appConfig';
 import {screenNames} from '../../../screen';
 import {customDrawerStyles} from './customDrawerStyles';
+import {useGetStarted} from '../../../hook/useGetStarted';
+import {useUser} from '../../../hook/useUser';
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   const [selectedLabel, setSelectedLabel] = useState<string>('Home');
-  const [GetStarted, setGetStarted] = useState({
-    hasUserVisitedBefore: false,
-  });
-
-  const currentUser = {email: 'test@gmail.com,', role: 'Admin'};
+  const {updateHasVisitedBefore} = useGetStarted();
+  const {currentUser} = useUser();
 
   function handleNavigation(screenName: string) {
     if (screenName === 'Logout') {
@@ -43,10 +44,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     try {
       await signOut(auth);
       await AsyncStorage.removeItem(getStartedStorageKey);
-      setGetStarted(prev => ({
-        ...prev,
-        hasUserVisitedBefore: false,
-      }));
+      updateHasVisitedBefore(false);
       setSelectedLabel('Home');
       props.navigation.navigate(screenNames.homeStack);
     } catch (error) {}
@@ -60,9 +58,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     label: string;
     name: string;
     screen: string;
-    Icon: Partial<{}>;
+    Icon: any;
+    // Icon: Partial<{}>;
     color: string;
-    onPress?: (screenName: string) => void;
   };
 
   const screens = [
@@ -81,21 +79,24 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       Icon: Feather,
       color: 'blue',
     },
-
-    {
-      label: 'Profile',
-      name: 'user',
-      screen: screenNames.profile,
-      Icon: EvilIcons,
-      color: 'purple',
-    },
-    {
-      label: 'Account',
-      name: 'cog',
-      screen: screenNames.settingsStack,
-      Icon: Entypo,
-      color: 'indigo',
-    },
+    ...(currentUser && currentUser.email
+      ? [
+          {
+            label: 'Profile',
+            name: 'user',
+            screen: screenNames.profile,
+            Icon: EvilIcons,
+            color: 'purple',
+          },
+          {
+            label: 'Account',
+            name: 'cog',
+            screen: screenNames.settingsStack,
+            Icon: Entypo,
+            color: 'indigo',
+          },
+        ]
+      : []),
   ];
 
   const authScreens = [
@@ -105,41 +106,30 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             label: 'Log Out',
             screen: 'Logout',
             color: themes.COLORS.ORANGE,
-            onPress: handleNavigation,
-            Icon: Feather,
-            name: 'home',
-          },
-          {
-            label: 'Getting started',
-            screen: screenNames.homeStack,
-            color: 'red',
-            onPress: handleNavigation,
-            Icon: Feather,
-            name: 'home',
+            Icon: AntDesign,
+            name: 'logout',
           },
         ]
       : [
           {
             label: screenNames.signIn,
             screen: screenNames.signIn,
-            color: 'red',
-            onPress: handleNavigation,
-            Icon: Feather,
-            name: 'home',
+            color: 'gray',
+            Icon: MaterialCommunityIcons,
+            name: 'import',
           },
           {
             label: screenNames.signUp,
             screen: screenNames.signUp,
-            color: 'red',
-            onPress: handleNavigation,
+            color: themes.COLORS.BUTTON_COLOR,
             Icon: Feather,
-            name: 'home',
+            name: 'user-plus',
           },
         ]),
   ];
 
-  const renderItem: ListRenderItem<ItemProps> = ({item: screen}: any) => {
-    const selectedLabel = isSelectedLabel(screen.label);
+  const renderItem: ListRenderItem<ItemProps> = ({item}) => {
+    const selectedLabel = isSelectedLabel(item.label);
     return (
       <View
         style={[
@@ -152,19 +142,17 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         ]}>
         <DrawerItem
           icon={() => (
-            <screen.Icon
-              name={screen.name}
+            <item.Icon
+              name={item.name}
               size={themes.SIZES.SMALL}
               color={
-                isSelectedLabel(screen.label)
-                  ? themes.COLORS.WHITE
-                  : screen.color
+                isSelectedLabel(item.label) ? themes.COLORS.WHITE : item.color
               }
             />
           )}
-          label={screen.label}
+          label={item.label}
           onPress={() => {
-            handleNavigation(screen.screen);
+            handleNavigation(item.screen);
           }}
           labelStyle={{
             fontSize: themes.FONT_SIZES.MEDIUM,

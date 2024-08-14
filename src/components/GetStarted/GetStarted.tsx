@@ -10,7 +10,7 @@ const GetStarted = () => {
   const {updateHasVisitedBefore} = useGetStarted();
   const handleGetStarted = async () => {
     try {
-      updateHasVisitedBefore(false);
+      updateHasVisitedBefore(true);
       AsyncStorage.setItem(
         getStartedStorageKey,
         JSON.stringify('This user has visied'),
