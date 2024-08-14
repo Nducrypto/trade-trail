@@ -12,6 +12,7 @@ export const screenNames = {
   productDetail: 'ProductDetail',
   chat: 'Chat',
   cart: 'Cart',
+  albums: 'Albums',
   profile: 'Profile',
   settings: 'Settings',
   notifications: 'Notifications',

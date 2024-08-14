@@ -7,9 +7,11 @@ import {
   Products,
   ProductForm,
   ProductDetail,
+  Profile,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
+import themes from '../../config/themes';
 
 const Tab = createStackNavigator();
 
@@ -47,6 +49,18 @@ const HomeStack = () => {
           backgroundColor: 'transparent',
         },
         headerRight: () => <Navbar color />,
+      },
+    },
+    {
+      name: screenNames.profile,
+      component: Profile,
+      options: {
+        headerRight: () => <Navbar color />,
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'indigo',
+        },
+        headerTintColor: themes.COLORS.WHITE,
       },
     },
   ];

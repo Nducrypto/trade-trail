@@ -9,6 +9,7 @@ export interface ProductInterface {
   category: string;
   subCategory: string;
   type: string;
+  creatorId: string;
 }
 
 export interface AllProductState {
@@ -38,7 +39,9 @@ const dummyData = [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
     productId: '1',
+    creatorId: '12345',
   },
+
   {
     brand: 'Ndu',
 
@@ -51,6 +54,7 @@ const dummyData = [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
     productId: '2',
+    creatorId: '12345',
   },
   {
     brand: 'Ndu',
@@ -64,6 +68,7 @@ const dummyData = [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
     productId: '3',
+    creatorId: '12345',
   },
   {
     brand: 'Ndu',
@@ -77,6 +82,7 @@ const dummyData = [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
     productId: '4',
+    creatorId: '12345',
   },
 ];
 const useProductsStore = create<AllProductState>(set => ({
