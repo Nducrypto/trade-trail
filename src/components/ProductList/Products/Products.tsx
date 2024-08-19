@@ -17,8 +17,10 @@ import {Product, ProductCard} from '../../index';
 import {NavigationProps, screenNames} from '../../../screen';
 import {productsStyles} from './productsStyles';
 import {wp} from '../../../config/appConfig';
+import {useAuthentication} from '../../../controller/user';
 
 const Products = () => {
+  useAuthentication();
   //   fetchAllProducts();
   const [searchType, setSearchType] = useState<string>('');
   const [filteredArticlesArray, setfilteredArticlesArray] = useState<

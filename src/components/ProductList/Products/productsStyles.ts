@@ -29,13 +29,12 @@ export const productsStyles = StyleSheet.create({
   },
 
   tabs: {
-    marginBottom: 3,
-    marginTop: 10,
+    height: hp('5%'),
+    marginBottom: 9,
     elevation: 4,
     flexDirection: 'row',
     gap: wp('10%'),
     justifyContent: 'center',
-    paddingBottom: 5,
     alignItems: 'center',
     paddingLeft: 10,
   },
