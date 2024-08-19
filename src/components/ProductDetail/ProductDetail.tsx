@@ -134,9 +134,6 @@ const ProductDetail = () => {
               <Avatar
                 size={hp('6.3%')}
                 rounded
-                source={{
-                  uri: currentUser ? currentUser.photos[0] : '',
-                }}
                 icon={{name: 'user', type: 'font-awesome'}}
                 containerStyle={{backgroundColor: 'gray'}}
               />

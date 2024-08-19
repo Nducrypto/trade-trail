@@ -10,6 +10,7 @@ import {
   Profile,
   SignIn,
   SignUp,
+  Fashion,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -63,6 +64,13 @@ const HomeStack = () => {
           backgroundColor: 'indigo',
         },
         headerTintColor: themes.COLORS.WHITE,
+      },
+    },
+    {
+      name: screenNames.fashion,
+      component: Fashion,
+      options: {
+        headerRight: () => <Navbar />,
       },
     },
     {

@@ -29,12 +29,12 @@ export interface AllProductState {
 
 const dummyData = [
   {
-    category: 'Man',
-    subCategory: 'Fashion',
+    category: 'Fashion',
+    subCategory: 'Lingerie',
     brand: 'Ndu',
-    type: 'Shoe',
+    type: 'pant',
     price: 300,
-    title: 'producs',
+    title: 'undy dion',
     image: [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
@@ -45,11 +45,11 @@ const dummyData = [
   {
     brand: 'Ndu',
 
-    category: 'Man',
-    subCategory: 'Fashion',
-    type: 'car',
+    category: 'Fashion',
+    subCategory: 'accessories',
+    type: 'watch',
     price: 300,
-    title: 'producs',
+    title: 'rolex',
     image: [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
@@ -59,11 +59,11 @@ const dummyData = [
   {
     brand: 'Ndu',
 
-    category: 'Man',
-    subCategory: 'Fashion',
-    type: 'car',
+    category: 'Fashion',
+    subCategory: 'footwear',
+    type: 't-shirt',
     price: 300,
-    title: 'producs',
+    title: 'timberland',
     image: [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
@@ -73,16 +73,30 @@ const dummyData = [
   {
     brand: 'Ndu',
 
-    category: 'Man',
-    subCategory: 'Fashion',
-    type: 'car',
+    category: 'Fashion',
+    subCategory: 'clothing',
+    type: 't-shirt',
     price: 300,
-    title: 'producs',
+    title: 'versace',
     image: [
       'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
     ],
     productId: '4',
     creatorId: '12345',
+  },
+  {
+    brand: 'Ndu',
+
+    category: 'Fashion',
+    subCategory: 'clothing',
+    type: 't-shirt',
+    price: 300,
+    title: 'versace',
+    image: [
+      'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
+    ],
+    productId: '5',
+    creatorId: '123456',
   },
 ];
 const useProductsStore = create<AllProductState>(set => ({

@@ -4,6 +4,8 @@ import CustomButton from './CustomButton/CustomButton';
 import ProductCard from './CustomCard/ProductCard';
 import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/CustomDrawerContent';
 import MenuToggleIcon from './CustomDrawerContent/MenuToggleIcon';
+import CustomTitle from './CustomTitle/CustomTitle';
+import Fashion from './Fashion/Fashion';
 import GetStarted from './GetStarted/GetStarted';
 import Navbar from './Navbar/Navbar';
 import ProductDetail from './ProductDetail/ProductDetail';
@@ -27,4 +29,6 @@ export {
   Profile,
   SignIn,
   SignUp,
+  Fashion,
+  CustomTitle,
 };
