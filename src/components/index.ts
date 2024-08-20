@@ -6,6 +6,7 @@ import ProductCard from './CustomCard/ProductCard';
 import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/CustomDrawerContent';
 import MenuToggleIcon from './CustomDrawerContent/MenuToggleIcon';
 import CustomTitle from './CustomTitle/CustomTitle';
+import CustomToast from './CustomToast/CustomToast';
 import Fashion from './Fashion/Fashion';
 import GetStarted from './GetStarted/GetStarted';
 import Navbar from './Navbar/Navbar';
@@ -33,4 +34,5 @@ export {
   Fashion,
   CustomTitle,
   Beauty,
+  CustomToast,
 };
