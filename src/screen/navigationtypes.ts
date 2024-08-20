@@ -16,7 +16,7 @@ export type RootStackParamList = {
   Chat: undefined;
   Cart: undefined;
   Albums: {creatorId: string};
-  Profile: undefined;
+  Profile: {profileId: string};
   Settings: undefined;
   Notifications: undefined;
 };

@@ -11,6 +11,7 @@ import {
   SignIn,
   SignUp,
   Fashion,
+  Beauty,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -69,6 +70,13 @@ const HomeStack = () => {
     {
       name: screenNames.fashion,
       component: Fashion,
+      options: {
+        headerRight: () => <Navbar />,
+      },
+    },
+    {
+      name: screenNames.beauty,
+      component: Beauty,
       options: {
         headerRight: () => <Navbar />,
       },

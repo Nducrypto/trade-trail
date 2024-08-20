@@ -11,6 +11,7 @@ export interface CollectionInterface {
   userName: string;
   profilePic: string;
   phoneNumber: string;
+  bio: string;
   age: null | number;
   friends: string[];
   photos: string[];
@@ -20,29 +21,29 @@ export interface CollectionInterface {
 }
 
 interface AllUserStateProps {
-  allUsers: CollectionInterface[];
+  allUsers: Record<string, CollectionInterface>;
   currentUser: CollectionInterface | null;
   isUserLoading: boolean;
   isAuthError: boolean | string;
   previousRoute: keyof RootStackParamList;
-  storeAllUsers: (value: CollectionInterface[]) => void;
+  storeAllUsers: (value: Record<string, CollectionInterface>) => void;
   updateCurrentUser: (value: CollectionInterface) => void;
   setUserLoading: (value: boolean) => void;
   setUserError: (value: boolean | string) => void;
 }
 
 const useUserStore = create<AllUserStateProps>(set => ({
-  allUsers: [],
+  allUsers: {},
   currentUser: null,
   isUserLoading: false,
   isAuthError: false,
   previousRoute: screenNames.productList,
-  storeAllUsers: (value: CollectionInterface[]) =>
+  storeAllUsers: (value: Record<string, CollectionInterface>) =>
     set(state => ({
       ...state,
       isUserLoading: false,
       isAuthError: false,
-      allUsers: [...value],
+      allUsers: value,
     })),
   updateCurrentUser: (value: CollectionInterface) =>
     set(state => ({
