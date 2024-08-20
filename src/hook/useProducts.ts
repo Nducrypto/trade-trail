@@ -17,14 +17,12 @@ export interface AllProductState {
   isProductLoading: boolean;
   isProductError: boolean;
   currentId: string;
-  uniqueSubCategory: Record<string, ProductInterface[]>;
-  uniqueTypeDataArray: ProductInterface[];
-  storeAllProducts: (value: ProductInterface[]) => void;
-  updateUniqueSubCategory: (value: Record<string, ProductInterface[]>) => void;
-  updateUniqueType: (value: ProductInterface[]) => void;
+  uniqueCategory: Record<string, ProductInterface[]>;
+  storeAllArticles: (value: ProductInterface[]) => void;
+  updateUniqueCategory: (value: Record<string, ProductInterface[]>) => void;
   addProductToState: (value: ProductInterface) => void;
   updateProductLoading: (value: boolean) => void;
-  deleteProduct: (value: string) => void;
+  deleteArticle: (value: string) => void;
 }
 
 const dummyData = [
@@ -98,13 +96,55 @@ const dummyData = [
     productId: '5',
     creatorId: '123456',
   },
+  {
+    brand: 'Ndu',
+
+    category: 'Beauty',
+    subCategory: 'Skincare',
+    type: 'Moisturizer',
+    price: 300,
+    title: 'ultrahydration body lotion',
+    image: [
+      'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
+    ],
+    productId: '6',
+    creatorId: '123456',
+  },
+  {
+    brand: 'Ndu',
+
+    category: 'Beauty',
+    subCategory: 'Makeup',
+    type: 'Lipsticks',
+    price: 300,
+    title: 'ultra Lipsticks',
+    image: [
+      'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
+    ],
+    productId: '7',
+    creatorId: '123456',
+  },
+  {
+    brand: 'Ndu',
+
+    category: 'Beauty',
+    subCategory: 'Fragrances',
+    type: 'Perfumes',
+    price: 300,
+    title: 'ultra Lipsticks',
+    image: [
+      'https://images.unsplash.com/photo-1719937206300-fc0dac6f8cac?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8',
+    ],
+    productId: '8',
+    creatorId: '123456',
+  },
 ];
 const useProductsStore = create<AllProductState>(set => ({
   allArticles: [...dummyData],
   isProductLoading: false,
   isProductError: false,
   currentId: '',
-  uniqueSubCategory: {},
+  uniqueCategory: {},
   uniqueTypeDataArray: [],
 
   addProductToState: (value: ProductInterface) =>
@@ -114,7 +154,7 @@ const useProductsStore = create<AllProductState>(set => ({
       isProductError: false,
       allProducts: [...state.allArticles, value],
     })),
-  storeAllProducts: (value: ProductInterface[]) =>
+  storeAllArticles: (value: ProductInterface[]) =>
     set(state => ({
       ...state,
       isProductLoading: false,
@@ -128,16 +168,16 @@ const useProductsStore = create<AllProductState>(set => ({
       isProductError: false,
       allProducts: [...value],
     })),
-  updateUniqueSubCategory: (value: Record<string, ProductInterface[]>) =>
+  updateUniqueCategory: (value: Record<string, ProductInterface[]>) =>
     set(state => ({
       ...state,
       isProductLoading: false,
       isProductError: false,
-      uniqueSubCategory: value,
+      uniqueCategory: value,
     })),
   updateProductLoading: (value: boolean) =>
     set(state => ({...state, isProductLoading: value})),
-  deleteProduct: (value: string) =>
+  deleteArticle: (value: string) =>
     set(state => ({
       ...state,
       allProducts: state.allArticles.filter(item => item.productId !== value),
@@ -147,31 +187,27 @@ const useProductsStore = create<AllProductState>(set => ({
 export const useProducts = () => {
   const {
     allArticles,
-    storeAllProducts,
-    updateUniqueSubCategory,
-    updateUniqueType,
-    uniqueSubCategory,
+    storeAllArticles,
+    updateUniqueCategory,
+    uniqueCategory,
     isProductLoading,
     isProductError,
     updateProductLoading,
-    uniqueTypeDataArray,
     currentId,
     addProductToState,
-    deleteProduct,
+    deleteArticle,
   } = useProductsStore(state => state);
 
   return {
     allArticles,
-    storeAllProducts,
-    updateUniqueSubCategory,
-    updateProductLoading,
-    updateUniqueType,
-    addProductToState,
-    uniqueSubCategory,
+    uniqueCategory,
     isProductLoading,
     isProductError,
-    uniqueTypeDataArray,
     currentId,
-    deleteProduct,
+    storeAllArticles,
+    updateUniqueCategory,
+    updateProductLoading,
+    addProductToState,
+    deleteArticle,
   };
 };

@@ -49,10 +49,7 @@ export const fetchAllProducts = () => {
       collection(firestore, productRoute),
       snapshot => {
         const fetchedData: ProductInterface[] = [];
-        const uniqueCaTegories: Set<string | string> = new Set(['POPULAR']);
-        const groupBySubCategories: Record<string, ProductInterface[]> = {};
-        const uniqueType: Set<string | string> = new Set();
-        const uniqueTypeDataArray: ProductInterface[] = [];
+        const groupByCategories: Record<string, ProductInterface[]> = {};
 
         snapshot.forEach(doc => {
           const product = {
@@ -60,25 +57,14 @@ export const fetchAllProducts = () => {
             productId: doc.id,
           };
           fetchedData.push(product);
-          if (!groupBySubCategories[product.subCategory]) {
-            groupBySubCategories[product.subCategory] = [];
+          if (!groupByCategories[product.category]) {
+            groupByCategories[product.category] = [];
           }
-          groupBySubCategories[product.subCategory].push(product);
-          if (!uniqueType.has(product?.type)) {
-            uniqueType.add(product.type);
-            uniqueTypeDataArray.push(product);
-          }
-          if (
-            !uniqueCaTegories.has(product?.category) &&
-            product.category !== 'All'
-          ) {
-            uniqueCaTegories.add(product.category);
-          }
+          groupByCategories[product.subCategory].push(product);
         });
 
-        state.storeAllProducts(fetchedData);
-        state.updateUniqueSubCategory(groupBySubCategories);
-        state.updateUniqueType(uniqueTypeDataArray);
+        state.storeAllArticles(fetchedData);
+        state.updateUniqueCategory(groupByCategories);
       },
     );
 
@@ -122,7 +108,7 @@ export const removeProduct = async (
     const success = await removeInDatabase(productRoute, productId);
 
     if (success) {
-      state.deleteProduct(productId);
+      state.deleteArticle(productId);
       // toastSuccess('Product deleted successfully', 'success', setSnackBar);
     }
   } catch (error) {
