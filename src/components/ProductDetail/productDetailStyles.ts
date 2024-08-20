@@ -114,9 +114,4 @@ export const productDetailStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: {
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    top: hp('-4.6%'),
-  },
 });

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {useProducts} from '../../hook/useProducts';
 import {profileStyles} from './profileStyles';
 import themes from '../../config/themes';
@@ -16,67 +16,28 @@ import {
   RootStackParamList,
   screenNames,
 } from '../../screen';
+import {fetchAllUsers} from '../../controller/user';
+import {useUser} from '../../hook/useUser';
 
 const Profile = () => {
-  const {params} = useRoute();
-  const searchedCreatorId = '12345';
+  fetchAllUsers();
+  const {params} = useRoute<RouteProp<RootStackParamList, 'Profile'>>();
+  const searchedProfileId = params.profileId;
 
   const navigation = useNavigation<DynamicNavigationProps>();
-  const {allArticles, isProductLoading} = useProducts();
-  const allUsers = [
-    {
-      picture: '',
-      email: 'test@gmail.com',
-      userId: '12345',
-      friends: ['user1', 'user2', 'user3'],
-      age: 20,
-      userName: 'James King',
+  const {allArticles} = useProducts();
+  const {allUsers, currentUser} = useUser();
 
-      photos: [1, 2, 3, 4, 5],
-      comments: [{email: 'user@hmai.com'}],
-      city: 'Portharcourt',
-      country: 'ngn',
-      bio: 'An artist of considerable range, Ndubuisi name taken by Taraba...',
-    },
-    {
-      picture: '',
-      email: 'ndu@gmail.com',
-      userId: '123',
-      friends: ['user1', 'user2', 'user3'],
-      age: null,
-      userName: 'John Doe',
-
-      photos: [1, 2, 3, 4, 5],
-      comments: [{email: 'user@hmai.com'}],
-      city: 'Portharcourt',
-      country: 'ngn',
-      bio: 'An artist of considerable range, Ndubuisi name taken by Taraba...',
-    },
-  ];
-  const currentUser = {
-    picture: '',
-    email: 'test@gmail.com',
-    userId: '12345',
-    age: 20,
-    userName: 'Ndubuisi Agbo',
-    friends: ['user1', 'user2', 'user3'],
-    photos: [1, 2, 3, 4, 5],
-    comments: [{email: 'user@hmai.com'}],
-    city: 'Portharcourt',
-    country: 'ngn',
-    bio: 'An artist of considerable range, Ndubuisi name taken by Taraba...',
-  };
-  const profileDetails = allUsers.find(
-    user => user.userId === searchedCreatorId,
-  );
+  const profileDetails = allUsers[searchedProfileId];
 
   const userAlbums = allArticles.filter(
-    article => article.creatorId === searchedCreatorId,
+    article => article.creatorId === searchedProfileId,
   );
+
   const handleNavigation = (name: keyof RootStackParamList) => {
     if (name === screenNames.albums) {
       navigation.navigate(screenNames.albums, {
-        creatorId: searchedCreatorId,
+        creatorId: searchedProfileId,
       });
       return;
     }
@@ -94,6 +55,8 @@ const Profile = () => {
       return number.toString();
     }
   };
+
+  const isCurrentUser = currentUser && currentUser.userId === searchedProfileId;
   const numColumns = 3;
   const image =
     'https://plus.unsplash.com/premium_photo-1720823182783-3b9fb27e40d9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8';
@@ -103,7 +66,7 @@ const Profile = () => {
       <View style={profileStyles.sectionTwo}>
         <View style={profileStyles.card}>
           <Image style={profileStyles.image} source={{uri: image}} />
-          {currentUser.userId !== searchedCreatorId && (
+          {!isCurrentUser && (
             <View style={profileStyles.buttonCon}>
               <TouchableOpacity
                 style={profileStyles.button}
@@ -125,20 +88,20 @@ const Profile = () => {
           <View style={profileStyles.labelSection}>
             <View>
               <Text style={profileStyles.value}>
-                {formatLargeNumber(profileDetails?.friends.length)}
+                {formatLargeNumber(profileDetails?.friends?.length)}
               </Text>
               <Text style={profileStyles.label}>Friends</Text>
             </View>
             <View>
               <Text style={profileStyles.value}>
-                {formatLargeNumber(profileDetails?.photos.length)}
+                {formatLargeNumber(profileDetails?.photos?.length)}
               </Text>
               <Text style={profileStyles.label}>Photos</Text>
             </View>
             <View>
               <Text style={profileStyles.value}>
                 {' '}
-                {formatLargeNumber(profileDetails?.comments.length)}
+                {formatLargeNumber(profileDetails?.comments?.length)}
               </Text>
               <Text style={profileStyles.label}>comments</Text>
             </View>
@@ -149,7 +112,7 @@ const Profile = () => {
           </Text>
           <View style={profileStyles.locationCon}>
             <Text style={profileStyles.location} numberOfLines={1}>
-              {profileDetails?.city ?? ''},{' '}
+              {profileDetails?.city ?? ''}{' '}
             </Text>
             <Text
               numberOfLines={1}

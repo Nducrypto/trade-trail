@@ -36,6 +36,12 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       handleSignOut();
       return;
     }
+    if (screenName === screenNames.profile) {
+      props.navigation.navigate(screenName, {
+        profileId: currentUser?.userId,
+      });
+      return;
+    }
     props.navigation.navigate(screenName);
     setSelectedLabel('Home');
   }

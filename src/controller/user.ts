@@ -48,15 +48,18 @@ export const fetchAllUsers = () => {
     const listenForChangeUsers = onSnapshot(
       collection(firestore, usersRoute),
       snapshot => {
-        const allUsers: CollectionInterface[] = [];
+        const groupedUserById: Record<string, CollectionInterface> = {};
         snapshot.forEach(doc => {
           const data = doc.data() as CollectionInterface;
-          allUsers.push({
+          if (!groupedUserById[data.userId]) {
+            groupedUserById[data.userId] = {} as CollectionInterface;
+          }
+          groupedUserById[data.userId] = {
             ...data,
             docId: doc.id,
-          });
+          };
         });
-        state.storeAllUsers(allUsers);
+        state.storeAllUsers(groupedUserById);
       },
     );
     return () => {
