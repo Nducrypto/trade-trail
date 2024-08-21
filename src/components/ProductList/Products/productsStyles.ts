@@ -66,6 +66,10 @@ export const productsStyles = StyleSheet.create({
     width: wp('95%'),
     paddingVertical: 16,
   },
+  rowItemCon: {
+    flexDirection: 'row',
+    gap: 10,
+  },
   emptyText: {
     fontSize: themes.FONT_SIZES.LARGE,
     marginTop: hp('20%'),

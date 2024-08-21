@@ -57,7 +57,7 @@ const Fashion = () => {
       <FlatList
         data={filtered}
         renderItem={({item}) => (
-          <ProductCard minHeight={hp('27%')} maxWidth={wp('100%')}>
+          <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
             <ImageBackground
               source={{
                 uri: item.image[0],

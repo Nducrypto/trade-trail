@@ -33,7 +33,10 @@ const Product = ({product, horizontal, full, style}: Props) => {
 
   return (
     <View style={productStyles.container}>
-      <ProductCard minHeight={120} maxWidth={wp('100%')} paddingLeft={0}>
+      <ProductCard
+        minHeight={120}
+        maxWidth={horizontal || full ? wp('95%') : wp('46%')}
+        paddingLeft={0}>
         <View
           style={[
             productStyles.product,
@@ -43,7 +46,7 @@ const Product = ({product, horizontal, full, style}: Props) => {
           ]}>
           <TouchableWithoutFeedback
             onPress={proceedToProductDetail}
-            testID="proceed-to-product-detail-button">
+            testID="proceed-to-product-detail-btn">
             <View style={productStyles.imageContainer}>
               <Image source={{uri: product?.image[0]}} style={imageStyles} />
             </View>
@@ -62,14 +65,13 @@ const Product = ({product, horizontal, full, style}: Props) => {
               </Text>
               <Text
                 style={{
-                  ...productStyles.price,
-                  fontWeight: '500',
+                  ...productStyles.viewArticle,
                   ...(style && {
                     marginBottom: style.top,
                     marginTop: style.top,
                   }),
                 }}>
-                ${Intl.NumberFormat().format(Number(product?.price))}
+                View article
               </Text>
             </View>
           </TouchableWithoutFeedback>
