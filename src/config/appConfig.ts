@@ -4,4 +4,5 @@ import {
 } from 'react-native-responsive-screen';
 
 const getStartedStorageKey = 'trade-trail-getStarted';
-export {wp, hp, getStartedStorageKey};
+const cartKey = 'trade-trail-cartKey';
+export {wp, hp, getStartedStorageKey, cartKey};

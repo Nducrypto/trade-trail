@@ -15,3 +15,5 @@ declare module '@env' {
   export const GOOGLEWEBCLIENTID: string;
   export const GOOGLEIOSCLIENTID: string;
 }
+
+declare module 'react-native-modal-dropdown';

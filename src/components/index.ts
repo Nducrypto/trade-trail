@@ -1,6 +1,7 @@
 import SignIn from './Authentication/SignIn/SignIn';
 import SignUp from './Authentication/SignUp/SignUp';
 import Beauty from './Beauty/Beauty';
+import Cart from './Cart/Cart';
 import CustomButton from './CustomButton/CustomButton';
 import ProductCard from './CustomCard/ProductCard';
 import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/CustomDrawerContent';
@@ -35,4 +36,5 @@ export {
   CustomTitle,
   Beauty,
   CustomToast,
+  Cart,
 };
