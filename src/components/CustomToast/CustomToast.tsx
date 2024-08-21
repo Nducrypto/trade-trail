@@ -6,7 +6,6 @@ import {useGlobalState} from '../../hook/useGlobal';
 
 function CustomToast() {
   const {text2, type, closeToast, isVisible} = useGlobalState();
-  console.log('isVisible: ', isVisible);
 
   useEffect(() => {
     if (isVisible) {
@@ -28,12 +27,16 @@ function CustomToast() {
     closeToast();
   };
   const toastConfig = {
-    tomatoToast: ({text1, text2}: {text1: string; text2: string}) => (
-      <View style={text1 === 'success' ? styles.successCon : styles.errorCon}>
-        <Text style={styles.text}>{text1}</Text>
-        <Text style={styles.text}>{text2}</Text>
-      </View>
-    ),
+    tomatoToast: ({text1, text2}: {text1: string; text2: string}) => {
+      const isSuccess = text1 === 'success';
+
+      return (
+        <View style={isSuccess ? styles.successCon : styles.errorCon}>
+          <Text style={isSuccess ? styles.sucText : styles.text}>{text1}</Text>
+          <Text style={isSuccess ? styles.sucText : styles.text}>{text2}</Text>
+        </View>
+      );
+    },
   };
 
   if (!isVisible) {

@@ -15,7 +15,8 @@ import {productDetailStyles} from './productDetailStyles';
 import {NavigationProps} from '../..//screen';
 import themes from '../../config/themes';
 import {Avatar} from '@rneui/themed';
-import {useUser} from '../../hook/useUser';
+import {useCart} from '../../hook/useCart';
+import {useGlobalState} from '../../hook/useGlobal';
 
 const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('M');
@@ -23,9 +24,8 @@ const ProductDetail = () => {
   const navigation = useNavigation<NavigationProps>();
   const {params} = useRoute();
   const product = params as ProductInterface;
-  const {currentUser} = useUser();
-  const cartItems = [{productId: '123'}];
-  const savedForLaterItems = [{productId: '123'}];
+  const cart = useCart();
+  const toast = useGlobalState();
 
   const handleAddToCart = () => {
     if (isItemInCart()) {
@@ -35,7 +35,7 @@ const ProductDetail = () => {
 
     const quantity = 1;
     let totalPrice = product?.price * quantity;
-    const data = {
+    const item = {
       ...product,
       quantity: quantity,
       totalPrice: totalPrice,
@@ -43,12 +43,20 @@ const ProductDetail = () => {
       date: new Date().toString(),
       selectedSize,
     };
+    try {
+      cart.storeItemToCart(item);
+      toast.toastSuccess('Product added successfully');
+    } catch (error) {
+      toast.toastError('Failed to add product to cart');
+    }
   };
 
   function isItemInCart() {
     const foundItem =
-      cartItems.find(data => data.productId === product?.productId) ||
-      savedForLaterItems.find(data => data.productId === product?.productId);
+      cart.cartItems.find(data => data.productId === product?.productId) ||
+      cart.savedForLaterItems.find(
+        data => data.productId === product?.productId,
+      );
 
     return !!foundItem;
   }

@@ -1,8 +1,5 @@
 authentication
-home
-cart
-toast
-profile
+order
 settings
 notification
 chat

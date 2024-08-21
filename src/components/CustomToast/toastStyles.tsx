@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     width: wp('95%'),
     padding: 10,
     borderRadius: 5,
-    backgroundColor: themes.COLORS.DARKGREEN,
+    backgroundColor: themes.COLORS.SUCCESS,
   },
   errorCon: {
     height: hp('9%'),
@@ -19,6 +19,10 @@ export const styles = StyleSheet.create({
   },
   text: {
     color: themes.COLORS.WHITE,
+    fontSize: themes.FONT_SIZES.SMALL,
+  },
+  sucText: {
+    color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.SMALL,
   },
 });

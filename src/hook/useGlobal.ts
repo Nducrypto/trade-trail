@@ -1,7 +1,7 @@
 import {RootStackParamList, screenNames} from '../screen';
 import {create} from 'zustand';
 
-interface GlobalStateProps {
+export interface GlobalStateProps {
   previousRoute: keyof RootStackParamList;
   isVisible: boolean | string;
   text1: string;
