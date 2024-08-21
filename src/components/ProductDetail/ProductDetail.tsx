@@ -24,7 +24,9 @@ const ProductDetail = () => {
   const navigation = useNavigation<NavigationProps>();
   const {params} = useRoute();
   const product = params as ProductInterface;
-  const cart = useCart();
+  const {savedForLaterItems, items, storeItemToCart} = useCart();
+  const cartItems = Object.values(items);
+
   const toast = useGlobalState();
 
   const handleAddToCart = () => {
@@ -44,7 +46,7 @@ const ProductDetail = () => {
       selectedSize,
     };
     try {
-      cart.storeItemToCart(item);
+      storeItemToCart(item);
       toast.toastSuccess('Product added successfully');
     } catch (error) {
       toast.toastError('Failed to add product to cart');
@@ -53,10 +55,8 @@ const ProductDetail = () => {
 
   function isItemInCart() {
     const foundItem =
-      cart.cartItems.find(data => data.productId === product?.productId) ||
-      cart.savedForLaterItems.find(
-        data => data.productId === product?.productId,
-      );
+      cartItems.find(data => data.productId === product?.productId) ||
+      savedForLaterItems.find(data => data.productId === product?.productId);
 
     return !!foundItem;
   }

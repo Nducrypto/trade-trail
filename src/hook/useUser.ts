@@ -22,7 +22,7 @@ export interface CollectionInterface {
 
 interface AllUserStateProps {
   allUsers: Record<string, CollectionInterface>;
-  currentUser: CollectionInterface | null;
+  currentUser: CollectionInterface;
   isUserLoading: boolean;
   isAuthError: boolean | string;
   previousRoute: keyof RootStackParamList;
@@ -31,10 +31,27 @@ interface AllUserStateProps {
   setUserLoading: (value: boolean) => void;
   setUserError: (value: boolean | string) => void;
 }
-
+export const initialState = {
+  role: '',
+  email: '',
+  userId: '',
+  joined: '',
+  docId: '',
+  location: '',
+  userName: '',
+  profilePic: '',
+  phoneNumber: '',
+  bio: '',
+  age: null,
+  friends: [],
+  photos: [],
+  comments: [],
+  city: '',
+  country: '',
+};
 const useUserStore = create<AllUserStateProps>(set => ({
   allUsers: {},
-  currentUser: null,
+  currentUser: initialState,
   isUserLoading: false,
   isAuthError: false,
   previousRoute: screenNames.productList,

@@ -79,12 +79,14 @@ export const useCartStore = create<CartState>(set => ({
 
       return newState;
     }),
-  clearCart: () =>
+  clearCart: () => {
     set({
       items: {},
       subTotal: 0,
       savedForLaterItems: [],
-    }),
+    });
+    localStorage.clearCartFromStorage();
+  },
 
   manageSavedItem: (product: CartItem, type: string) => {
     const isDelete = type === 'delete';
@@ -140,14 +142,12 @@ export const useCart = () => {
     clearCart,
   } = useCartStore(state => state);
 
-  const cartItems = Object.values(items);
-
   useEffect(() => {
     loadCartStateFromStorage();
   }, []);
 
   return {
-    cartItems,
+    items,
     subTotal,
     savedForLaterItems,
     storeItemToCart,

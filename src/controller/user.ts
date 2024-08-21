@@ -7,7 +7,7 @@ import {
   onSnapshot,
   getDocs,
 } from '../config/firebase';
-import {CollectionInterface, useUser} from '../hook/useUser';
+import {CollectionInterface, initialState, useUser} from '../hook/useUser';
 
 import {USERS} from '@env';
 
@@ -24,16 +24,15 @@ export const useAuthentication = () => {
         const usersCollectionRef = collection(firestore, usersRoute);
         const userSnapshot = await getDocs(usersCollectionRef);
         for (const doc of userSnapshot.docs) {
-          const data = doc?.data();
+          const data = doc?.data() as CollectionInterface;
 
           if (data?.email === user?.email) {
-            state.updateCurrentUser(data as CollectionInterface);
-
+            state.updateCurrentUser(data);
             return;
           }
         }
       } else {
-        state.updateCurrentUser({} as CollectionInterface);
+        state.updateCurrentUser(initialState);
       }
     });
 

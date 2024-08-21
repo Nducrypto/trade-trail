@@ -13,18 +13,21 @@ import {Paystack, paystackProps} from 'react-native-paystack-webview';
 import Select from './SelectButton/Select';
 import {CustomButton, ProductCard} from '../';
 import {useUser} from '../../hook/useUser';
-import {useGlobalState} from '../../hook/useGlobal';
+import {GlobalStateProps, useGlobalState} from '../../hook/useGlobal';
 import {PAYSTACK_TEST_PUBLIC_KEY} from '@env';
 import {hp, wp} from '../../config/appConfig.ts';
 import {NavigationProps, screenNames} from '../../screen';
 import SavedForLater from './SavedForLater/SavedForLater.tsx';
 import {useAuthentication} from '../../controller/user.ts';
-import {CartItem, useCart} from '../../hook/useCart.ts';
+import {CartItem, CartState, useCart} from '../../hook/useCart.ts';
 import themes from '../../config/themes.ts';
+import {createOrder} from '../../controller/order.ts';
+import {useOrder} from '../../hook/useOrder.ts';
 
 export type Data = {
   email: string;
   userId: string;
+  userName: string;
   items: CartItem[];
   subTotal: number;
   status: string;
@@ -34,15 +37,20 @@ export type Data = {
 const Cart = () => {
   useAuthentication();
   const [quantity, setQuantity] = useState<Record<string, number>>({});
-  const [isSaveForLaterOpen, setIsSaveForLaterOpen] = useState<boolean>(false);
+  const [isSaveForLaterVisible, setIsSaveForLaterVisible] =
+    useState<boolean>(false);
   const paystackKey = PAYSTACK_TEST_PUBLIC_KEY;
   const paystackWebViewRef = useRef<paystackProps.PayStackRef | any>();
   const navigation = useNavigation<NavigationProps>();
   const {currentUser} = useUser();
-  const cart = useCart();
-  const toast = useGlobalState();
+  const {email, userId, userName} = currentUser;
+  const cart = useCart() as CartState;
+  const cartItems = Object.values(cart.items);
 
-  const handleSelectQuantity = async (
+  const globalState = useGlobalState() as GlobalStateProps;
+  const orderState = useOrder();
+
+  const handleQuantityChange = async (
     index: string,
     value: number,
     item: CartItem,
@@ -65,20 +73,28 @@ const Cart = () => {
     try {
       cart.deleteItemInCart(item.productId);
       cart.updateSavedForLater(item);
-      toast.toastSuccess('Product saved successfully');
+      globalState.toastSuccess('Product saved successfully');
     } catch (error) {
-      toast.toastError('Failed to save product for later');
+      globalState.toastError('Failed to save product for later');
     }
   };
   async function handlePaymentSuccess(reference: Partial<{}>) {
     const data: Data = {
-      email: currentUser?.email || '',
-      userId: currentUser?.userId || '',
-      items: cart.cartItems,
+      email: email,
+      userId: userId,
+      userName: userName,
+      items: cartItems,
       subTotal: cart.subTotal,
       status: 'Pending',
       date: new Date().toString(),
     };
+    createOrder({
+      orderData: data,
+      orderState,
+      globalState,
+      cartState: cart,
+    });
+    navigation.navigate(screenNames.productList);
   }
 
   function handlePaystackCloseAction() {
@@ -92,22 +108,20 @@ const Cart = () => {
   const handleRemoveItem = async (productId: string) => {
     try {
       cart.deleteItemInCart(productId);
-      toast.toastSuccess('Product was removed from cart');
+      globalState.toastSuccess('Product was removed from cart');
     } catch (error) {
-      toast.toastError('failed to removeProduct from cart');
+      globalState.toastError('failed to removeProduct from cart');
     }
   };
 
-  const length = cart.cartItems.length;
-  const buttonLabel = currentUser?.email
-    ? 'PROCEED TO CHECKOUT'
-    : 'SIGN IN TO CONTINUE';
+  const length = cartItems.length;
+
   function CheckoutButton() {
     return (
       <View style={cartStyles.payButCon}>
         <Paystack
           paystackKey={paystackKey}
-          billingEmail={currentUser?.email ?? ''}
+          billingEmail={email}
           amount={cart.subTotal}
           currency="NGN"
           onCancel={handlePaystackCloseAction}
@@ -116,12 +130,12 @@ const Cart = () => {
           activityIndicatorColor={themes.COLORS.SUCCESS}
         />
         <CustomButton
-          title={buttonLabel}
+          title={email ? 'PROCEED TO CHECKOUT' : 'SIGN IN TO CONTINUE'}
           width={wp('90%')}
           marginTop={hp('1%')}
           testID="payment-btn"
           onPress={() =>
-            currentUser?.email
+            email
               ? paystackWebViewRef?.current?.startTransaction()
               : navigation.navigate(screenNames.signIn)
           }
@@ -132,7 +146,7 @@ const Cart = () => {
 
   return (
     <FlatList
-      data={cart.cartItems.slice(0, 3)}
+      data={cartItems}
       renderItem={({item, index}) => (
         <ProductCard
           minHeight={130}
@@ -163,7 +177,7 @@ const Cart = () => {
                 options={['1', '2', '3', '4', '5']}
                 id={item.productId}
                 onSelect={(index, value) =>
-                  handleSelectQuantity(item.productId, value, item)
+                  handleQuantityChange(index, value, item)
                 }
                 value={quantity}
                 testID={`select${index}`}
@@ -196,15 +210,24 @@ const Cart = () => {
                   Cart Subtotal ({length}):
                 </Text>
                 <Text style={cartStyles.subTotalValue}>
-                  ${Intl.NumberFormat().format(cart.subTotal)}
+                  ₦ {Intl.NumberFormat().format(cart.subTotal)}
                 </Text>
               </View>
               <CheckoutButton />
+              {cart.savedForLaterItems.length > 0 && (
+                <TouchableOpacity
+                  style={cartStyles.viewSavedItemCon}
+                  onPress={() => setIsSaveForLaterVisible(true)}>
+                  <Text style={cartStyles.viewSavedItemtext}>
+                    View saved items
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
           <SavedForLater
-            modalStatus={isSaveForLaterOpen}
-            setModalStatus={setIsSaveForLaterOpen}
+            modalStatus={isSaveForLaterVisible}
+            setModalStatus={setIsSaveForLaterVisible}
           />
         </View>
       }
@@ -225,11 +248,11 @@ const Cart = () => {
                 width={wp('50%')}
                 marginTop={15}
                 testID="saved-for-later-modal-opener"
-                onPress={() => setIsSaveForLaterOpen(true)}
+                onPress={() => setIsSaveForLaterVisible(true)}
               />
               <SavedForLater
-                modalStatus={isSaveForLaterOpen}
-                setModalStatus={setIsSaveForLaterOpen}
+                modalStatus={isSaveForLaterVisible}
+                setModalStatus={setIsSaveForLaterVisible}
               />
             </View>
           )}
