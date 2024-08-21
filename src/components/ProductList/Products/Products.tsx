@@ -107,20 +107,16 @@ const Products = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={productsStyles.products}>
         {firstRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-          }}>
+        <View style={productsStyles.rowItemCon}>
           {secondRow.map((product, index) => (
             <Product product={product} style={{top: 10}} key={index} />
           ))}
         </View>
 
         {thirdRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
 
         {fourthRow.map((product, index) => (
@@ -132,15 +128,10 @@ const Products = () => {
           />
         ))}
         {otherRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
         {lastRow.map((product, index) => (
-          <Product
-            product={product}
-            full={true}
-            key={index}
-            style={{top: 10}}
-          />
+          <Product product={product} full key={index} style={{top: 10}} />
         ))}
       </ScrollView>
     );
