@@ -11,6 +11,7 @@ import CustomToast from './CustomToast/CustomToast';
 import Fashion from './Fashion/Fashion';
 import GetStarted from './GetStarted/GetStarted';
 import Navbar from './Navbar/Navbar';
+import Order from './Order/Order';
 import ProductDetail from './ProductDetail/ProductDetail';
 import Product from './ProductList/Product/Product';
 import ProductForm from './ProductList/ProductForm';
@@ -37,4 +38,5 @@ export {
   Beauty,
   CustomToast,
   Cart,
+  Order,
 };

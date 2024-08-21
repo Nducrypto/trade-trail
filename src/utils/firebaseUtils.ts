@@ -4,12 +4,13 @@ import {DynamicNavigationProps, RootStackParamList} from '../screen';
 import {ProductInterface} from '../hook/useProducts';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {CollectionInterface} from '../hook/useUser';
+import {OrderItem} from '../hook/useOrder';
 
 const usersRoute = USERS;
 
 export const createInDatabase = async (
   url: string,
-  requestData: Partial<ProductInterface>,
+  requestData: Partial<ProductInterface | OrderItem>,
 ) => {
   try {
     const productCollections = firebase.collection(firebase.firestore, url);

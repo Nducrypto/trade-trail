@@ -30,11 +30,16 @@ export const cartStyles = StyleSheet.create({
   item: {
     marginVertical: 20,
   },
+  viewSavedItemCon: {
+    width: wp('50%'),
+    alignSelf: 'center',
+    marginTop: hp('1%'),
+    alignItems: 'center',
+  },
   viewSavedItemtext: {
-    color: themes.COLORS.DARKGREEN,
-    textAlign: 'center',
-    marginTop: 10,
-    fontWeight: '700',
+    color: themes.COLORS.BUTTON_COLOR,
+    fontWeight: 'bold',
+    fontSize: themes.FONT_SIZES.MEDIUM,
   },
   itemCon: {
     alignItems: 'center',

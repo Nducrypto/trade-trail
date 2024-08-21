@@ -13,6 +13,7 @@ import {
   Fashion,
   Beauty,
   Cart,
+  Order,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -78,6 +79,13 @@ const HomeStack = () => {
     {
       name: screenNames.beauty,
       component: Beauty,
+      options: {
+        headerRight: () => <Navbar />,
+      },
+    },
+    {
+      name: screenNames.order,
+      component: Order,
       options: {
         headerRight: () => <Navbar />,
       },
