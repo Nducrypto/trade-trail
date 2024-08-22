@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     borderColor: 'lightgrey',
-    height: hp('7.4%'),
+    height: hp('6.5%'),
     borderRadius: 1,
     borderWidth: 2,
     paddingLeft: wp('2%'),

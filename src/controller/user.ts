@@ -75,13 +75,40 @@ export const fetchAllUsers = () => {
   }, []);
 };
 
+export const updateFriendsList = async (data: FriendsProp) => {
+  try {
+    const docRef = doc(firestore, usersRoute, data.docId);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      const friendsArray: FriendsProp[] = docSnapshot.data().friends || [];
+      const friendsMap = new Map(
+        friendsArray.map(friend => [friend.userId, friend]),
+      );
+
+      if (friendsMap.has(data.userId)) {
+        friendsMap.delete(data.userId);
+      } else {
+        friendsMap.set(data.userId, data);
+      }
+
+      const updatedFriendsArray = Array.from(friendsMap.values());
+
+      await updateDoc(docRef, {friends: updatedFriendsArray});
+    }
+    return true;
+  } catch (error) {
+    throw new Error('Failed to update friends list');
+  }
+};
+
 export const markFollowersAsViewed = async (friendsArray: FriendsProp[]) => {
   try {
     for (const message of friendsArray) {
       const docRef = doc(firestore, usersRoute, message.docId);
       const docSnapshot = await getDoc(docRef);
       if (docSnapshot.exists()) {
-        const updatedFriends = docSnapshot
+        const updatedFriends = await docSnapshot
           .data()
           .friends.map((friend: FriendsProp) => ({
             ...friend,
