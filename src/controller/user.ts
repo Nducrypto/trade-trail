@@ -6,8 +6,16 @@ import {
   auth,
   onSnapshot,
   getDocs,
+  updateDoc,
+  doc,
+  getDoc,
 } from '../config/firebase';
-import {CollectionInterface, initialState, useUser} from '../hook/useUser';
+import {
+  CollectionInterface,
+  FriendsProp,
+  initialState,
+  useUser,
+} from '../hook/useUser';
 
 import {USERS} from '@env';
 
@@ -65,4 +73,25 @@ export const fetchAllUsers = () => {
       listenForChangeUsers();
     };
   }, []);
+};
+
+export const markFollowersAsViewed = async (friendsArray: FriendsProp[]) => {
+  try {
+    for (const message of friendsArray) {
+      const docRef = doc(firestore, usersRoute, message.docId);
+      const docSnapshot = await getDoc(docRef);
+      if (docSnapshot.exists()) {
+        const updatedFriends = docSnapshot
+          .data()
+          .friends.map((friend: FriendsProp) => ({
+            ...friend,
+            status: 'viewed',
+          }));
+
+        await updateDoc(docRef, {friends: updatedFriends});
+      }
+    }
+  } catch (error) {
+    throw Error('failed to update notifications status to read');
+  }
 };

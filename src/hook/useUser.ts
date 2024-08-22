@@ -1,6 +1,18 @@
 import {create} from 'zustand';
 import {RootStackParamList, screenNames} from '../screen';
 
+export interface FriendsProp {
+  userName: string;
+  status: string;
+  date: string;
+  userId: string;
+  docId: string;
+}
+
+export interface CommentsProp extends Omit<FriendsProp, 'status'> {
+  comment: string;
+}
+
 export interface CollectionInterface {
   role: string;
   email: string;
@@ -13,9 +25,9 @@ export interface CollectionInterface {
   phoneNumber: string;
   bio: string;
   age: null | number;
-  friends: string[];
+  friends: FriendsProp[];
   photos: string[];
-  comments: {userId: string; userName: string}[];
+  comments: CommentsProp[];
   city: string;
   country: string;
 }
