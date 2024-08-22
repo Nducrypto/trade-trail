@@ -1,5 +1,5 @@
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {notificationStyles} from './notificationStyles';
 import {useUser} from '../../hook/useUser';
 import {Avatar} from '@rneui/themed';
@@ -8,20 +8,34 @@ import moment from 'moment';
 import {ProductCard} from '../';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, screenNames} from '../../screen';
+import {markFollowersAsViewed, useAuthentication} from '../../controller/user';
 const Notification = () => {
+  useAuthentication();
   const {currentUser} = useUser();
+
   const navigation = useNavigation<NavigationProps>();
-  const proceedToProfile = (userId: string) => {
+  const navigateToProfile = (userId: string) => {
     navigation.navigate(screenNames.profile, {
       profileId: userId,
     });
   };
-  const array = currentUser.friends;
+  const followersNotifications = currentUser.friends;
 
+  const hasUnviewedNotifications = !!followersNotifications.find(
+    item => item.status === 'unViewed',
+  );
+
+  useEffect(() => {
+    if (hasUnviewedNotifications) {
+      markFollowersAsViewed(followersNotifications, currentUser.docId);
+    }
+  }, [hasUnviewedNotifications]);
+
+  const length = followersNotifications.length;
   return (
     <FlatList
-      scrollEnabled={array.length > 8}
-      data={array}
+      scrollEnabled={length > 8}
+      data={followersNotifications}
       renderItem={({item, index}) => (
         <ProductCard
           minHeight={hp('8%')}
@@ -31,7 +45,7 @@ const Notification = () => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={notificationStyles.item}
-            onPress={() => proceedToProfile(item.userId)}>
+            onPress={() => navigateToProfile(item.userId)}>
             <View style={notificationStyles.imgAndNameCon}>
               <Avatar
                 size={hp('5%')}
