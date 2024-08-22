@@ -6,7 +6,6 @@ export interface FriendsProp {
   status: string;
   date: string;
   userId: string;
-  docId: string;
 }
 
 export interface CommentsProp extends Omit<FriendsProp, 'status'> {

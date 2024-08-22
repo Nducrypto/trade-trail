@@ -32,7 +32,7 @@ export const useAuthentication = () => {
         const usersCollectionRef = collection(firestore, usersRoute);
         const userSnapshot = await getDocs(usersCollectionRef);
         for (const doc of userSnapshot.docs) {
-          const data = doc?.data() as CollectionInterface;
+          const data = {...doc?.data(), docId: doc.id} as CollectionInterface;
 
           if (data?.email === user?.email) {
             state.updateCurrentUser(data);
@@ -75,9 +75,9 @@ export const fetchAllUsers = () => {
   }, []);
 };
 
-export const updateFriendsList = async (data: FriendsProp) => {
+export const updateFriendsList = async (data: FriendsProp, docId: string) => {
   try {
-    const docRef = doc(firestore, usersRoute, data.docId);
+    const docRef = doc(firestore, usersRoute, docId);
     const docSnapshot = await getDoc(docRef);
 
     if (docSnapshot.exists()) {
@@ -91,32 +91,27 @@ export const updateFriendsList = async (data: FriendsProp) => {
       } else {
         friendsMap.set(data.userId, data);
       }
-
       const updatedFriendsArray = Array.from(friendsMap.values());
-
       await updateDoc(docRef, {friends: updatedFriendsArray});
     }
-    return true;
   } catch (error) {
     throw new Error('Failed to update friends list');
   }
 };
 
-export const markFollowersAsViewed = async (friendsArray: FriendsProp[]) => {
+export const markFollowersAsViewed = async (docId: string) => {
   try {
-    for (const message of friendsArray) {
-      const docRef = doc(firestore, usersRoute, message.docId);
-      const docSnapshot = await getDoc(docRef);
-      if (docSnapshot.exists()) {
-        const updatedFriends = await docSnapshot
-          .data()
-          .friends.map((friend: FriendsProp) => ({
-            ...friend,
-            status: 'viewed',
-          }));
+    const docRef = doc(firestore, usersRoute, docId);
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.exists()) {
+      const updatedFriends = await docSnapshot
+        .data()
+        .friends.map((friend: FriendsProp) => ({
+          ...friend,
+          status: 'viewed',
+        }));
 
-        await updateDoc(docRef, {friends: updatedFriends});
-      }
+      await updateDoc(docRef, {friends: updatedFriends});
     }
   } catch (error) {
     throw Error('failed to update notifications status to read');

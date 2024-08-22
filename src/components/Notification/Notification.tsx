@@ -27,7 +27,7 @@ const Notification = () => {
 
   useEffect(() => {
     if (hasUnviewedNotifications) {
-      markFollowersAsViewed(followersNotifications, currentUser.docId);
+      markFollowersAsViewed(currentUser.docId);
     }
   }, [hasUnviewedNotifications]);
 
