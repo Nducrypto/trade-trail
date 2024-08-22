@@ -11,6 +11,7 @@ import CustomToast from './CustomToast/CustomToast';
 import Fashion from './Fashion/Fashion';
 import GetStarted from './GetStarted/GetStarted';
 import Navbar from './Navbar/Navbar';
+import Notification from './Notification/Notification';
 import Order from './Order/Order';
 import ProductDetail from './ProductDetail/ProductDetail';
 import Product from './ProductList/Product/Product';
@@ -39,4 +40,5 @@ export {
   CustomToast,
   Cart,
   Order,
+  Notification,
 };
