@@ -99,7 +99,7 @@ const HomeStack = () => {
       name: screenNames.notifications,
       component: Notification,
       options: {
-        headerRight: () => <Navbar />,
+        headerRight: () => <Navbar chat />,
       },
     },
     {
