@@ -9,15 +9,19 @@ import {navbarStyles} from './navbarStyles';
 import themes from '../../config/themes';
 import {wp} from '../../config/appConfig';
 import {useGlobalState} from '../../hook/useGlobal';
+import {useAuthentication} from '../../controller/user';
+import {useUser} from '../../hook/useUser';
+import {useCart} from '../../hook/useCart';
 
-const Navbar = ({color}: {color?: boolean}) => {
+const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
+  useAuthentication();
   const navigation = useNavigation<NavigationProps>();
   const {COLORS} = themes;
   const {updatePreviousRoute} = useGlobalState();
-
-  const isUserLoading = false;
-  const currentUser = {email: 'test@gmail.com,', role: 'Admin'};
-  const cartItems = [{email: 'test@gmail.com,', role: 'Admin'}];
+  const {currentUser, isUserLoading} = useUser();
+  const {items} = useCart();
+  const hasNewNotification = currentUser.friends.length > 0;
+  const cartItems = Object.values(items);
   const validRouteNames: (keyof RootStackParamList)[] = [
     screenNames.productDetail,
     screenNames.cart,
@@ -53,16 +57,29 @@ const Navbar = ({color}: {color?: boolean}) => {
 
   return (
     <View style={navbarStyles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate(screenNames.chat)}
-        style={navbarStyles.button}>
-        <Ionicons
-          name="notifications"
-          size={wp('5.5%')}
-          color={color ? COLORS.WHITE : COLORS.BLACK}
-        />
-        {hasNewMessage && <View style={navbarStyles.indicator} />}
-      </TouchableOpacity>
+      {chat ? (
+        <TouchableOpacity
+          onPress={() => navigation.navigate(screenNames.chat)}
+          style={{flexDirection: 'row', position: 'relative'}}>
+          <Ionicons
+            name="chatbubble-ellipses-sharp"
+            size={wp('5.5%')}
+            color={color ? COLORS.WHITE : COLORS.BLACK}
+          />
+          {hasNewMessage && <View style={navbarStyles.indicator} />}
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => navigation.navigate(screenNames.notifications)}
+          style={navbarStyles.button}>
+          <Ionicons
+            name="notifications"
+            size={wp('5.5%')}
+            color={color ? COLORS.WHITE : COLORS.BLACK}
+          />
+          {hasNewNotification && <View style={navbarStyles.indicator} />}
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         onPress={() => navigation.navigate(screenNames.cart)}
