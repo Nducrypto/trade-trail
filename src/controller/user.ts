@@ -75,8 +75,13 @@ export const fetchAllUsers = () => {
   }, []);
 };
 
-export const updateFriendsList = async (data: FriendsProp, docId: string) => {
+export const updateFriendsList = async (
+  data: FriendsProp,
+  docId: string,
+  userLoading: (value: boolean) => void,
+) => {
   try {
+    userLoading(true);
     const docRef = doc(firestore, usersRoute, docId);
     const docSnapshot = await getDoc(docRef);
 
@@ -93,8 +98,10 @@ export const updateFriendsList = async (data: FriendsProp, docId: string) => {
       }
       const updatedFriendsArray = Array.from(friendsMap.values());
       await updateDoc(docRef, {friends: updatedFriendsArray});
+      userLoading(false);
     }
   } catch (error) {
+    userLoading(false);
     throw new Error('Failed to update friends list');
   }
 };
