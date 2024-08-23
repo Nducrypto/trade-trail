@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {useProducts} from '../../hook/useProducts';
@@ -16,36 +17,62 @@ import {
   RootStackParamList,
   screenNames,
 } from '../../screen';
-import {fetchAllUsers} from '../../controller/user';
-import {useUser} from '../../hook/useUser';
+import {fetchAllUsers, updateFriendsList} from '../../controller/user';
+import {initialState, useUser} from '../../hook/useUser';
+import {Avatar} from '@rneui/themed';
+import {hp} from '../../config/appConfig';
+import {useGlobalState} from '../../hook/useGlobal';
 
 const Profile = () => {
   fetchAllUsers();
   const {params} = useRoute<RouteProp<RootStackParamList, 'Profile'>>();
-  const searchedProfileId = params.profileId;
-
+  const profileId = params.profileId;
   const navigation = useNavigation<DynamicNavigationProps>();
   const {allArticles} = useProducts();
-  const {allUsers, currentUser} = useUser();
-
-  const profileDetails = allUsers[searchedProfileId];
-
-  const userAlbums = allArticles.filter(
-    article => article.creatorId === searchedProfileId,
+  const {allUsers, currentUser, isUserLoading, setUserLoading} = useUser();
+  const {toastSuccess: showToastSuccess, toastError} = useGlobalState();
+  const {userId: currentUserId, userName: currentUserName} = currentUser;
+  const viewedUser = allUsers[profileId] ?? initialState;
+  const isFollowingUser = !!viewedUser.friends.find(
+    friend => friend.userId === currentUserId,
   );
 
-  const handleNavigation = (name: keyof RootStackParamList) => {
-    if (name === screenNames.albums) {
+  const userAlbums = allArticles.filter(
+    article => article.creatorId === profileId,
+  );
+
+  const navigateToScreen = (screenName: keyof RootStackParamList) => {
+    if (screenName === screenNames.albums) {
       navigation.navigate(screenNames.albums, {
-        creatorId: searchedProfileId,
+        creatorId: profileId,
       });
       return;
     }
-    navigation.navigate(name);
+    navigation.navigate(screenName);
   };
-  const handleConnect = () => {};
 
-  const formatLargeNumber = (number: number | undefined) => {
+  const handleConnectionToggle = async () => {
+    if (!currentUserId) {
+      return Alert.alert('Sign in to continue');
+    }
+
+    const userData = {
+      userId: currentUserId,
+      userName: currentUserName,
+      status: 'unViewed',
+      date: new Date().toString(),
+    };
+
+    try {
+      const action = isFollowingUser ? 'Disconnected' : 'Connected';
+      await updateFriendsList(userData, viewedUser.docId, setUserLoading);
+      showToastSuccess(`Successfully ${action} ${viewedUser.userName}`);
+    } catch (error) {
+      toastError('Error managing connection');
+    }
+  };
+
+  const formatNumber = (number: number | undefined) => {
     if (number === undefined) return '0';
     if (number >= 1000000) {
       return (number / 1000000).toFixed(1) + 'M';
@@ -56,88 +83,96 @@ const Profile = () => {
     }
   };
 
-  const isCurrentUser = currentUser && currentUser.userId === searchedProfileId;
-  const numColumns = 3;
-  const image =
-    'https://plus.unsplash.com/premium_photo-1720823182783-3b9fb27e40d9?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8';
+  const isViewingOwnProfile = currentUser && currentUser.userId === profileId;
+
+  const profileImageUri =
+    'https://plus.unsplash.com/premium_photo-1724076827133-593437b8f16a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8';
+
   return (
     <View style={profileStyles.container}>
-      <View style={profileStyles.sectionOne}></View>
-      <View style={profileStyles.sectionTwo}>
-        <View style={profileStyles.card}>
-          <Image style={profileStyles.image} source={{uri: image}} />
-          {!isCurrentUser && (
-            <View style={profileStyles.buttonCon}>
+      <View style={profileStyles.headerSection}></View>
+      <View style={profileStyles.profileDetailsSection}>
+        <View style={profileStyles.profileCard}>
+          <Avatar
+            size={hp('11%')}
+            rounded
+            icon={{name: 'user', type: 'font-awesome'}}
+            containerStyle={profileStyles.avatar}
+            source={{uri: viewedUser.profilePic}}
+          />
+          {!isViewingOwnProfile && (
+            <View style={profileStyles.actionButtonContainer}>
               <TouchableOpacity
-                style={profileStyles.button}
+                style={profileStyles.actionButton}
                 activeOpacity={0.6}
-                onPress={handleConnect}>
-                <Text style={profileStyles.buttonText}>Connect</Text>
+                disabled={isUserLoading}
+                onPress={handleConnectionToggle}>
+                <Text style={profileStyles.actionButtonText}>
+                  {isFollowingUser ? 'Disconnect' : 'Connect'}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => handleNavigation(screenNames.chat)}
+                onPress={() => navigateToScreen(screenNames.chat)}
                 activeOpacity={0.6}
                 style={[
-                  profileStyles.button,
+                  profileStyles.actionButton,
                   {backgroundColor: themes.COLORS.BUTTON_COLOR},
                 ]}>
-                <Text style={profileStyles.buttonText}>Message</Text>
+                <Text style={profileStyles.actionButtonText}>Message</Text>
               </TouchableOpacity>
             </View>
           )}
-          <View style={profileStyles.labelSection}>
+          <View style={profileStyles.statsSection}>
             <View>
-              <Text style={profileStyles.value}>
-                {formatLargeNumber(profileDetails?.friends?.length)}
+              <Text style={profileStyles.statsValue}>
+                {formatNumber(viewedUser.friends?.length)}
               </Text>
-              <Text style={profileStyles.label}>Friends</Text>
+              <Text style={profileStyles.statsLabel}>Friends</Text>
             </View>
             <View>
-              <Text style={profileStyles.value}>
-                {formatLargeNumber(profileDetails?.photos?.length)}
+              <Text style={profileStyles.statsValue}>
+                {formatNumber(userAlbums?.length)}
               </Text>
-              <Text style={profileStyles.label}>Photos</Text>
+              <Text style={profileStyles.statsLabel}>Photos</Text>
             </View>
             <View>
-              <Text style={profileStyles.value}>
-                {' '}
-                {formatLargeNumber(profileDetails?.comments?.length)}
+              <Text style={profileStyles.statsValue}>
+                {formatNumber(viewedUser?.comments?.length)}
               </Text>
-              <Text style={profileStyles.label}>comments</Text>
+              <Text style={profileStyles.statsLabel}>Comments</Text>
             </View>
           </View>
 
-          <Text style={profileStyles.name} numberOfLines={1}>
-            {profileDetails?.userName}, {profileDetails?.age ?? ''}
+          <Text style={profileStyles.profileName} numberOfLines={1}>
+            {viewedUser?.userName}
+            {viewedUser?.age && `, ${viewedUser.age}`}
           </Text>
-          <View style={profileStyles.locationCon}>
-            <Text style={profileStyles.location} numberOfLines={1}>
-              {profileDetails?.city ?? ''}{' '}
+          <View style={profileStyles.locationContainer}>
+            <Text style={profileStyles.locationText} numberOfLines={1}>
+              {viewedUser?.city}{' '}
             </Text>
             <Text
               numberOfLines={1}
               style={[
-                profileStyles.location,
-                {
-                  textTransform: 'uppercase',
-                },
+                profileStyles.locationText,
+                {textTransform: 'uppercase'},
               ]}>
-              {profileDetails?.country ?? ''}
+              {viewedUser?.country}
             </Text>
           </View>
-          <Text style={profileStyles.bio} numberOfLines={2}>
-            {profileDetails?.bio}
+          <Text style={profileStyles.bioText} numberOfLines={2}>
+            {viewedUser?.bio}
           </Text>
           <TouchableOpacity
             activeOpacity={0.7}
             style={profileStyles.showMoreBtn}>
-            <Text style={profileStyles.showMoreText}>Show more</Text>
+            <Text style={profileStyles.showMoreBtnText}>Show more</Text>
           </TouchableOpacity>
-          <Text style={profileStyles.albumLabel}>Albums</Text>
+          <Text style={profileStyles.albumsLabel}>Albums</Text>
 
           <TouchableOpacity
-            style={profileStyles.viewBtnCon}
-            onPress={() => handleNavigation(screenNames.albums)}>
+            style={profileStyles.viewAllBtnContainer}
+            onPress={() => navigateToScreen(screenNames.albums)}>
             <Text style={profileStyles.viewAllBtnText}>View all</Text>
           </TouchableOpacity>
           <FlatList
@@ -147,18 +182,18 @@ const Profile = () => {
                 <Image
                   source={{uri: item.image[0]}}
                   resizeMode="cover"
-                  style={profileStyles.thumb}
+                  style={profileStyles.thumbnail}
                   testID={`index${index}`}
                 />
               </TouchableWithoutFeedback>
             )}
             scrollEnabled={userAlbums.length > 6}
-            numColumns={numColumns}
-            key={`flatlist-${numColumns}`}
-            contentContainerStyle={profileStyles.albumsCon}
+            numColumns={3}
+            key={`flatlist-${3}`}
+            contentContainerStyle={profileStyles.albumListContainer}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
-              <Text style={profileStyles.emptyText}>
+              <Text style={profileStyles.emptyListText}>
                 There are currently no items in this album
               </Text>
             }
