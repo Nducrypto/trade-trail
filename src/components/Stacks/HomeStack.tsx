@@ -15,15 +15,19 @@ import {
   Cart,
   Order,
   Notification,
+  ChatList,
+  ChatScreen,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
 import themes from '../../config/themes';
+import {useGlobalState} from '../../hook/useGlobal';
 
 const Tab = createStackNavigator();
 
 const HomeStack = () => {
   const {hasUserVisitedBefore} = useGetStarted();
+  const {utilityTitle} = useGlobalState();
   const defaultScreenOptions = {
     headerBackTitleVisible: false,
     headerTintColor: 'black',
@@ -100,6 +104,17 @@ const HomeStack = () => {
       component: Notification,
       options: {
         headerRight: () => <Navbar chat />,
+      },
+    },
+    {
+      name: screenNames.chatList,
+      component: ChatList,
+    },
+    {
+      name: screenNames.chatScreen,
+      component: ChatScreen,
+      options: {
+        title: utilityTitle,
       },
     },
     {

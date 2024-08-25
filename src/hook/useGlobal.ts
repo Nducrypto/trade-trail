@@ -7,15 +7,18 @@ export interface GlobalStateProps {
   text1: string;
   text2: string;
   type: string;
+  utilityTitle: string;
 
   toastSuccess: (value: string) => void;
   toastError: (value: string) => void;
   closeToast: () => void;
   updatePreviousRoute: (value: keyof RootStackParamList) => void;
+  updateUtilityTitle: (value: string) => void;
 }
 
 const useGlobalStateStore = create<GlobalStateProps>(set => ({
   previousRoute: screenNames.productList,
+  utilityTitle: '',
   toastOpen: null,
   isVisible: false,
   text1: '',
@@ -23,6 +26,8 @@ const useGlobalStateStore = create<GlobalStateProps>(set => ({
   type: '',
   updatePreviousRoute: (value: keyof RootStackParamList) =>
     set(state => ({...state, previousRoute: value})),
+  updateUtilityTitle: (value: string) =>
+    set(state => ({...state, utilityTitle: value})),
   toastSuccess: (message: string) =>
     set(state => ({
       ...state,
@@ -50,10 +55,12 @@ export const useGlobalState = () => {
     previousRoute,
     text2,
     type,
-    closeToast,
     isVisible,
+    closeToast,
     toastSuccess,
     toastError,
+    utilityTitle,
+    updateUtilityTitle,
   } = useGlobalStateStore(state => state);
 
   return {
@@ -65,5 +72,7 @@ export const useGlobalState = () => {
     isVisible,
     toastSuccess,
     toastError,
+    utilityTitle,
+    updateUtilityTitle,
   };
 };

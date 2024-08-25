@@ -13,7 +13,8 @@ export type RootStackParamList = {
   Fashion: undefined;
   Beauty: undefined;
   ProductDetail: ProductInterface;
-  Chat: undefined;
+  ChatScreen: {profileId: string; profileName: string};
+  ChatList: undefined;
   Cart: undefined;
   Order: undefined;
   Albums: {creatorId: string};
