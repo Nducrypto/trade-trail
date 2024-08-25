@@ -2,6 +2,8 @@ import SignIn from './Authentication/SignIn/SignIn';
 import SignUp from './Authentication/SignUp/SignUp';
 import Beauty from './Beauty/Beauty';
 import Cart from './Cart/Cart';
+import ChatList from './Chat/ChatList/ChatList';
+import ChatScreen from './Chat/ChatScreen/ChatScreen';
 import CustomButton from './CustomButton/CustomButton';
 import ProductCard from './CustomCard/ProductCard';
 import CustomDrawerContent from './CustomDrawerContent/CustomDrawerContent/CustomDrawerContent';
@@ -41,4 +43,6 @@ export {
   Cart,
   Order,
   Notification,
+  ChatList,
+  ChatScreen,
 };
