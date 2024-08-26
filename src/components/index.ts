@@ -17,7 +17,7 @@ import Notification from './Notification/Notification';
 import Order from './Order/Order';
 import ProductDetail from './ProductDetail/ProductDetail';
 import Product from './ProductList/Product/Product';
-import ProductForm from './ProductList/ProductForm';
+import ProductForm from './ProductList/ProductForm/ProductForm';
 import Products from './ProductList/Products/Products';
 import Profile from './Profile/Profile';
 import HomeStack from './Stacks/HomeStack';

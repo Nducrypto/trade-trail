@@ -40,7 +40,7 @@ export const productsStyles = StyleSheet.create({
   },
   tab: {
     backgroundColor: 'transparent',
-    width: wp('35.4%'),
+    width: wp('31.4%'),
     height: hp('2.6%'),
     elevation: 0,
     flexDirection: 'row',
@@ -49,7 +49,6 @@ export const productsStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   tabTitle: {
-    lineHeight: 19,
     fontWeight: '300',
     fontSize: themes.FONT_SIZES.MEDIUM,
     color: themes.COLORS.BLACK,
