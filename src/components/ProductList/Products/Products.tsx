@@ -16,12 +16,13 @@ import {ProductInterface, useProducts} from '../../../hook/useProducts';
 import {Product, ProductCard} from '../../index';
 import {NavigationProps, screenNames} from '../../../screen';
 import {productsStyles} from './productsStyles';
-import {wp} from '../../../config/appConfig';
+import {hp, wp} from '../../../config/appConfig';
 import {useAuthentication} from '../../../controller/user';
+import {fetchAllProducts} from '../../../controller/product';
 
 const Products = () => {
   useAuthentication();
-  //   fetchAllProducts();
+  fetchAllProducts();
   const [searchType, setSearchType] = useState<string>('');
   const [filteredArticlesArray, setfilteredArticlesArray] = useState<
     ProductInterface[]
@@ -76,7 +77,9 @@ const Products = () => {
               style={productsStyles.icon}
             />
 
-            <Text style={productsStyles.tabTitle}>Beauty</Text>
+            <Text style={{...productsStyles.tabTitle, top: hp('0.2%')}}>
+              Beauty
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity

@@ -10,16 +10,16 @@ import {AllProductState, ProductInterface} from '../hook/useProducts';
 import {removeInDatabase, createInDatabase} from '../utils/firebaseUtils';
 import {PRODUCTS} from '@env';
 import {useProducts} from '../hook/useProducts';
+import {GlobalStateProps} from '../hook/useGlobal';
 
 const productRoute = PRODUCTS;
 
 export const addProduct = async (
   newProduct: ProductInterface,
-  state: AllProductState,
-  setToast: any,
-  // setToast,
+  productState: AllProductState,
+  globalState: GlobalStateProps,
 ) => {
-  state.updateProductLoading(true);
+  productState.updateProductLoading(true);
 
   try {
     const productId = await createInDatabase(productRoute, newProduct);
@@ -29,17 +29,15 @@ export const addProduct = async (
         ...newProduct,
         productId,
       };
-      state.addProductToState(newProduct);
-      //    toastSuccess('New product added successfully', 'success', setSnackBar);
+      productState.addProductToState(newProduct);
+      globalState.toastSuccess('New product added successfully');
     }
   } catch (error) {
-    state.updateProductLoading(false);
-
-    // toastFailure('Failed To Create Product', 'error', setSnackBar);
-    throw new Error();
+    productState.updateProductLoading(false);
+    globalState.toastError('Failed To Create Product');
+    throw new Error('Failed To Create Product');
   }
 };
-
 export const fetchAllProducts = () => {
   const state = useProducts();
 
@@ -60,7 +58,7 @@ export const fetchAllProducts = () => {
           if (!groupByCategories[product.category]) {
             groupByCategories[product.category] = [];
           }
-          groupByCategories[product.subCategory].push(product);
+          groupByCategories[product.category].push(product);
         });
 
         state.storeAllArticles(fetchedData);
