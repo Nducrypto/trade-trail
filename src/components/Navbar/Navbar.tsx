@@ -12,6 +12,9 @@ import {useGlobalState} from '../../hook/useGlobal';
 import {useAuthentication} from '../../controller/user';
 import {useUser} from '../../hook/useUser';
 import {useCart} from '../../hook/useCart';
+import {useChat} from '../../hook/useChat';
+import {countUnreadMessages} from '../../controller/chats';
+import {Badge} from '@rneui/base';
 
 const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
   useAuthentication();
@@ -19,8 +22,10 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
   const {COLORS} = themes;
   const {updatePreviousRoute} = useGlobalState();
   const {currentUser, isUserLoading} = useUser();
+  const {userId, email, friends} = currentUser;
   const {items} = useCart();
-  const hasNewNotification = currentUser.friends.length > 0;
+  const {allChats} = useChat();
+
   const cartItems = Object.values(items);
   const validRouteNames: (keyof RootStackParamList)[] = [
     screenNames.productDetail,
@@ -29,15 +34,12 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
   ];
 
   useEffect(() => {
-    if (!currentUser?.email && !isUserLoading) {
+    if (!email && !isUserLoading) {
       const unsubscribe = navigation.addListener('state', event => {
         const currentState = event.data.state;
-
         const getCurrentScreen = event.data.state.routes[currentState.index];
-
         if (getCurrentScreen) {
           const screenName = getCurrentScreen.name;
-
           if (validRouteNames.includes(screenName)) {
             updatePreviousRoute(screenName);
           }
@@ -50,34 +52,48 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
         }
       };
     }
-  }, [navigation, currentUser, isUserLoading]);
+  }, [navigation, email, isUserLoading]);
 
-  const hasNewMessage = true;
-  const cartHasItems = cartItems.length > 0;
+  const unviewedNotifications = friends.filter(
+    item => item.status === 'unViewed',
+  );
+  const notificationLength = unviewedNotifications.length;
+  const newMessageLength = countUnreadMessages(userId, allChats);
+  const cartLength = cartItems.length;
 
   return (
     <View style={navbarStyles.container}>
       {chat ? (
         <TouchableOpacity
-          onPress={() => navigation.navigate(screenNames.chat)}
-          style={{flexDirection: 'row', position: 'relative'}}>
+          onPress={() => navigation.navigate(screenNames.chatList)}
+          style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
             name="chatbubble-ellipses-sharp"
             size={wp('5.5%')}
             color={color ? COLORS.WHITE : COLORS.BLACK}
           />
-          {hasNewMessage && <View style={navbarStyles.indicator} />}
+          {newMessageLength > 0 && (
+            <Badge
+              badgeStyle={navbarStyles.indicator}
+              value={newMessageLength}
+            />
+          )}
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
           onPress={() => navigation.navigate(screenNames.notifications)}
-          style={navbarStyles.button}>
+          style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
             name="notifications"
             size={wp('5.5%')}
             color={color ? COLORS.WHITE : COLORS.BLACK}
           />
-          {hasNewNotification && <View style={navbarStyles.indicator} />}
+          {notificationLength > 0 && (
+            <Badge
+              badgeStyle={navbarStyles.indicator}
+              value={notificationLength}
+            />
+          )}
         </TouchableOpacity>
       )}
 
@@ -89,7 +105,10 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
           size={wp('5.5%')}
           color={color ? COLORS.WHITE : COLORS.BLACK}
         />
-        {cartHasItems && <View style={navbarStyles.indicator} />}
+
+        {cartLength > 0 && (
+          <Badge badgeStyle={navbarStyles.indicator} value={cartLength} />
+        )}
       </TouchableOpacity>
     </View>
   );
