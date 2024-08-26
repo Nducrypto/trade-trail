@@ -7,45 +7,26 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {fashionStyles} from './fashionStyles';
-import {ProductInterface, useProducts} from '../../hook/useProducts';
+import {useProducts} from '../../hook/useProducts';
 import {CustomTitle, ProductCard} from '../';
 import {hp, wp} from '../../config/appConfig';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, screenNames} from '../../screen';
+import {getUniqueSubCategory} from '../../controller/product';
+
 const Fashion = () => {
   const [selectedTitle, setSelectedTitle] = useState<string>('POPULAR');
-
   const navigation = useNavigation<NavigationProps>();
-
-  const {allArticles} = useProducts();
-  const handleNavigation = (product: string) => {};
-
-  const getUnigueSubCategory = () => {
-    const uniqueSubCategory: Set<string> = new Set(['POPULAR']);
-    const uniqueType: Set<string> = new Set();
-    const uniqueTypeArray = [];
-    for (const item of allArticles) {
-      if (!uniqueSubCategory.has(item.subCategory)) {
-        uniqueSubCategory.add(item.subCategory);
-      }
-      if (!uniqueType.has(item.type)) {
-        uniqueType.add(item.type);
-        uniqueTypeArray.push(item);
-      }
-    }
-    const titleArray = Array.from(uniqueSubCategory);
-    const filtered = filtereBySelectedTitle(uniqueTypeArray);
-    return {filtered, titleArray};
-  };
-  const filtereBySelectedTitle = (array: ProductInterface[]) => {
-    const isPopular = selectedTitle === 'POPULAR';
-    const filtered = isPopular
-      ? array
-      : array.filter(item => item.subCategory === selectedTitle);
-    return filtered;
+  const {uniqueCategory} = useProducts();
+  const fashionArray = uniqueCategory['Fashion'] ?? [];
+  const handleNavigation = (type: string) => {
+    navigation.navigate(screenNames.searchResult, {type});
   };
 
-  const {filtered, titleArray} = getUnigueSubCategory();
+  const {filteredBySelectedType, titleArray} = getUniqueSubCategory(
+    fashionArray,
+    selectedTitle,
+  );
 
   return (
     <View style={fashionStyles.container}>
@@ -55,7 +36,7 @@ const Fashion = () => {
         handleSelect={setSelectedTitle}
       />
       <FlatList
-        data={filtered}
+        data={filteredBySelectedType}
         renderItem={({item}) => (
           <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
             <ImageBackground

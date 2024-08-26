@@ -19,4 +19,5 @@ export const screenNames = {
   settings: 'Settings',
   notifications: 'Notifications',
   forgotPassword: 'Forgot Password',
+  searchResult: 'SearchResult',
 } as const;

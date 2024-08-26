@@ -78,7 +78,6 @@ export const updateProduct = async (
   productId: string,
   newProduct: ProductUpdateFields,
   state: AllProductState,
-  // setToast,
 ) => {
   state.updateProductLoading(true);
 
@@ -87,30 +86,46 @@ export const updateProduct = async (
   try {
     await updateDoc(productIdRef, newProduct);
     state.updateProductLoading(false);
-
-    // toastSuccess('Product updated successfully', 'success', setToast);
   } catch (error) {
-    // toastFailure('Failed To update Product', 'error', setToast);
-    throw new Error();
+    throw new Error('Failed To update Product');
   }
 };
 
 export const removeProduct = async (
   productId: string,
   state: AllProductState,
-  // setToast,
 ) => {
   state.updateProductLoading(true);
 
   try {
     const success = await removeInDatabase(productRoute, productId);
-
     if (success) {
       state.deleteArticle(productId);
-      // toastSuccess('Product deleted successfully', 'success', setSnackBar);
     }
   } catch (error) {
-    // toastFailure('Failed to delete product', 'error', setSnackBar);
-    throw new Error();
+    throw new Error('Failed to delete product');
   }
+};
+
+export const getUniqueSubCategory = (
+  categoryArray: ProductInterface[],
+  selectedTitle: string,
+) => {
+  const uniqueSubCategory = new Set(['POPULAR']);
+  const uniqueTypeArray = [] as ProductInterface[];
+  for (const item of categoryArray) {
+    uniqueSubCategory.add(item.subCategory);
+
+    if (!uniqueTypeArray.some(i => i.type === item.type)) {
+      uniqueTypeArray.push(item);
+    }
+  }
+  const titleArray = Array.from(uniqueSubCategory);
+  const isPopular = selectedTitle === 'POPULAR';
+
+  const filteredBySelectedType = isPopular
+    ? uniqueTypeArray
+    : uniqueTypeArray.filter(item => item.subCategory === selectedTitle);
+
+  return {filteredBySelectedType, titleArray};
 };
