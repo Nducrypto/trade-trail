@@ -48,6 +48,13 @@ const Profile = () => {
       });
       return;
     }
+    if (screenName === screenNames.chatScreen) {
+      navigation.navigate(screenNames.chatScreen, {
+        profileId: viewedUser.userId,
+        profileName: viewedUser.userName,
+      });
+      return;
+    }
     navigation.navigate(screenName);
   };
 
@@ -85,9 +92,6 @@ const Profile = () => {
 
   const isViewingOwnProfile = currentUser && currentUser.userId === profileId;
 
-  const profileImageUri =
-    'https://plus.unsplash.com/premium_photo-1724076827133-593437b8f16a?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8';
-
   return (
     <View style={profileStyles.container}>
       <View style={profileStyles.headerSection}></View>
@@ -98,7 +102,6 @@ const Profile = () => {
             rounded
             icon={{name: 'user', type: 'font-awesome'}}
             containerStyle={profileStyles.avatar}
-            source={{uri: viewedUser.profilePic}}
           />
           {!isViewingOwnProfile && (
             <View style={profileStyles.actionButtonContainer}>
@@ -112,7 +115,7 @@ const Profile = () => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigateToScreen(screenNames.chat)}
+                onPress={() => navigateToScreen(screenNames.chatScreen)}
                 activeOpacity={0.6}
                 style={[
                   profileStyles.actionButton,
@@ -176,7 +179,7 @@ const Profile = () => {
             <Text style={profileStyles.viewAllBtnText}>View all</Text>
           </TouchableOpacity>
           <FlatList
-            data={userAlbums}
+            data={userAlbums.slice(0, 6)}
             renderItem={({item, index}) => (
               <TouchableWithoutFeedback key={`viewed-${index}`}>
                 <Image
