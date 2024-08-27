@@ -17,6 +17,7 @@ import {
   Notification,
   ChatList,
   ChatScreen,
+  SearchResult,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -86,6 +87,13 @@ const HomeStack = () => {
       component: Beauty,
       options: {
         headerRight: () => <Navbar />,
+      },
+    },
+    {
+      name: screenNames.searchResult,
+      component: SearchResult,
+      options: {
+        title: utilityTitle,
       },
     },
     {

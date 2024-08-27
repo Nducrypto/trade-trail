@@ -20,6 +20,7 @@ import Product from './ProductList/Product/Product';
 import ProductForm from './ProductList/ProductForm/ProductForm';
 import Products from './ProductList/Products/Products';
 import Profile from './Profile/Profile';
+import SearchResult from './SearchResult/SearchResult';
 import HomeStack from './Stacks/HomeStack';
 export {
   CustomDrawerContent,
@@ -45,4 +46,5 @@ export {
   Notification,
   ChatList,
   ChatScreen,
+  SearchResult,
 };
