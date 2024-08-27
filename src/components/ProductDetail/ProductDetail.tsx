@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ImageBackground,
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Alert, Image} from 'react-native';
 import {hp, wp} from '../../config/appConfig';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {CustomButton} from '../index';
@@ -17,17 +11,21 @@ import themes from '../../config/themes';
 import {Avatar} from '@rneui/themed';
 import {useCart} from '../../hook/useCart';
 import {useGlobalState} from '../../hook/useGlobal';
+import {useUser} from '../../hook/useUser';
+import {fetchAllUsers} from '../../controller/user';
 
 const ProductDetail = () => {
+  fetchAllUsers();
   const [selectedSize, setSelectedSize] = useState<string>('M');
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const navigation = useNavigation<NavigationProps>();
   const {params} = useRoute();
   const product = params as ProductInterface;
   const {savedForLaterItems, items, storeItemToCart} = useCart();
+  const {allUsers} = useUser();
   const cartItems = Object.values(items);
-
   const toast = useGlobalState();
+  const creatorName = allUsers[product?.creatorId]?.userName ?? '';
 
   const handleAddToCart = () => {
     if (isItemInCart()) {
@@ -71,7 +69,7 @@ const ProductDetail = () => {
     let timeoutId: NodeJS.Timeout | undefined;
     if (product) {
       const imageCount = product?.image?.length || 1;
-      const intervalTime = 3500;
+      const intervalTime = 6500;
 
       function run() {
         setCurrentIndex(prev => (prev + 1) % imageCount);
@@ -96,39 +94,16 @@ const ProductDetail = () => {
   return (
     <View style={productDetailStyles.profile}>
       <View>
-        {product?.image.length > 0 ? (
-          <ImageBackground
-            testID="carousel-image"
-            source={{uri: product?.image[currentIndex]}}
-            style={productDetailStyles.profileContainer}
-            imageStyle={productDetailStyles.profileImage}>
-            <View style={productDetailStyles.carouselCon}>
-              {Array.from({length: product?.image.length}).map(
-                (number, index) => (
-                  <TouchableOpacity
-                    onPress={() => setCurrentIndex(index)}
-                    key={index}
-                    style={{
-                      ...productDetailStyles.carousel,
-                      borderRadius: 60,
-                      ...(currentIndex === index && {
-                        backgroundColor: 'white',
-                        width: wp('4%'),
-                      }),
-                    }}
-                  />
-                ),
-              )}
-            </View>
-          </ImageBackground>
-        ) : (
-          <Text>No images available</Text>
-        )}
+        <Image
+          testID="carousel-image"
+          source={{uri: product?.image[currentIndex]}}
+          style={productDetailStyles.profileImage}
+        />
       </View>
       <View style={productDetailStyles.optionsCon}>
         <View style={productDetailStyles.options}>
           <Text style={productDetailStyles.nikeText} numberOfLines={2}>
-            {product?.title?.slice(0, 20)}
+            {product?.title}
           </Text>
 
           <View style={productDetailStyles.imgAndTextCon}>
@@ -145,7 +120,7 @@ const ProductDetail = () => {
 
               <View>
                 <Text style={productDetailStyles.sharedText}>
-                  Ndubuisi Agbo
+                  {creatorName}
                 </Text>
                 <Text
                   style={{
@@ -160,7 +135,7 @@ const ProductDetail = () => {
 
             <View>
               <Text style={productDetailStyles.price}>
-                ${Intl.NumberFormat().format(product?.price)}
+                ₦ {Intl.NumberFormat().format(product?.price)}
               </Text>
             </View>
           </View>
@@ -199,13 +174,15 @@ const ProductDetail = () => {
               ))}
             </View>
           </View>
-          <CustomButton
-            title="Add to cart"
-            testID="add-to-cart-"
-            marginTop={hp('6%')}
-            width={wp('88')}
-            onPress={() => handleAddToCart()}
-          />
+          <View style={productDetailStyles.btnCon}>
+            <CustomButton
+              title="Add to cart"
+              testID="add-to-cart-"
+              marginTop={hp('6%')}
+              width={wp('88')}
+              onPress={() => handleAddToCart()}
+            />
+          </View>
         </View>
       </View>
     </View>
