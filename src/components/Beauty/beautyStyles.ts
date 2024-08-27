@@ -9,14 +9,15 @@ export const beautyStyles = StyleSheet.create({
   itemCon: {
     gap: 20,
     paddingVertical: hp('3%'),
-    paddingHorizontal: 10,
   },
-
+  item: {
+    alignItems: 'center',
+  },
   background: {
     flex: 1,
     resizeMode: 'cover',
   },
-  item: {
+  button: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

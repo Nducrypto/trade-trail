@@ -13,13 +13,17 @@ import {hp, wp} from '../../config/appConfig';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, screenNames} from '../../screen';
 import {getUniqueSubCategory} from '../../controller/product';
+import {useGlobalState} from '../../hook/useGlobal';
 
 const Fashion = () => {
   const [selectedTitle, setSelectedTitle] = useState<string>('POPULAR');
   const navigation = useNavigation<NavigationProps>();
   const {uniqueCategory} = useProducts();
+  const {updateUtilityTitle} = useGlobalState();
   const fashionArray = uniqueCategory['Fashion'] ?? [];
+
   const handleNavigation = (type: string) => {
+    updateUtilityTitle(type);
     navigation.navigate(screenNames.searchResult, {type});
   };
 
@@ -36,28 +40,33 @@ const Fashion = () => {
         handleSelect={setSelectedTitle}
       />
       <FlatList
+        initialNumToRender={5}
         data={filteredBySelectedType}
         renderItem={({item}) => (
-          <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
-            <ImageBackground
-              source={{
-                uri: item.image[0],
-              }}
-              style={fashionStyles.background}
-              resizeMode="cover">
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => handleNavigation(item.type)}
-                style={fashionStyles.item}>
-                <Text style={fashionStyles.text} numberOfLines={1}>
-                  {item.type}
-                </Text>
-              </TouchableOpacity>
-            </ImageBackground>
-          </ProductCard>
+          <View style={fashionStyles.item}>
+            <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
+              <ImageBackground
+                source={{
+                  uri: item.image[0],
+                }}
+                style={fashionStyles.background}
+                resizeMode="cover">
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={() => handleNavigation(item.type)}
+                  style={fashionStyles.button}>
+                  <Text style={fashionStyles.text} numberOfLines={1}>
+                    {item.type}
+                  </Text>
+                </TouchableOpacity>
+              </ImageBackground>
+            </ProductCard>
+          </View>
         )}
         keyExtractor={item => item.productId}
         contentContainerStyle={fashionStyles.itemCon}
+        removeClippedSubviews={true}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

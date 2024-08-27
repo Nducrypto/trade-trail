@@ -13,13 +13,16 @@ import {hp, wp} from '../../config/appConfig';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, screenNames} from '../../screen';
 import {getUniqueSubCategory} from '../../controller/product';
+import {useGlobalState} from '../../hook/useGlobal';
 
 const Beauty = () => {
   const [selectedTitle, setSelectedTitle] = useState<string>('POPULAR');
   const navigation = useNavigation<NavigationProps>();
   const {uniqueCategory} = useProducts();
+  const {updateUtilityTitle} = useGlobalState();
 
   const handleNavigation = (type: string) => {
+    updateUtilityTitle(type);
     navigation.navigate(screenNames.searchResult, {type});
   };
 
@@ -38,26 +41,31 @@ const Beauty = () => {
         handleSelect={setSelectedTitle}
       />
       <FlatList
+        initialNumToRender={5}
         data={filteredBySelectedType}
         renderItem={({item}) => (
-          <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
-            <ImageBackground
-              source={{uri: item.image[0]}}
-              style={beautyStyles.background}
-              resizeMode="cover">
-              <TouchableOpacity
-                activeOpacity={0.6}
-                onPress={() => handleNavigation(item.type)}
-                style={beautyStyles.item}>
-                <Text style={beautyStyles.text} numberOfLines={1}>
-                  {item.type}
-                </Text>
-              </TouchableOpacity>
-            </ImageBackground>
-          </ProductCard>
+          <View style={beautyStyles.item}>
+            <ProductCard minHeight={hp('27%')} maxWidth={wp('94%')}>
+              <ImageBackground
+                source={{uri: item.image[0]}}
+                style={beautyStyles.background}
+                resizeMode="cover">
+                <TouchableOpacity
+                  activeOpacity={0.6}
+                  onPress={() => handleNavigation(item.type)}
+                  style={beautyStyles.button}>
+                  <Text style={beautyStyles.text} numberOfLines={1}>
+                    {item.type}
+                  </Text>
+                </TouchableOpacity>
+              </ImageBackground>
+            </ProductCard>
+          </View>
         )}
         keyExtractor={item => item.productId}
         contentContainerStyle={beautyStyles.itemCon}
+        removeClippedSubviews={true}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
