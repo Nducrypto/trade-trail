@@ -18,6 +18,7 @@ import {
   ChatList,
   ChatScreen,
   SearchResult,
+  Albums,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -117,6 +118,13 @@ const HomeStack = () => {
     {
       name: screenNames.chatList,
       component: ChatList,
+    },
+    {
+      name: screenNames.albums,
+      component: Albums,
+      options: {
+        title: utilityTitle,
+      },
     },
     {
       name: screenNames.chatScreen,

@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Profile: {profileId: string};
   Settings: undefined;
   Notifications: undefined;
-  SearchResult: {type: string};
+  SearchResult: {type: string; category: string};
 };
 
 export type NavigationProps = StackNavigationProp<RootStackParamList>;
