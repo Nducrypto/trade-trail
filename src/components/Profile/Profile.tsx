@@ -30,7 +30,11 @@ const Profile = () => {
   const navigation = useNavigation<DynamicNavigationProps>();
   const {allArticles} = useProducts();
   const {allUsers, currentUser, isUserLoading, setUserLoading} = useUser();
-  const {toastSuccess: showToastSuccess, toastError} = useGlobalState();
+  const {
+    toastSuccess: showToastSuccess,
+    toastError,
+    updateUtilityTitle,
+  } = useGlobalState();
   const {userId: currentUserId, userName: currentUserName} = currentUser;
   const viewedUser = allUsers[profileId] ?? initialState;
   const isFollowingUser = !!viewedUser.friends.find(
@@ -43,6 +47,7 @@ const Profile = () => {
 
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
     if (screenName === screenNames.albums) {
+      updateUtilityTitle(viewedUser.userName);
       navigation.navigate(screenNames.albums, {
         creatorId: profileId,
       });

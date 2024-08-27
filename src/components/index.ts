@@ -1,3 +1,4 @@
+import Albums from './Albums/Albums';
 import SignIn from './Authentication/SignIn/SignIn';
 import SignUp from './Authentication/SignUp/SignUp';
 import Beauty from './Beauty/Beauty';
@@ -47,4 +48,5 @@ export {
   ChatList,
   ChatScreen,
   SearchResult,
+  Albums,
 };
