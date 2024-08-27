@@ -8,11 +8,11 @@ import {Product} from '../';
 
 const SearchResult = () => {
   const {params} = useRoute<RouteProp<RootStackParamList, 'SearchResult'>>();
-  const searchedType = params.type;
-  const {allArticles} = useProducts();
-  const filteredByType = allArticles.filter(
-    article => article.type === searchedType,
-  );
+  const {category, type} = params;
+
+  const {uniqueCategory} = useProducts();
+  const filteredByType =
+    uniqueCategory[category].filter(article => article.type === type) || [];
 
   return (
     <FlatList

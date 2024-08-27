@@ -69,7 +69,7 @@ const ChatList = () => {
         ).length;
         const hasUnreadMessages = unreadCount > 0;
         const recentMessageText = messageValues[length - 1]?.message ?? '';
-        const recentMessageDate = messageValues[length - 1]?.date;
+        const recentMessageDate = messageValues[length - 1]?.date?.toString();
         const senderName = retrieveSenderName(key);
 
         return (

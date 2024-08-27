@@ -20,11 +20,12 @@ const Fashion = () => {
   const navigation = useNavigation<NavigationProps>();
   const {uniqueCategory} = useProducts();
   const {updateUtilityTitle} = useGlobalState();
-  const fashionArray = uniqueCategory['Fashion'] ?? [];
+  const category = 'Fashion';
+  const fashionArray = uniqueCategory[category] ?? [];
 
   const handleNavigation = (type: string) => {
     updateUtilityTitle(type);
-    navigation.navigate(screenNames.searchResult, {type});
+    navigation.navigate(screenNames.searchResult, {type, category});
   };
 
   const {filteredBySelectedType, titleArray} = getUniqueSubCategory(
