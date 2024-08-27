@@ -20,13 +20,13 @@ const Beauty = () => {
   const navigation = useNavigation<NavigationProps>();
   const {uniqueCategory} = useProducts();
   const {updateUtilityTitle} = useGlobalState();
+  const category = 'Beauty';
+  const beautyArray = uniqueCategory[category] ?? [];
 
   const handleNavigation = (type: string) => {
     updateUtilityTitle(type);
-    navigation.navigate(screenNames.searchResult, {type});
+    navigation.navigate(screenNames.searchResult, {type, category});
   };
-
-  const beautyArray = uniqueCategory['Beauty'] ?? [];
 
   const {filteredBySelectedType, titleArray} = getUniqueSubCategory(
     beautyArray,
