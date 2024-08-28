@@ -1,6 +1,15 @@
 import {create} from 'zustand';
-import {RootStackParamList, screenNames} from '../screen';
+import {
+  RootStackParamList,
+  screenNames,
+  DynamicNavigationProps,
+} from '../screen';
 
+export interface GoogleSignInProps {
+  navigate: DynamicNavigationProps['navigate'];
+  previousRoute: keyof RootStackParamList;
+  setLoading: (value: boolean) => void;
+}
 export interface FriendsProp {
   userName: string;
   status: string;

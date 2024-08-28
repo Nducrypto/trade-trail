@@ -28,6 +28,8 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<DynamicNavigationProps>();
+  const {navigate} = navigation;
+
   const {previousRoute} = useUser();
 
   const users = USERS;
@@ -37,7 +39,18 @@ const SignUp = () => {
       return;
     }
     setLoading(true);
+
     try {
+      const userCollections = firebase.collection(firebase.firestore, users);
+      const getDocs = firebase.getDocs(userCollections);
+      const isUserNameExist = (await getDocs).docs.find(
+        user => user.data().userName === userName,
+      );
+
+      if (isUserNameExist) {
+        setLoading(false);
+        return Alert.alert('Username already exists');
+      }
       const fetchedUserCredential =
         await firebase.createUserWithEmailAndPassword(
           firebase.auth,
@@ -46,7 +59,7 @@ const SignUp = () => {
         );
       if (!fetchedUserCredential) {
         setLoading(false);
-        return;
+        return Alert.alert('User creation failed');
       }
 
       const userData = {
@@ -65,7 +78,6 @@ const SignUp = () => {
         country: '',
       };
 
-      const userCollections = firebase.collection(firebase.firestore, users);
       await firebase.addDoc(userCollections, userData);
 
       navigation.navigate(previousRoute);
@@ -83,12 +95,7 @@ const SignUp = () => {
   };
 
   function handleSignInWithGoogle() {
-    signInWithGoogle(
-      navigation.navigate,
-      previousRoute,
-      setLoading,
-      screenNames.signUp,
-    );
+    signInWithGoogle({navigate, previousRoute, setLoading});
   }
 
   const passwordStrength = !password.length
