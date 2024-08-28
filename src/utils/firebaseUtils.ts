@@ -1,17 +1,14 @@
 import * as firebase from '../config/firebase';
 import {USERS} from '@env';
-import {DynamicNavigationProps, RootStackParamList} from '../screen';
 import {ProductInterface} from '../hook/useProducts';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {CollectionInterface} from '../hook/useUser';
+import {CollectionInterface, GoogleSignInProps} from '../hook/useUser';
 import {OrderItem} from '../hook/useOrder';
+import {Alert} from 'react-native';
 
 const usersRoute = USERS;
-
-export const createInDatabase = async (
-  url: string,
-  requestData: Partial<ProductInterface | OrderItem>,
-) => {
+type ReqProps = Partial<ProductInterface | OrderItem>;
+export const createInDatabase = async (url: string, requestData: ReqProps) => {
   try {
     const productCollections = firebase.collection(firebase.firestore, url);
     const newDocument = await firebase.addDoc(productCollections, requestData);
@@ -32,23 +29,22 @@ export const removeInDatabase = async (url: string, docId: string) => {
   }
 };
 
-export async function signInWithGoogle(
-  navigate: DynamicNavigationProps['navigate'],
-  previousRoute: keyof RootStackParamList,
-  setLoading: (value: boolean) => void,
-  type: string,
-) {
+export async function signInWithGoogle({
+  navigate,
+  previousRoute,
+  setLoading,
+}: GoogleSignInProps) {
   try {
     setLoading(true);
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     const {idToken} = await GoogleSignin.signIn();
     if (!idToken) {
-      throw new Error('Error fetching token');
+      return Alert.alert('Error fetching token');
     }
     const googleCredentials = firebase.GoogleAuthProvider.credential(idToken);
 
     if (!googleCredentials) {
-      throw new Error('Error fetching google credentials');
+      return Alert.alert('Error fetching google credentials');
     }
     const fetchedData = await firebase.signInWithCredential(
       firebase.auth,
@@ -94,7 +90,6 @@ export async function signInWithGoogle(
     setLoading(false);
   } catch (error) {
     setLoading(false);
-
-    throw new Error('Failed to authenticate with google auth');
+    Alert.alert('Failed to authenticate with google auth');
   }
 }

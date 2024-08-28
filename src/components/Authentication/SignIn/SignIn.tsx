@@ -26,7 +26,7 @@ const SignIn = () => {
   const {previousRoute, currentUser, isUserLoading} = useUser();
 
   const navigation = useNavigation<DynamicNavigationProps>();
-
+  const {navigate} = navigation;
   const handleLoginWithEmail = async () => {
     setLoading(true);
     try {
@@ -56,12 +56,7 @@ const SignIn = () => {
     }
   };
   function handleSignInWithGoogle() {
-    signInWithGoogle(
-      navigation.navigate,
-      previousRoute,
-      setLoading,
-      screenNames.signIn,
-    );
+    signInWithGoogle({navigate, previousRoute, setLoading});
   }
 
   if (currentUser && currentUser?.email && !isUserLoading) {
