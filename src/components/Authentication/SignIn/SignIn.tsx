@@ -42,15 +42,11 @@ const SignIn = () => {
       setLoading(false);
     } catch (error) {
       if (error instanceof firebase.FirebaseError) {
-        if (error.code === 'auth/wrong-password') {
-          Alert.alert('Wrong password');
-        } else if (error.code === 'auth/user-not-found') {
+        if (error.code === 'auth/invalid-credential') {
           Alert.alert('User not found');
         } else {
-          Alert.alert('An unknown error occurred');
+          Alert.alert('An error occurred');
         }
-      } else {
-        Alert.alert('An unexpected error occurred');
       }
       setLoading(false);
     }
@@ -117,17 +113,19 @@ const SignIn = () => {
             placeholder="Email"
             value={email}
             onChangeText={value => setEmail(value)}
+            testID="email-text-field"
           />
           <AuthInput
             iconName="password"
             placeholder="Password"
             value={password}
             onChangeText={value => setPassword(value)}
+            testID="password-text-field"
           />
 
           <View>
             <Text style={styles.forgPass} onPress={() => {}}>
-              Forgot your password ?{' '}
+              Forgot your password ?
             </Text>
           </View>
           <View>
@@ -141,7 +139,14 @@ const SignIn = () => {
           <View style={styles.authBtnCon}>
             <CustomButton
               title={
-                loading ? <ActivityIndicator color="#ffffff" /> : 'SIGN IN'
+                loading ? (
+                  <ActivityIndicator
+                    color="#ffffff"
+                    testID="activity-indicator"
+                  />
+                ) : (
+                  'SIGN IN'
+                )
               }
               width={wp('50%')}
               onPress={() => handleLoginWithEmail()}

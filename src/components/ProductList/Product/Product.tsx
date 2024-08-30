@@ -38,6 +38,7 @@ const Product = ({product, horizontal, full, style}: Props) => {
         maxWidth={horizontal || full ? wp('95%') : wp('46%')}
         paddingLeft={0}>
         <View
+          testID={product.title}
           style={[
             productStyles.product,
             {

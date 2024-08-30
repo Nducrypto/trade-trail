@@ -112,6 +112,15 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: 50,
   },
-
+  passStrengthCon: {
+    flexDirection: 'row',
+    gap: wp('0.5%'),
+    marginTop: hp('2%'),
+    marginLeft: wp('1%'),
+  },
+  passStrengthlabel: {
+    color: themes.COLORS.BUTTON_COLOR,
+    fontWeight: '400',
+  },
   authBtnCon: {alignItems: 'center'},
 });

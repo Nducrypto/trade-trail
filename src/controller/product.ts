@@ -3,7 +3,7 @@ import {
   doc,
   collection,
   updateDoc,
-  onSnapshot,
+  getDocs,
 } from '../config/firebase';
 import {useEffect} from 'react';
 import {AllProductState, ProductInterface} from '../hook/useProducts';
@@ -43,32 +43,29 @@ export const fetchAllProducts = () => {
 
   useEffect(() => {
     state.updateProductLoading(true);
-    const unsubscribe = onSnapshot(
-      collection(firestore, productRoute),
-      snapshot => {
-        const fetchedData: ProductInterface[] = [];
-        const groupByCategories: Record<string, ProductInterface[]> = {};
+    const getAll = async () => {
+      const userCollections = collection(firestore, productRoute);
+      const getDoc = getDocs(userCollections);
 
-        snapshot.forEach(doc => {
-          const product = {
-            ...(doc.data() as ProductInterface),
-            productId: doc.id,
-          };
-          fetchedData.push(product);
-          if (!groupByCategories[product.category]) {
-            groupByCategories[product.category] = [];
-          }
-          groupByCategories[product.category].push(product);
-        });
+      const fetchedData: ProductInterface[] = [];
+      const groupByCategories: Record<string, ProductInterface[]> = {};
 
-        state.storeAllArticles(fetchedData);
-        state.updateUniqueCategory(groupByCategories);
-      },
-    );
+      (await getDoc).forEach(doc => {
+        const product = {
+          ...(doc.data() as ProductInterface),
+          productId: doc.id,
+        };
+        fetchedData.push(product);
+        if (!groupByCategories[product.category]) {
+          groupByCategories[product.category] = [];
+        }
+        groupByCategories[product.category].push(product);
+      });
 
-    return () => {
-      unsubscribe();
+      state.storeAllArticles(fetchedData);
+      state.updateUniqueCategory(groupByCategories);
     };
+    getAll();
   }, []);
 };
 

@@ -14,7 +14,7 @@ import {styles} from '../authStyles';
 import {CustomButton} from '../../';
 import {AuthInput, circles} from '../AuthInput';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {DynamicNavigationProps, screenNames} from '../../../screen';
+import {DynamicNavigationProps} from '../../../screen';
 import themes from '../../../config/themes';
 import {signInWithGoogle} from '../../../utils/firebaseUtils';
 import {useUser} from '../../../hook/useUser';
@@ -49,7 +49,7 @@ const SignUp = () => {
 
       if (isUserNameExist) {
         setLoading(false);
-        return Alert.alert('Username already exists');
+        return Alert.alert('Username already in use');
       }
       const fetchedUserCredential =
         await firebase.createUserWithEmailAndPassword(
@@ -86,8 +86,6 @@ const SignUp = () => {
       if (error instanceof firebase.FirebaseError) {
         if (error.code === 'auth/email-already-in-use') {
           Alert.alert('Email already in use');
-        } else {
-          Alert.alert('Password should be at least 6 characters');
         }
       }
       setLoading(false);
@@ -100,8 +98,8 @@ const SignUp = () => {
 
   const passwordStrength = !password.length
     ? ''
-    : password.length > 9
-    ? 'strong'
+    : password.length > 5
+    ? 'Strong'
     : 'Weak';
 
   return (
@@ -134,7 +132,7 @@ const SignUp = () => {
                   name="github"
                   color={themes.COLORS.BLACK}
                   size={themes.SIZES.SMALL}
-                  testID="githu-login-icon"
+                  testID="githu-login-btn"
                 />
                 <Text style={styles.iconBtnText}>Github</Text>
               </TouchableOpacity>
@@ -145,7 +143,7 @@ const SignUp = () => {
                   name="google"
                   color={themes.COLORS.BLACK}
                   size={themes.SIZES.SMALL}
-                  testID="google-login-icon"
+                  testID="google-login-btn"
                 />
                 <Text style={styles.iconBtnText}>Google</Text>
               </TouchableOpacity>
@@ -159,36 +157,39 @@ const SignUp = () => {
               placeholder="Name"
               value={userName}
               onChangeText={value => setUserName(value)}
+              testID="username-text-field"
             />
             <AuthInput
               iconName="envelope"
               placeholder="Email"
               value={email}
               onChangeText={value => setEmail(value)}
+              testID="email-text-field"
             />
             <AuthInput
               iconName="password"
               placeholder="Password"
               value={password}
               onChangeText={value => setPassword(value)}
+              testID="password-text-field"
             />
 
-            <View>
+            <View style={styles.passStrengthCon}>
               <Text
                 style={{
-                  ...styles.forgPass,
+                  ...styles.passStrengthlabel,
                   color: themes.COLORS.BLACK,
                   fontWeight: '200',
                 }}
                 onPress={() => {}}>
                 password strength:{' '}
-                <Text
-                  style={{
-                    color: password.length > 9 ? 'green' : 'red',
-                    fontWeight: '700',
-                  }}>
-                  {passwordStrength}
-                </Text>
+              </Text>
+              <Text
+                style={{
+                  color: password.length > 5 ? 'green' : 'red',
+                  fontWeight: '700',
+                }}>
+                {passwordStrength}
               </Text>
             </View>
 
@@ -200,6 +201,7 @@ const SignUp = () => {
                 checkedIcon="checkbox-marked"
                 uncheckedIcon="checkbox-blank-outline"
                 onPress={() => setIsPolicyAgreed(!isPolicyAgreed)}
+                testID="check-box"
               />
               <Text style={styles.privacyPolicy}>
                 I agree with the{' '}
@@ -217,7 +219,10 @@ const SignUp = () => {
               <CustomButton
                 title={
                   loading ? (
-                    <ActivityIndicator color={themes.COLORS.WHITE} />
+                    <ActivityIndicator
+                      color={themes.COLORS.WHITE}
+                      testID="activity-indicator"
+                    />
                   ) : (
                     'CREATE ACCOUNT'
                   )
@@ -226,7 +231,13 @@ const SignUp = () => {
                 onPress={() => handleSignupWithEmail()}
                 testID="sign-up-button"
                 marginTop={hp('4%')}
-                disabled={!email || !password || !userName || !isPolicyAgreed}
+                disabled={
+                  !email ||
+                  !password ||
+                  !userName ||
+                  !isPolicyAgreed ||
+                  password.length < 6
+                }
               />
             </View>
           </View>
