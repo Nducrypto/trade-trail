@@ -10,6 +10,7 @@ interface InputWithIconProps {
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
+  testID: string;
 }
 
 const AuthInput = ({
@@ -17,6 +18,7 @@ const AuthInput = ({
   placeholder,
   value,
   onChangeText,
+  testID,
 }: InputWithIconProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -53,6 +55,8 @@ const AuthInput = ({
             ? !showPassword
             : false
         }
+        testID={testID}
+        accessibilityLabel={placeholder}
       />
     </View>
   );

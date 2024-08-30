@@ -1,6 +1,7 @@
 import Albums from './Albums/Albums';
 import SignIn from './Authentication/SignIn/SignIn';
 import SignUp from './Authentication/SignUp/SignUp';
+import BackButton from './BackButton/BackButton';
 import Beauty from './Beauty/Beauty';
 import Cart from './Cart/Cart';
 import ChatList from './Chat/ChatList/ChatList';
@@ -49,4 +50,5 @@ export {
   ChatScreen,
   SearchResult,
   Albums,
+  BackButton,
 };

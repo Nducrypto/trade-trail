@@ -17,6 +17,7 @@ const MenuToggleIcon = () => {
         name="menu"
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
         style={customDrawerStyles.icon}
+        testID="open-menu"
       />
     </View>
   );

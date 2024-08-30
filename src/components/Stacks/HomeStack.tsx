@@ -19,6 +19,7 @@ import {
   ChatScreen,
   SearchResult,
   Albums,
+  BackButton,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -50,6 +51,7 @@ const HomeStack = () => {
       component: ProductForm,
       options: {
         title: 'Add Product',
+        headerLeft: () => <BackButton testID="productForm" />,
       },
     },
     {
@@ -62,6 +64,7 @@ const HomeStack = () => {
           backgroundColor: 'transparent',
         },
         headerRight: () => <Navbar color />,
+        headerLeft: () => <BackButton testID="productDetail" />,
       },
     },
     {
@@ -69,6 +72,7 @@ const HomeStack = () => {
       component: Profile,
       options: {
         headerRight: () => <Navbar color />,
+        headerLeft: () => <BackButton testID="profile" />,
         headerTransparent: true,
         headerStyle: {
           backgroundColor: 'indigo',
@@ -81,6 +85,7 @@ const HomeStack = () => {
       component: Fashion,
       options: {
         headerRight: () => <Navbar />,
+        headerLeft: () => <BackButton testID="fashion" />,
       },
     },
     {
@@ -88,6 +93,7 @@ const HomeStack = () => {
       component: Beauty,
       options: {
         headerRight: () => <Navbar />,
+        headerLeft: () => <BackButton testID="beauty" />,
       },
     },
     {
@@ -95,6 +101,7 @@ const HomeStack = () => {
       component: SearchResult,
       options: {
         title: utilityTitle,
+        headerLeft: () => <BackButton testID="searchResult" />,
       },
     },
     {
@@ -102,28 +109,37 @@ const HomeStack = () => {
       component: Order,
       options: {
         headerRight: () => <Navbar />,
+        headerLeft: () => <BackButton testID="order" />,
       },
     },
     {
       name: screenNames.cart,
       component: Cart,
+      options: {
+        headerLeft: () => <BackButton testID="cart" />,
+      },
     },
     {
       name: screenNames.notifications,
       component: Notification,
       options: {
         headerRight: () => <Navbar chat />,
+        headerLeft: () => <BackButton testID="notification" />,
       },
     },
     {
       name: screenNames.chatList,
       component: ChatList,
+      options: {
+        headerLeft: () => <BackButton testID="chatList" />,
+      },
     },
     {
       name: screenNames.albums,
       component: Albums,
       options: {
         title: utilityTitle,
+        headerLeft: () => <BackButton testID="albums" />,
       },
     },
     {
@@ -131,6 +147,7 @@ const HomeStack = () => {
       component: ChatScreen,
       options: {
         title: utilityTitle,
+        headerLeft: () => <BackButton testID="chatScreen" />,
       },
     },
     {
@@ -138,6 +155,7 @@ const HomeStack = () => {
       component: SignIn,
       options: {
         title: '',
+        headerLeft: () => <BackButton testID="signIn" white />,
         headerTransparent: true,
         headerStyle: {
           backgroundColor: 'transparent',
@@ -149,6 +167,7 @@ const HomeStack = () => {
       name: screenNames.signUp,
       component: SignUp,
       options: {
+        headerLeft: () => <BackButton testID="signUp" white />,
         title: '',
         headerTransparent: true,
         headerStyle: {

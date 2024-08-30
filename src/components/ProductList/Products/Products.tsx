@@ -58,6 +58,7 @@ const Products = () => {
           name="search-plus"
           disabled={!searchType}
           onPress={handleSearch}
+          testID="search-icon"
         />
       </View>
     );
@@ -68,7 +69,8 @@ const Products = () => {
       <View style={productsStyles.tabs}>
         <TouchableOpacity
           style={[productsStyles.tab, productsStyles.divider]}
-          onPress={() => navigation.navigate(screenNames.beauty)}>
+          onPress={() => navigation.navigate(screenNames.beauty)}
+          testID="beauty-btn">
           <View style={productsStyles.tabContent}>
             <Entypo
               size={themes.SIZES.MEDIUM}
@@ -84,7 +86,8 @@ const Products = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={productsStyles.tab}
-          onPress={() => navigation.navigate(screenNames.fashion)}>
+          onPress={() => navigation.navigate(screenNames.fashion)}
+          testID="fashion-btn">
           <View style={{flexDirection: 'row'}}>
             <Entypo
               size={themes.SIZES.SMALL}
@@ -158,7 +161,7 @@ const Products = () => {
       ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
         <Text style={productsStyles.emptyText}>Empty</Text>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} testID="scrollView">
           {renderProducts()}
         </ScrollView>
       )}

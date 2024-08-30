@@ -164,6 +164,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             fontSize: themes.FONT_SIZES.MEDIUM,
             color: selectedLabel ? themes.COLORS.WHITE : themes.COLORS.BLACK,
           }}
+          testID={`${item.label}`}
         />
       </View>
     );
