@@ -12,7 +12,8 @@ const CustomTitle = ({array, selectedTitle, handleSelect}: Props) => {
   return (
     <View style={customeTitleStyles.container}>
       <ScrollView
-        horizontal
+        testID="custom-title-scrollview"
+        horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={customeTitleStyles.titleCon}>
         {array.map(item => (
