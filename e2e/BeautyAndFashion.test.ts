@@ -7,6 +7,13 @@ describe('Example', () => {
       '.*firestore.googleapis.com/google.firestore.v1.Firestore/Listen.*',
     ]);
   });
+  it('should render Get Started screen correctly', async () => {
+    await expect(
+      element(by.text('Your ultimate shopping destination')),
+    ).toBeVisible();
+    await expect(element(by.text('Get Started'))).toBeVisible();
+    await element(by.id('get-started-button')).tap();
+  });
 
   it('should render products correctly', async () => {
     await expect(element(by.text('Beauty'))).toBeVisible();
