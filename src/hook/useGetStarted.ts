@@ -10,7 +10,7 @@ interface GetStartedProps {
 }
 
 const useUserOnboardingStore = create<GetStartedProps>(set => ({
-  hasUserVisitedBefore: true,
+  hasUserVisitedBefore: false,
   updateHasVisitedBefore: (value: boolean) =>
     set({hasUserVisitedBefore: value}),
 
@@ -33,7 +33,7 @@ export const useGetStarted = () => {
 
   useEffect(() => {
     loadStateFromStorage();
-  }, [loadStateFromStorage]);
+  }, []);
 
   return {hasUserVisitedBefore, updateHasVisitedBefore};
 };
