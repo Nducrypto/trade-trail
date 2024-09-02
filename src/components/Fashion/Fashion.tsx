@@ -41,6 +41,7 @@ const Fashion = () => {
         handleSelect={setSelectedTitle}
       />
       <FlatList
+        testID="flatlist"
         initialNumToRender={5}
         data={filteredBySelectedType}
         renderItem={({item}) => (

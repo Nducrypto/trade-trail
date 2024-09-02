@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import themes from '../../config/themes';
-import {hp} from '../../config/appConfig';
+import {hp, wp} from '../../config/appConfig';
 
 export const customeTitleStyles = StyleSheet.create({
   container: {
@@ -13,6 +13,7 @@ export const customeTitleStyles = StyleSheet.create({
     paddingRight: 10,
     backgroundColor: 'white',
     minWidth: themes.SIZES.FULLWIDTH,
+    flexDirection: 'row',
   },
   tabTitle: {
     lineHeight: 19,
