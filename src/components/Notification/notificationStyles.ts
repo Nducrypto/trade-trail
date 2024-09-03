@@ -9,6 +9,15 @@ export const notificationStyles = StyleSheet.create({
     marginTop: hp('3%'),
     paddingBottom: hp('8%'),
   },
+  signInCon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signInText: {
+    color: themes.COLORS.BLACK,
+    fontWeight: '700',
+  },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
