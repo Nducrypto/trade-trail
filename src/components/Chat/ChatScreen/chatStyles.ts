@@ -14,6 +14,7 @@ export const chatStyles = StyleSheet.create({
   signInText: {
     color: themes.COLORS.BLACK,
     fontWeight: '700',
+    fontSize: themes.FONT_SIZES.MEDIUM,
   },
 
   content: {

@@ -2,6 +2,7 @@ import {expect, element} from 'detox';
 import {dismissAlertWithOk} from './utils/dismissAlert';
 import {dismisskeyBoard} from './utils/dismisskeyBoard';
 import {getStarted} from './utils/getStarted';
+import {CHITESTEMAIL, CHITESTPASS, CHITESTUSERNAME} from '@env';
 
 describe('Sign-up and Sign-in', () => {
   it('should render Get Started screen correctly', async () => {
@@ -30,20 +31,20 @@ describe('Sign-up and Sign-in', () => {
   });
 
   it('should display "Weak" password strength indicator for weak passwords', async () => {
-    await element(by.id('username-text-field')).typeText('Chi chi');
+    await element(by.id('username-text-field')).typeText(CHITESTUSERNAME);
     await dismisskeyBoard('username-text-field');
 
-    await element(by.id('email-text-field')).typeText('Chi@gmail.com');
+    await element(by.id('email-text-field')).typeText(CHITESTEMAIL);
     await dismisskeyBoard('email-text-field');
 
-    await element(by.id('password-text-field')).typeText('chich');
+    await element(by.id('password-text-field')).typeText('hey');
     await dismisskeyBoard('password-text-field');
     await expect(element(by.text('Weak'))).toBeVisible();
   });
 
   it('should display "Strong" password strength indicator for strong passwords', async () => {
     await element(by.id('password-text-field')).clearText();
-    await element(by.id('password-text-field')).typeText('chichi');
+    await element(by.id('password-text-field')).typeText(CHITESTPASS);
     await dismisskeyBoard('password-text-field');
     await expect(element(by.text('Strong'))).toBeVisible();
   });
@@ -153,12 +154,12 @@ describe('Sign-up and Sign-in', () => {
   it('should navigate to home screen after successful sign-in', async () => {
     await dismissAlertWithOk();
     await element(by.id('email-text-field')).clearText();
-    await element(by.id('email-text-field')).typeText('Chi@gmail.com');
+    await element(by.id('email-text-field')).typeText('test@gmail.com');
     await dismisskeyBoard('email-text-field');
 
     await element(by.id('password-text-field')).clearText();
 
-    await element(by.id('password-text-field')).typeText('chichi');
+    await element(by.id('password-text-field')).typeText('test-password');
     await dismisskeyBoard('password-text-field');
 
     await element(by.id('sign-in-button')).tap();

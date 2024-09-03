@@ -32,6 +32,17 @@ const Notification = () => {
   }, [hasUnviewedNotifications]);
 
   const length = followersNotifications.length;
+  if (!currentUser?.userId) {
+    return (
+      <TouchableOpacity
+        testID="sign-in-btn"
+        activeOpacity={0.7}
+        style={notificationStyles.signInCon}
+        onPress={() => navigation.navigate(screenNames.signIn)}>
+        <Text style={notificationStyles.signInText}>Sign in to continue</Text>
+      </TouchableOpacity>
+    );
+  }
   return (
     <FlatList
       testID="notification-flatlist"
@@ -45,7 +56,7 @@ const Notification = () => {
           paddingLeft={0}
           key={index}>
           <TouchableOpacity
-            testID={`sender-${index}`}
+            testID={`follower-${index + 1}`}
             activeOpacity={0.8}
             style={notificationStyles.item}
             onPress={() => navigateToProfile(item.userId)}>

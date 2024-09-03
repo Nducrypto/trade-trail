@@ -53,10 +53,21 @@ const ChatList = () => {
       : '';
     return otherName;
   };
-  const messages = countUnreadMessages(currentUser.userId, allChats);
+  if (!currentUserId) {
+    return (
+      <TouchableOpacity
+        testID="sign-in-btn"
+        activeOpacity={0.7}
+        style={chatListStyles.signInCon}
+        onPress={() => navigation.navigate(screenNames.signIn)}>
+        <Text style={chatListStyles.signInText}>Sign in to continue</Text>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <FlatList
+      testID="chat-list-flatlist"
       scrollEnabled={recentlyActiveChats.length > 7}
       data={recentlyActiveChats}
       renderItem={({item, index}) => {
@@ -69,12 +80,12 @@ const ChatList = () => {
         ).length;
         const hasUnreadMessages = unreadCount > 0;
         const recentMessageText = messageValues[length - 1]?.message ?? '';
-        const recentMessageDate = messageValues[length - 1]?.date?.toString();
+        const recentMessageDate = messageValues[length - 1]?.date;
         const senderName = retrieveSenderName(key);
 
         return (
           <TouchableOpacity
-            testID="chat-list-flatlist"
+            testID={`sender-${index + 1}`}
             activeOpacity={0.7}
             onPress={() => handleNavigation(messageValues[0])}
             key={index}
@@ -111,7 +122,9 @@ const ChatList = () => {
                     }),
                 }}>
                 {recentMessageDate
-                  ? moment(recentMessageDate).fromNow(true)
+                  ? moment(new Date(recentMessageDate).toISOString()).fromNow(
+                      true,
+                    )
                   : ''}
               </Text>
             </View>
@@ -119,6 +132,9 @@ const ChatList = () => {
         );
       }}
       contentContainerStyle={chatListStyles.container}
+      ListEmptyComponent={
+        <Text style={chatListStyles.noChatLabel}>You have no message</Text>
+      }
     />
   );
 };

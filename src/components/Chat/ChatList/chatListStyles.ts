@@ -6,6 +6,16 @@ export const chatListStyles = StyleSheet.create({
   container: {
     paddingBottom: hp('6%'),
   },
+  signInCon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signInText: {
+    color: themes.COLORS.BLACK,
+    fontWeight: '700',
+    fontSize: themes.FONT_SIZES.MEDIUM,
+  },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -51,5 +61,11 @@ export const chatListStyles = StyleSheet.create({
     color: themes.COLORS.BLACK,
     fontWeight: '300',
     marginTop: hp('1%'),
+  },
+  noChatLabel: {
+    fontSize: themes.FONT_SIZES.LARGE,
+    color: themes.COLORS.BLACK,
+    fontWeight: '500',
+    marginTop: hp('30%'),
   },
 });
