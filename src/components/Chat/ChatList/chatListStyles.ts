@@ -6,6 +6,15 @@ export const chatListStyles = StyleSheet.create({
   container: {
     paddingBottom: hp('6%'),
   },
+  signInCon: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  signInText: {
+    color: themes.COLORS.BLACK,
+    fontWeight: '700',
+  },
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',

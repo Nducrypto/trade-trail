@@ -53,7 +53,19 @@ const ChatList = () => {
       : '';
     return otherName;
   };
-  const messages = countUnreadMessages(currentUser.userId, allChats);
+  if (!currentUserId) {
+    return (
+      <TouchableOpacity
+        testID="sign-in-btn"
+        activeOpacity={0.7}
+        style={chatListStyles.signInCon}
+        onPress={() => navigation.navigate(screenNames.signIn)}>
+        <Text style={chatListStyles.signInText}>
+          Please Sign in to continue
+        </Text>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <FlatList
