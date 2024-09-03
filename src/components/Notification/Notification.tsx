@@ -34,6 +34,8 @@ const Notification = () => {
   const length = followersNotifications.length;
   return (
     <FlatList
+      testID="notification-flatlist"
+      accessibilityLabel="flatlist"
       scrollEnabled={length > 8}
       data={followersNotifications}
       renderItem={({item, index}) => (
@@ -43,6 +45,7 @@ const Notification = () => {
           paddingLeft={0}
           key={index}>
           <TouchableOpacity
+            testID={`sender-${index}`}
             activeOpacity={0.8}
             style={notificationStyles.item}
             onPress={() => navigateToProfile(item.userId)}>
