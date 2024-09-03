@@ -4,14 +4,6 @@ import {dismissAlertWithCancel, dismissAlertWithOk} from './utils/dismissAlert';
 import {dismisskeyBoard} from './utils/dismisskeyBoard';
 
 describe('Profile', () => {
-  beforeAll(async () => {
-    await device.launchApp();
-  });
-
-  afterAll(async () => {
-    await device.terminateApp();
-  });
-
   it('should launch the app and render Get Started screen correctly', async () => {
     const isGetStartedvisible = await getStarted();
     if (isGetStartedvisible) {
