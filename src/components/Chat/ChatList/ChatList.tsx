@@ -74,6 +74,7 @@ const ChatList = () => {
 
         return (
           <TouchableOpacity
+            testID="chat-list-flatlist"
             activeOpacity={0.7}
             onPress={() => handleNavigation(messageValues[0])}
             key={index}
