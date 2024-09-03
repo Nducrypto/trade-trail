@@ -8,12 +8,14 @@ export interface GlobalStateProps {
   text2: string;
   type: string;
   utilityTitle: string;
+  utilityProfileId: string;
 
   toastSuccess: (value: string) => void;
   toastError: (value: string) => void;
   closeToast: () => void;
   updatePreviousRoute: (value: keyof RootStackParamList) => void;
   updateUtilityTitle: (value: string) => void;
+  updateUtilityyProfileId: (value: string) => void;
 }
 
 const useGlobalStateStore = create<GlobalStateProps>(set => ({
@@ -24,10 +26,13 @@ const useGlobalStateStore = create<GlobalStateProps>(set => ({
   text1: '',
   text2: '',
   type: '',
+  utilityProfileId: '',
   updatePreviousRoute: (value: keyof RootStackParamList) =>
     set(state => ({...state, previousRoute: value})),
   updateUtilityTitle: (value: string) =>
     set(state => ({...state, utilityTitle: value})),
+  updateUtilityyProfileId: (value: string) =>
+    set(state => ({...state, utilityProfileId: value})),
   toastSuccess: (message: string) =>
     set(state => ({
       ...state,
@@ -61,6 +66,8 @@ export const useGlobalState = () => {
     toastError,
     utilityTitle,
     updateUtilityTitle,
+    utilityProfileId,
+    updateUtilityyProfileId,
   } = useGlobalStateStore(state => state);
 
   return {
@@ -74,5 +81,7 @@ export const useGlobalState = () => {
     toastError,
     utilityTitle,
     updateUtilityTitle,
+    utilityProfileId,
+    updateUtilityyProfileId,
   };
 };

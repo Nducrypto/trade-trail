@@ -29,7 +29,7 @@ export const addProduct = async (
         ...newProduct,
         productId,
       };
-      productState.addProductToState(newProduct);
+      productState.addProductToState(data);
       globalState.toastSuccess('New product added successfully');
     }
   } catch (error) {

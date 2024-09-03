@@ -26,15 +26,19 @@ import {useGlobalState} from '../../hook/useGlobal';
 const Profile = () => {
   fetchAllUsers();
   const {params} = useRoute<RouteProp<RootStackParamList, 'Profile'>>();
-  const profileId = params.profileId;
-  const navigation = useNavigation<DynamicNavigationProps>();
-  const {allArticles} = useProducts();
-  const {allUsers, currentUser, isUserLoading, setUserLoading} = useUser();
   const {
     toastSuccess: showToastSuccess,
     toastError,
     updateUtilityTitle,
+    updatePreviousRoute,
+    updateUtilityyProfileId,
+    utilityProfileId,
   } = useGlobalState();
+  const profileId = params?.profileId ?? utilityProfileId;
+
+  const navigation = useNavigation<DynamicNavigationProps>();
+  const {allArticles} = useProducts();
+  const {allUsers, currentUser, isUserLoading, setUserLoading} = useUser();
   const {userId: currentUserId, userName: currentUserName} = currentUser;
   const viewedUser = allUsers[profileId] ?? initialState;
   const isFollowingUser = !!viewedUser.friends.find(
@@ -47,25 +51,56 @@ const Profile = () => {
 
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
     if (screenName === screenNames.albums) {
-      updateUtilityTitle(viewedUser.userName);
-      navigation.navigate(screenNames.albums, {
-        creatorId: profileId,
-      });
+      goToAlbums();
       return;
     }
     if (screenName === screenNames.chatScreen) {
-      navigation.navigate(screenNames.chatScreen, {
-        profileId: viewedUser.userId,
-        profileName: viewedUser.userName,
-      });
+      goToChatScreen();
+      return;
+    }
+    if (screenName === screenNames.signIn) {
+      goToSignIn();
       return;
     }
     navigation.navigate(screenName);
   };
+  const goToAlbums = () => {
+    updateUtilityTitle(viewedUser.userName);
+    navigation.navigate(screenNames.albums, {
+      creatorId: profileId,
+    });
+  };
+  const goToChatScreen = () => {
+    navigation.navigate(screenNames.chatScreen, {
+      profileId: viewedUser.userId,
+      profileName: viewedUser.userName,
+    });
+  };
+  const goToSignIn = () => {
+    updatePreviousRoute(screenNames.profile);
+    updateUtilityyProfileId(profileId);
+    navigation.navigate(screenNames.signIn);
+  };
 
+  const handleAlert = () => {
+    Alert.alert(
+      'Sign in to continue',
+      '',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigateToScreen(screenNames.signIn);
+          },
+        },
+        {text: 'Cancel', style: 'cancel'},
+      ],
+      {cancelable: false},
+    );
+  };
   const handleConnectionToggle = async () => {
     if (!currentUserId) {
-      return Alert.alert('Sign in to continue');
+      return handleAlert();
     }
 
     const userData = {

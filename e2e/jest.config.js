@@ -6,8 +6,8 @@ module.exports = {
   maxWorkers: 1,
   globalSetup: 'detox/runners/jest/globalSetup',
   globalTeardown: 'detox/runners/jest/globalTeardown',
+  setupFilesAfterEnv: ['<rootDir>/e2e/detox.setup.ts'],
   reporters: ['detox/runners/jest/reporter'],
   testEnvironment: 'detox/runners/jest/testEnvironment',
   verbose: true,
-  testPathIgnorePatterns: ['./node_modules/'],
 };

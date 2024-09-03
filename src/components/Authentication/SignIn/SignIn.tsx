@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,13 +18,14 @@ import {hp, wp} from '../../../config/appConfig';
 import {DynamicNavigationProps, screenNames} from '../../../screen';
 import themes from '../../../config/themes';
 import {useUser} from '../../../hook/useUser';
+import {useGlobalState} from '../../../hook/useGlobal';
 
 const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const {previousRoute, currentUser, isUserLoading} = useUser();
-
+  const {currentUser, isUserLoading} = useUser();
+  const {previousRoute, utilityProfileId} = useGlobalState();
   const navigation = useNavigation<DynamicNavigationProps>();
   const {navigate} = navigation;
   const handleLoginWithEmail = async () => {
@@ -37,6 +38,13 @@ const SignIn = () => {
       );
 
       if (userCredential) {
+        if (utilityProfileId === screenNames.profile) {
+          navigation.navigate(previousRoute, {
+            profileId: utilityProfileId,
+          });
+          setLoading(false);
+          return;
+        }
         navigation.navigate(previousRoute);
       }
       setLoading(false);
@@ -55,9 +63,11 @@ const SignIn = () => {
     signInWithGoogle({navigate, previousRoute, setLoading});
   }
 
-  if (currentUser && currentUser?.email && !isUserLoading) {
-    navigation.navigate(screenNames.homeStack);
-  }
+  useEffect(() => {
+    if (currentUser && currentUser?.email && !isUserLoading) {
+      navigation.navigate(screenNames.homeStack);
+    }
+  }, [currentUser, isUserLoading, navigation]);
 
   return (
     <View style={styles.signupContainer}>

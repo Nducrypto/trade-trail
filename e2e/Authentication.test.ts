@@ -1,48 +1,27 @@
-import {device, expect, element} from 'detox';
+import {expect, element} from 'detox';
+import {dismissAlertWithOk} from './utils/dismissAlert';
+import {dismisskeyBoard} from './utils/dismisskeyBoard';
+import {getStarted} from './utils/getStarted';
 
-const dismissAlert = async () => {
-  if (device.getPlatform() === 'ios') {
-    await element(by.label('OK')).atIndex(0).tap();
-  } else {
-    await device.pressBack();
-  }
-};
-const dismisskeyBoard = async (textFieldId: string) => {
-  if (device.getPlatform() === 'ios') {
-    await element(by.id(textFieldId)).tapReturnKey();
-  } else {
-    await device.pressBack();
-  }
-};
-
-describe('Sign-up and sign-in', () => {
-  beforeAll(async () => {
-    await device.launchApp();
-    await device.setURLBlacklist([
-      '.*firestore.googleapis.com/google.firestore.v1.Firestore/Listen.*',
-    ]);
-  });
-
+describe('Sign-up and Sign-in', () => {
   it('should render Get Started screen correctly', async () => {
-    await expect(
-      element(by.text('Your ultimate shopping destination')),
-    ).toBeVisible();
-    await expect(element(by.text('Get Started'))).toBeVisible();
-    await element(by.id('get-started-button')).tap();
+    const isGetStartedvisible = await getStarted();
+    if (isGetStartedvisible) {
+      await element(by.id('get-started-button')).tap();
+    }
   });
 
   // ====SINGUP==
-  it('should open sidebar and navigate to sign-up correctly', async () => {
+  it('should open sidebar menu and navigate to sign-up screen', async () => {
     await element(by.id('open-menu')).tap();
     await element(by.id('SignUp')).tap();
   });
 
-  it('should render sign-up correctly', async () => {
+  it('should render all elements on the sign-up screen', async () => {
     await expect(element(by.text('Sign up with'))).toBeVisible();
     await expect(element(by.text('Github'))).toBeVisible();
     await expect(element(by.text('Google'))).toBeVisible();
     await expect(element(by.text('or sign up the classic way'))).toBeVisible();
-
     await expect(element(by.id('username-text-field'))).toBeVisible();
     await expect(element(by.id('email-text-field'))).toBeVisible();
     await expect(element(by.id('password-text-field'))).toBeVisible();
@@ -50,7 +29,7 @@ describe('Sign-up and sign-in', () => {
     await expect(element(by.id('google-login-btn'))).toBeVisible();
   });
 
-  it('should check Weak password', async () => {
+  it('should display "Weak" password strength indicator for weak passwords', async () => {
     await element(by.id('username-text-field')).typeText('Chi chi');
     await dismisskeyBoard('username-text-field');
 
@@ -62,14 +41,14 @@ describe('Sign-up and sign-in', () => {
     await expect(element(by.text('Weak'))).toBeVisible();
   });
 
-  it('should check Strong password', async () => {
+  it('should display "Strong" password strength indicator for strong passwords', async () => {
     await element(by.id('password-text-field')).clearText();
     await element(by.id('password-text-field')).typeText('chichi');
     await dismisskeyBoard('password-text-field');
     await expect(element(by.text('Strong'))).toBeVisible();
   });
 
-  it('should show a message if user-name alread exist', async () => {
+  it('should show an error message if the username is already in use', async () => {
     await element(by.id('check-box')).tap();
     await element(by.id('sign-up-button')).tap();
     await waitFor(element(by.id('activity-indicator'))).toBeVisible();
@@ -79,8 +58,8 @@ describe('Sign-up and sign-in', () => {
       .withTimeout(2000);
   });
 
-  it('should show a message if email alread exist', async () => {
-    await dismissAlert();
+  it('should show an error message if the email is already in use', async () => {
+    await dismissAlertWithOk();
     await element(by.id('username-text-field')).clearText();
     await element(by.id('username-text-field')).typeText('test test');
     await dismisskeyBoard('username-text-field');
@@ -92,8 +71,8 @@ describe('Sign-up and sign-in', () => {
       .withTimeout(2000);
   });
 
-  it('should navigate to home screen on successful sign-up', async () => {
-    await dismissAlert();
+  it('should navigate to home screen after successful sign-up', async () => {
+    await dismissAlertWithOk();
     await element(by.id('username-text-field')).clearText();
     await element(by.id('username-text-field')).typeText('test');
     await dismisskeyBoard('username-text-field');
@@ -108,19 +87,31 @@ describe('Sign-up and sign-in', () => {
   });
 
   // ===LOGOUT==
-  it('should open sidebar and navigate to sign in correctly', async () => {
+  it('should log out and navigate back to the Get Started screen', async () => {
+    await waitFor(element(by.id('test@gmail.com')))
+      .toBeVisible()
+      .withTimeout(6000);
     await element(by.id('open-menu')).tap();
     await element(by.id('Log Out')).tap();
-    await element(by.id('get-started-button')).tap();
   });
 
+  it('should render Get Started screen correctly to handle Sign In', async () => {
+    const isGetStartedvisible = await getStarted();
+    if (isGetStartedvisible) {
+      await element(by.id('get-started-button')).tap();
+    }
+  });
   // ====SIGN IN==
-  it('should open sidebar and navigate to sign in correctly', async () => {
+  it('should open sidebar menu and navigate to sign-in screen', async () => {
+    await waitFor(element(by.text('Fashion')))
+      .toBeVisible()
+      .withTimeout(6000);
+
     await element(by.id('open-menu')).tap();
     await element(by.id('SignIn')).tap();
   });
 
-  it('should render sign in correctly', async () => {
+  it('should render all elements on the sign-in screen', async () => {
     await expect(element(by.text('Sign in with'))).toBeVisible();
     await expect(element(by.text('Github'))).toBeVisible();
     await expect(element(by.text('Google'))).toBeVisible();
@@ -134,14 +125,14 @@ describe('Sign-up and sign-in', () => {
     await expect(element(by.id('google-login-icon'))).toBeVisible();
   });
 
-  it('should navigate to sign up screen', async () => {
+  it('should navigate to sign-up screen when prompted', async () => {
     await element(by.text(`Don't have an Account? Sign Up`)).tap();
     await expect(element(by.id('signUp-Back-btn'))).toBeVisible();
 
     await element(by.id('signUp-Back-btn')).tap();
   });
 
-  it('should show an error message for invalid credentials', async () => {
+  it('should show an error message for invalid sign-in credentials', async () => {
     await element(by.id('email-text-field')).clearText();
     await element(by.id('email-text-field')).typeText(
       'invaliduser@example.com',
@@ -159,8 +150,8 @@ describe('Sign-up and sign-in', () => {
       .withTimeout(5000);
   });
 
-  it('should navigate to home screen on successful sign-in', async () => {
-    await dismissAlert();
+  it('should navigate to home screen after successful sign-in', async () => {
+    await dismissAlertWithOk();
     await element(by.id('email-text-field')).clearText();
     await element(by.id('email-text-field')).typeText('Chi@gmail.com');
     await dismisskeyBoard('email-text-field');

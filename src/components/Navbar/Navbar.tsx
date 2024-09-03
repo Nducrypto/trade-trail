@@ -31,6 +31,7 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
     screenNames.productDetail,
     screenNames.cart,
     screenNames.productList,
+    screenNames.profile,
   ];
 
   useEffect(() => {

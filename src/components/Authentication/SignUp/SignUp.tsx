@@ -17,9 +17,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {DynamicNavigationProps} from '../../../screen';
 import themes from '../../../config/themes';
 import {signInWithGoogle} from '../../../utils/firebaseUtils';
-import {useUser} from '../../../hook/useUser';
 import {hp, wp} from '../../../config/appConfig';
 import {CheckBox} from '@rneui/themed';
+import {useGlobalState} from '../../../hook/useGlobal';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
@@ -30,9 +30,8 @@ const SignUp = () => {
   const navigation = useNavigation<DynamicNavigationProps>();
   const {navigate} = navigation;
 
-  const {previousRoute} = useUser();
-
-  const users = USERS;
+  const {previousRoute} = useGlobalState();
+  const usersRoute = USERS;
 
   const handleSignupWithEmail = async () => {
     if (!isPolicyAgreed) {
@@ -41,7 +40,10 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const userCollections = firebase.collection(firebase.firestore, users);
+      const userCollections = firebase.collection(
+        firebase.firestore,
+        usersRoute,
+      );
       const getDocs = firebase.getDocs(userCollections);
       const isUserNameExist = (await getDocs).docs.find(
         user => user.data().userName === userName,
