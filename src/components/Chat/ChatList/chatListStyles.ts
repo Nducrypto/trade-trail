@@ -14,6 +14,7 @@ export const chatListStyles = StyleSheet.create({
   signInText: {
     color: themes.COLORS.BLACK,
     fontWeight: '700',
+    fontSize: themes.FONT_SIZES.MEDIUM,
   },
   item: {
     flexDirection: 'row',
@@ -60,5 +61,11 @@ export const chatListStyles = StyleSheet.create({
     color: themes.COLORS.BLACK,
     fontWeight: '300',
     marginTop: hp('1%'),
+  },
+  noChatLabel: {
+    fontSize: themes.FONT_SIZES.LARGE,
+    color: themes.COLORS.BLACK,
+    fontWeight: '500',
+    marginTop: hp('30%'),
   },
 });

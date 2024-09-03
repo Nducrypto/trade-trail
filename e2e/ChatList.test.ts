@@ -1,17 +1,10 @@
 import {expect, element} from 'detox';
 import {getStarted} from './utils/getStarted';
-import {dismissAlertWithCancel, dismissAlertWithOk} from './utils/dismissAlert';
 import {dismisskeyBoard} from './utils/dismisskeyBoard';
+import {verifyTextVisibility} from './utils/verifyTextVisibility';
+import {CHITESTEMAIL, CHITESTPASS} from '@env';
 
 describe('Profile', () => {
-  //   beforeAll(async () => {
-  //     await device.launchApp();
-  //   });
-
-  //   afterAll(async () => {
-  //     await device.terminateApp();
-  //   });
-
   it('should launch the app and render Get Started screen correctly', async () => {
     const isGetStartedvisible = await getStarted();
     if (isGetStartedvisible) {
@@ -24,120 +17,71 @@ describe('Profile', () => {
   });
 
   it('should navigate to Notification screen when the icon is clicked', async () => {
-    await element(by.id('notification-icon-btn')).tap();
+    await element(by.id('productsScreen-notification-icon')).tap();
   });
 
-  //   it('should navigate to Seller Profile screen from Product Detail screen', async () => {
-  //     await waitFor(element(by.text('Chi chi')))
-  //       .toBeVisible()
-  //       .withTimeout(4000);
-  //     await element(by.text('Seller')).tap();
-  //   });
+  it('should navigate to ChatList screen when the chat icon is clicked', async () => {
+    await element(by.id('notificationScreen-chat-icon')).tap();
+  });
 
-  //   it('should attempt to follow the seller when user is not logged in', async () => {
-  //     await waitFor(element(by.text('Connect')))
-  //       .toBeVisible()
-  //       .withTimeout(3000);
+  it('should check if user is not signed in and proceed to Sign-In screen when clicked', async () => {
+    const isSignedIn = await verifyTextVisibility('Sign in to continue');
+    if (isSignedIn) {
+      await element(by.id('sign-in-btn')).tap();
+    }
+  });
 
-  //     await element(by.text('Connect')).tap();
-  //   });
+  it('should log in and navigate back to ChatList screen on successful Sign-In', async () => {
+    const isSignInScreen = await verifyTextVisibility('Sign in with');
 
-  //   it('should display alert and dismiss with cancel when trying to follow seller while not logged in', async () => {
-  //     const signInAlertVisible = await waitFor(
-  //       element(by.text('Sign in to continue')),
-  //     )
-  //       .toBeVisible()
-  //       .withTimeout(6000)
-  //       .catch(() => false);
+    if (isSignInScreen) {
+      await element(by.id('email-text-field')).typeText(CHITESTEMAIL);
+      await dismisskeyBoard('email-text-field');
 
-  //     if (signInAlertVisible) {
-  //       await dismissAlertWithCancel();
-  //     }
-  //   });
+      await element(by.id('password-text-field')).typeText(CHITESTPASS);
+      await dismisskeyBoard('password-text-field');
+      await element(by.id('sign-in-button')).tap();
+    }
+  });
 
-  //   it('should display alert and dismiss with ok to proceed to Sign-In screen', async () => {
-  //     await element(by.text('Connect')).tap();
-  //     const signInAlertVisible = await waitFor(
-  //       element(by.text('Sign in to continue')),
-  //     )
-  //       .toBeVisible()
-  //       .withTimeout(6000)
-  //       .catch(() => false);
+  it('should navigate to Chat Screen when a sender is selected', async () => {
+    const isEmpty = await verifyTextVisibility('You have no message');
+    if (!isEmpty) {
+      await waitFor(element(by.id('sender-1')))
+        .toBeVisible()
+        .withTimeout(4000);
 
-  //     if (signInAlertVisible) {
-  //       await dismissAlertWithOk();
-  //     }
-  //   });
+      await element(by.id('sender-1')).tap();
+    }
+  });
 
-  //   it('should log in and navigate back to Profile screen on successful Sign-In', async () => {
-  //     await element(by.id('email-text-field')).typeText('Ndubinho9@gmail.com');
-  //     await dismisskeyBoard('email-text-field');
+  it('should send a message to the seller in Chat Screen', async () => {
+    const isEmpty = await verifyTextVisibility('You have no message');
+    if (!isEmpty) {
+      await waitFor(element(by.id('chatScreen-Back-btn')))
+        .toBeVisible()
+        .withTimeout(3000);
 
-  //     await element(by.id('password-text-field')).typeText('oliver');
-  //     await dismisskeyBoard('password-text-field');
-  //     await element(by.id('sign-in-button')).tap();
-  //   });
+      await element(by.id('chat-input')).typeText('how may i help you');
+      await dismisskeyBoard('chat-input');
+      await expect(element(by.id('chat-input'))).toHaveText(
+        'how may i help you',
+      );
+      await element(by.id('button')).tap();
+      await element(by.id('chat-input')).clearText();
+    }
+  });
 
-  //   it('should handle follow or unfollow action for Seller when user is logged in', async () => {
-  //     const isNotFollowingSeller = await waitFor(element(by.text('Connect')))
-  //       .toBeVisible()
-  //       .withTimeout(3000)
-  //       .catch(() => false);
+  it('should verify if message is delivered successfully in Chat Screen', async () => {
+    const isEmpty = await verifyTextVisibility('You have no message');
+    if (!isEmpty) {
+      await waitFor(element(by.text('how may i help you')))
+        .toBeVisible()
+        .withTimeout(6000);
+    }
+  });
 
-  //     if (isNotFollowingSeller) {
-  //       await element(by.text('Connect')).tap();
-  //     } else {
-  //       await element(by.text('Disconnect')).tap();
-  //     }
-  //   });
-
-  //   it('should navigate to Seller Album screen', async () => {
-  //     await waitFor(element(by.text('View all')))
-  //       .toBeVisible()
-  //       .withTimeout(3000);
-  //     await element(by.text('View all')).tap();
-  //   });
-
-  //   it('should scroll through Seller Album to view more content', async () => {
-  //     await waitFor(element(by.id('albums-Back-btn')))
-  //       .toBeVisible()
-  //       .withTimeout(3000);
-
-  //     await element(by.id('albums-flatlist')).scrollTo('top');
-  //     await element(by.id('albums-flatlist')).scrollTo('bottom');
-  //   });
-
-  //   it('should navigate back to Profile screen from Album screen', async () => {
-  //     await element(by.id('albums-flatlist')).scrollTo('top');
-  //     await element(by.id('albums-Back-btn')).tap();
-  //   });
-
-  //   it('should navigate to Chat Screen from Profile screen', async () => {
-  //     await waitFor(element(by.text('Message')))
-  //       .toBeVisible()
-  //       .withTimeout(3000);
-  //     await element(by.text('Message')).tap();
-  //   });
-
-  //   it('should send a message to the seller in Chat Screen', async () => {
-  //     await waitFor(element(by.id('chatScreen-Back-btn')))
-  //       .toBeVisible()
-  //       .withTimeout(3000);
-
-  //     await element(by.id('chat-input')).typeText('hello');
-  //     await dismisskeyBoard('chat-input');
-  //     await expect(element(by.id('chat-input'))).toHaveText('hello');
-  //     await element(by.id('button')).tap();
-  //     await element(by.id('chat-input')).clearText();
-  //   });
-
-  //   it('should verify if message is delivered successfully in Chat Screen', async () => {
-  //     await waitFor(element(by.text('hello')))
-  //       .toBeVisible()
-  //       .withTimeout(6000);
-  //   });
-
-  //   it('should navigate back to Profile screen from Chat Screen', async () => {
-  //     await element(by.id('chatScreen-Back-btn')).tap();
-  //   });
+  it('should navigate back to ChatList screen from Chat Screen', async () => {
+    await element(by.id('chatScreen-Back-btn')).tap();
+  });
 });

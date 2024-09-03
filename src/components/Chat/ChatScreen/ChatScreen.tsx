@@ -120,7 +120,7 @@ const ChatScreen = () => {
               <View
                 style={{
                   ...chatStyles.messageCon,
-                  ...(data.senderId === currentUser?.userId && {
+                  ...(isCurrentUserMessage(data[currentUserId]) && {
                     justifyContent: 'flex-end',
                   }),
                 }}>
@@ -128,14 +128,14 @@ const ChatScreen = () => {
                   <View
                     style={{
                       ...chatStyles.message,
-                      ...(isCurrentUserMessage(data.senderId) && {
+                      ...(isCurrentUserMessage(data[currentUserId]) && {
                         backgroundColor: themes.COLORS.BUTTON_COLOR,
                       }),
                     }}>
                     <Text
                       style={{
                         ...chatStyles.messageText,
-                        ...(isCurrentUserMessage(data.senderId) && {
+                        ...(isCurrentUserMessage(data[currentUserId]) && {
                           color: themes.COLORS.WHITE,
                         }),
                       }}>

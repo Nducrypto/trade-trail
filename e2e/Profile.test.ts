@@ -2,6 +2,8 @@ import {expect, element} from 'detox';
 import {getStarted} from './utils/getStarted';
 import {dismissAlertWithCancel, dismissAlertWithOk} from './utils/dismissAlert';
 import {dismisskeyBoard} from './utils/dismisskeyBoard';
+import {verifyTextVisibility} from './utils/verifyTextVisibility';
+import {NDUTESTEMAIL, NDUTESTPASS} from '@env';
 
 describe('Profile', () => {
   it('should launch the app and render Get Started screen correctly', async () => {
@@ -38,48 +40,33 @@ describe('Profile', () => {
   });
 
   it('should display alert and dismiss with cancel when trying to follow seller while not logged in', async () => {
-    const signInAlertVisible = await waitFor(
-      element(by.text('Sign in to continue')),
-    )
-      .toBeVisible()
-      .withTimeout(6000)
-      .catch(() => false);
-
-    if (signInAlertVisible) {
+    const alertVisible = await verifyTextVisibility('Sign in to continue');
+    if (alertVisible) {
       await dismissAlertWithCancel();
     }
   });
 
   it('should display alert and dismiss with ok to proceed to Sign-In screen', async () => {
     await element(by.text('Connect')).tap();
-    const signInAlertVisible = await waitFor(
-      element(by.text('Sign in to continue')),
-    )
-      .toBeVisible()
-      .withTimeout(6000)
-      .catch(() => false);
-
-    if (signInAlertVisible) {
+    const alertVisible = await verifyTextVisibility('Sign in to continue');
+    if (alertVisible) {
       await dismissAlertWithOk();
     }
   });
 
   it('should log in and navigate back to Profile screen on successful Sign-In', async () => {
-    await element(by.id('email-text-field')).typeText('Ndubinho9@gmail.com');
+    await element(by.id('email-text-field')).typeText(NDUTESTEMAIL);
     await dismisskeyBoard('email-text-field');
 
-    await element(by.id('password-text-field')).typeText('oliver');
+    await element(by.id('password-text-field')).typeText(NDUTESTPASS);
     await dismisskeyBoard('password-text-field');
     await element(by.id('sign-in-button')).tap();
   });
 
   it('should handle follow or unfollow action for Seller when user is logged in', async () => {
-    const isNotFollowingSeller = await waitFor(element(by.text('Connect')))
-      .toBeVisible()
-      .withTimeout(3000)
-      .catch(() => false);
+    const isFollowingSeller = await verifyTextVisibility('Connect');
 
-    if (isNotFollowingSeller) {
+    if (!isFollowingSeller) {
       await element(by.text('Connect')).tap();
     } else {
       await element(by.text('Disconnect')).tap();

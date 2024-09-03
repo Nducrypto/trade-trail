@@ -43,7 +43,7 @@ const HomeStack = () => {
       options: {
         title: 'Home',
         headerLeft: () => <MenuToggleIcon />,
-        headerRight: () => <Navbar />,
+        headerRight: () => <Navbar testID="productsScreen" />,
       },
     },
     {
@@ -63,7 +63,7 @@ const HomeStack = () => {
         headerStyle: {
           backgroundColor: 'transparent',
         },
-        headerRight: () => <Navbar color />,
+        headerRight: () => <Navbar color testID="productDetailScreen" />,
         headerLeft: () => <BackButton testID="productDetail" />,
       },
     },
@@ -72,7 +72,7 @@ const HomeStack = () => {
       component: Profile,
       options: {
         headerRight: () => <Navbar color />,
-        headerLeft: () => <BackButton testID="profile" />,
+        headerLeft: () => <BackButton testID="profile" white />,
         headerTransparent: true,
         headerStyle: {
           backgroundColor: 'indigo',
@@ -123,7 +123,7 @@ const HomeStack = () => {
       name: screenNames.notifications,
       component: Notification,
       options: {
-        headerRight: () => <Navbar chat />,
+        headerRight: () => <Navbar chat testID="notificationScreen" />,
         headerLeft: () => <BackButton testID="notification" />,
       },
     },

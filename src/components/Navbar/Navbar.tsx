@@ -19,8 +19,9 @@ import {Badge} from '@rneui/base';
 interface Props {
   color?: boolean;
   chat?: boolean;
+  testID?: string;
 }
-const Navbar = ({color, chat}: Props) => {
+const Navbar = ({color, chat, testID}: Props) => {
   useAuthentication();
   const navigation = useNavigation<NavigationProps>();
   const {COLORS} = themes;
@@ -36,6 +37,8 @@ const Navbar = ({color, chat}: Props) => {
     screenNames.cart,
     screenNames.productList,
     screenNames.profile,
+    screenNames.chatList,
+    screenNames.notifications,
   ];
 
   useEffect(() => {
@@ -70,7 +73,7 @@ const Navbar = ({color, chat}: Props) => {
     <View style={navbarStyles.container}>
       {chat ? (
         <TouchableOpacity
-          testID="chat-icon-btn"
+          testID={`${testID}-chat-icon`}
           onPress={() => navigation.navigate(screenNames.chatList)}
           style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
@@ -87,7 +90,7 @@ const Navbar = ({color, chat}: Props) => {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          testID="notification-icon-btn"
+          testID={`${testID}-notification-icon`}
           onPress={() => navigation.navigate(screenNames.notifications)}
           style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
@@ -105,7 +108,7 @@ const Navbar = ({color, chat}: Props) => {
       )}
 
       <TouchableOpacity
-        testID="cart-icon-btn"
+        testID={`${testID}-cart-icon`}
         onPress={() => navigation.navigate(screenNames.cart)}
         style={navbarStyles.button}>
         <MaterialIcons

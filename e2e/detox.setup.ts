@@ -1,14 +1,9 @@
-let isAppLaunched = false;
-
 beforeAll(async () => {
-  if (!isAppLaunched) {
-    await device.launchApp();
-    await device.setURLBlacklist([
-      '.*firestore.googleapis.com/google.firestore.v1.Firestore.*',
-      '.*cdn.pixabay.com.*',
-    ]);
-    isAppLaunched = true;
-  }
+  await device.launchApp();
+  await device.setURLBlacklist([
+    '.*firestore.googleapis.com/google.firestore.v1.Firestore.*',
+    '.*cdn.pixabay.com.*',
+  ]);
 });
 
 afterAll(async () => {

@@ -39,9 +39,7 @@ const Notification = () => {
         activeOpacity={0.7}
         style={notificationStyles.signInCon}
         onPress={() => navigation.navigate(screenNames.signIn)}>
-        <Text style={notificationStyles.signInText}>
-          Please Sign in to continue
-        </Text>
+        <Text style={notificationStyles.signInText}>Sign in to continue</Text>
       </TouchableOpacity>
     );
   }
@@ -58,7 +56,7 @@ const Notification = () => {
           paddingLeft={0}
           key={index}>
           <TouchableOpacity
-            testID={`sender-${index}`}
+            testID={`follower-${index + 1}`}
             activeOpacity={0.8}
             style={notificationStyles.item}
             onPress={() => navigateToProfile(item.userId)}>
