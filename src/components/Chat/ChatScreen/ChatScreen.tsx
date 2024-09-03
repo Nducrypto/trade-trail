@@ -98,13 +98,12 @@ const ChatScreen = () => {
   }
   if (!currentUser?.email) {
     return (
-      <View style={chatStyles.signInCon}>
-        <Text
-          style={chatStyles.signInText}
-          onPress={() => navigation.navigate(screenNames.signIn)}>
-          Please Sign in to continue
-        </Text>
-      </View>
+      <TouchableOpacity
+        testID="sign-in-btn"
+        style={chatStyles.signInCon}
+        onPress={() => navigation.navigate(screenNames.signIn)}>
+        <Text style={chatStyles.signInText}>Please Sign in to continue</Text>
+      </TouchableOpacity>
     );
   }
 
