@@ -16,7 +16,11 @@ import {useChat} from '../../hook/useChat';
 import {countUnreadMessages} from '../../controller/chats';
 import {Badge} from '@rneui/base';
 
-const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
+interface Props {
+  color?: boolean;
+  chat?: boolean;
+}
+const Navbar = ({color, chat}: Props) => {
   useAuthentication();
   const navigation = useNavigation<NavigationProps>();
   const {COLORS} = themes;
@@ -66,6 +70,7 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
     <View style={navbarStyles.container}>
       {chat ? (
         <TouchableOpacity
+          testID="chat-icon-btn"
           onPress={() => navigation.navigate(screenNames.chatList)}
           style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
@@ -82,6 +87,7 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
+          testID="notification-icon-btn"
           onPress={() => navigation.navigate(screenNames.notifications)}
           style={{...navbarStyles.button, width: wp('7%')}}>
           <Ionicons
@@ -99,6 +105,7 @@ const Navbar = ({color, chat}: {color?: boolean; chat?: boolean}) => {
       )}
 
       <TouchableOpacity
+        testID="cart-icon-btn"
         onPress={() => navigation.navigate(screenNames.cart)}
         style={navbarStyles.button}>
         <MaterialIcons
