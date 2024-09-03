@@ -2,9 +2,10 @@ import * as firebase from '../config/firebase';
 import {USERS} from '@env';
 import {ProductInterface} from '../hook/useProducts';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {CollectionInterface, GoogleSignInProps} from '../hook/useUser';
+import {CollectionInterface} from '../hook/useUser';
 import {OrderItem} from '../hook/useOrder';
 import {Alert} from 'react-native';
+import {DynamicNavigationProps, RootStackParamList} from '../screen';
 
 const usersRoute = USERS;
 type ReqProps = Partial<ProductInterface | OrderItem>;
@@ -29,6 +30,11 @@ export const removeInDatabase = async (url: string, docId: string) => {
   }
 };
 
+export interface GoogleSignInProps {
+  navigate: DynamicNavigationProps['navigate'];
+  previousRoute: keyof RootStackParamList;
+  setLoading: (value: boolean) => void;
+}
 export async function signInWithGoogle({
   navigate,
   previousRoute,

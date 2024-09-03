@@ -32,6 +32,7 @@ const Albums = () => {
       keyExtractor={item => item.productId}
       removeClippedSubviews={true}
       showsVerticalScrollIndicator={false}
+      testID="albums-flatlist"
     />
   );
 };

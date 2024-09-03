@@ -1,15 +1,6 @@
 import {create} from 'zustand';
-import {
-  RootStackParamList,
-  screenNames,
-  DynamicNavigationProps,
-} from '../screen';
+import {screenNames} from '../screen';
 
-export interface GoogleSignInProps {
-  navigate: DynamicNavigationProps['navigate'];
-  previousRoute: keyof RootStackParamList;
-  setLoading: (value: boolean) => void;
-}
 export interface FriendsProp {
   userName: string;
   status: string;
@@ -45,7 +36,6 @@ interface AllUserStateProps {
   currentUser: CollectionInterface;
   isUserLoading: boolean;
   isAuthError: boolean | string;
-  previousRoute: keyof RootStackParamList;
   storeAllUsers: (value: Record<string, CollectionInterface>) => void;
   updateCurrentUser: (value: CollectionInterface) => void;
   setUserLoading: (value: boolean) => void;
@@ -109,7 +99,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,
@@ -121,7 +110,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,

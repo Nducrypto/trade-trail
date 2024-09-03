@@ -53,7 +53,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       updateHasVisitedBefore(false);
       setSelectedLabel('Home');
       props.navigation.navigate(screenNames.homeStack);
-    } catch (error) {}
+    } catch (error) {
+      throw Error('Error login out');
+    }
   };
 
   const isSelectedLabel = (label: string): boolean => {

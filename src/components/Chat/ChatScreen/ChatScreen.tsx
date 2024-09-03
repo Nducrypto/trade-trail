@@ -174,6 +174,7 @@ const ChatScreen = () => {
             placeholder="Message"
             style={chatStyles.input}
             placeholderTextColor="grey"
+            testID="chat-input"
           />
         </View>
       </View>

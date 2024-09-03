@@ -19,6 +19,7 @@ import {productsStyles} from './productsStyles';
 import {hp, wp} from '../../../config/appConfig';
 import {useAuthentication} from '../../../controller/user';
 import {fetchAllProducts} from '../../../controller/product';
+import {useUser} from '../../../hook/useUser';
 
 const Products = () => {
   useAuthentication();
@@ -28,6 +29,8 @@ const Products = () => {
     ProductInterface[]
   >([]);
   const {allArticles, isProductLoading} = useProducts();
+  const {currentUser} = useUser();
+  const email = currentUser?.email;
   const navigation = useNavigation<NavigationProps>();
 
   const handleSearch = () => {
@@ -144,7 +147,7 @@ const Products = () => {
   };
 
   return (
-    <View style={productsStyles.home}>
+    <View style={productsStyles.home} testID={email}>
       <StatusBar barStyle="dark-content" backgroundColor="black" />
 
       <ProductCard minHeight={100} maxWidth={wp('100%')}>
