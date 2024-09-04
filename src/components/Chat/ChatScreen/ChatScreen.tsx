@@ -93,8 +93,8 @@ const ChatScreen = () => {
     setMessage('');
   };
 
-  function isCurrentUserMessage(senderId: string) {
-    return senderId === currentUser?.userId;
+  function isUserMessage(id: string) {
+    return id === currentUser?.userId;
   }
   if (!currentUser?.email) {
     return (
@@ -102,7 +102,7 @@ const ChatScreen = () => {
         testID="sign-in-btn"
         style={chatStyles.signInCon}
         onPress={() => navigation.navigate(screenNames.signIn)}>
-        <Text style={chatStyles.signInText}>Please Sign in to continue</Text>
+        <Text style={chatStyles.signInText}>Sign in to continue</Text>
       </TouchableOpacity>
     );
   }
@@ -120,7 +120,7 @@ const ChatScreen = () => {
               <View
                 style={{
                   ...chatStyles.messageCon,
-                  ...(isCurrentUserMessage(data[currentUserId]) && {
+                  ...(isUserMessage(data.senderId) && {
                     justifyContent: 'flex-end',
                   }),
                 }}>
@@ -128,14 +128,14 @@ const ChatScreen = () => {
                   <View
                     style={{
                       ...chatStyles.message,
-                      ...(isCurrentUserMessage(data[currentUserId]) && {
+                      ...(isUserMessage(data.senderId) && {
                         backgroundColor: themes.COLORS.BUTTON_COLOR,
                       }),
                     }}>
                     <Text
                       style={{
                         ...chatStyles.messageText,
-                        ...(isCurrentUserMessage(data[currentUserId]) && {
+                        ...(isUserMessage(data.senderId) && {
                           color: themes.COLORS.WHITE,
                         }),
                       }}>

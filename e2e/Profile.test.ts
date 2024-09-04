@@ -64,9 +64,9 @@ describe('Profile', () => {
   });
 
   it('should handle follow or unfollow action for Seller when user is logged in', async () => {
-    const isFollowingSeller = await verifyTextVisibility('Connect');
+    const isConnectVisible = await verifyTextVisibility('Connect');
 
-    if (!isFollowingSeller) {
+    if (isConnectVisible) {
       await element(by.text('Connect')).tap();
     } else {
       await element(by.text('Disconnect')).tap();
