@@ -7,7 +7,6 @@ import {useUser} from '../../../hook/useUser';
 import {ChatMessage, useChat} from '../../../hook/useChat';
 import {
   fetchAllChatFromDatabase,
-  countUnreadMessages,
   getUnreadUserMessages,
   sortChatsByRecentSender,
   aggregateChatsForUser,

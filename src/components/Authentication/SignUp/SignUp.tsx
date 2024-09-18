@@ -40,33 +40,29 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const userCollections = firebase.collection(
-        firebase.firestore,
-        usersRoute,
-      );
-      const getDocs = firebase.getDocs(userCollections);
-      const isUserNameExist = (await getDocs).docs.find(
+      const users = firebase.collection(firebase.firestore, usersRoute);
+      const getDocs = firebase.getDocs(users);
+      const nameExist = (await getDocs).docs.find(
         user => user.data().userName === userName,
       );
 
-      if (isUserNameExist) {
+      if (nameExist) {
         setLoading(false);
         return Alert.alert('Username already in use');
       }
-      const fetchedUserCredential =
-        await firebase.createUserWithEmailAndPassword(
-          firebase.auth,
-          email,
-          password,
-        );
-      if (!fetchedUserCredential) {
+      const credential = await firebase.createUserWithEmailAndPassword(
+        firebase.auth,
+        email,
+        password,
+      );
+      if (!credential) {
         setLoading(false);
         return Alert.alert('User creation failed');
       }
 
       const userData = {
-        userId: fetchedUserCredential.user.uid,
-        email: fetchedUserCredential.user.email,
+        userId: credential.user.uid,
+        email: credential.user.email,
         role: 'Subscriber',
         joined: new Date().toString(),
         bio: '',
@@ -80,7 +76,7 @@ const SignUp = () => {
         country: '',
       };
 
-      await firebase.addDoc(userCollections, userData);
+      await firebase.addDoc(users, userData);
 
       navigation.navigate(previousRoute);
       setLoading(false);
