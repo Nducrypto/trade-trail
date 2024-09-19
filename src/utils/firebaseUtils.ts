@@ -6,10 +6,13 @@ import {CollectionInterface} from '../hook/useUser';
 import {OrderItem} from '../hook/useOrder';
 import {Alert} from 'react-native';
 import {DynamicNavigationProps, RootStackParamList} from '../screen';
+import {authorize} from 'react-native-app-auth';
+import {githubConfig} from '../config/githubConfig';
 
 const usersRoute = USERS;
-type ReqProps = Partial<ProductInterface | OrderItem>;
-export const createInDatabase = async (url: string, requestData: ReqProps) => {
+type ReqProps = Partial<ProductInterface | OrderItem | CollectionInterface>;
+
+export async function createInDatabase(url: string, requestData: ReqProps) {
   try {
     const productCollections = firebase.collection(firebase.firestore, url);
     const newDocument = await firebase.addDoc(productCollections, requestData);
@@ -18,9 +21,9 @@ export const createInDatabase = async (url: string, requestData: ReqProps) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-export const removeInDatabase = async (url: string, docId: string) => {
+export async function removeInDatabase(url: string, docId: string) {
   try {
     const productDocumentRef = firebase.doc(firebase.firestore, url, docId);
     await firebase.deleteDoc(productDocumentRef);
@@ -28,18 +31,19 @@ export const removeInDatabase = async (url: string, docId: string) => {
   } catch (error) {
     throw error;
   }
-};
+}
 
-export interface GoogleSignInProps {
+export interface OAuthProps {
   navigate: DynamicNavigationProps['navigate'];
-  previousRoute: keyof RootStackParamList;
+  route: keyof RootStackParamList;
   setLoading: (value: boolean) => void;
 }
+
 export async function signInWithGoogle({
   navigate,
-  previousRoute,
+  route,
   setLoading,
-}: GoogleSignInProps) {
+}: OAuthProps) {
   try {
     setLoading(true);
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
@@ -47,55 +51,104 @@ export async function signInWithGoogle({
     if (!idToken) {
       return Alert.alert('Error fetching token');
     }
-    const googleCredentials = firebase.GoogleAuthProvider.credential(idToken);
+    const credentials = firebase.GoogleAuthProvider.credential(idToken);
 
-    if (!googleCredentials) {
+    if (!credentials) {
       return Alert.alert('Error fetching google credentials');
     }
     const fetchedData = await firebase.signInWithCredential(
       firebase.auth,
-      googleCredentials,
+      credentials,
     );
 
-    const userCollections = firebase.collection(firebase.firestore, usersRoute);
-
-    const userSnapshot = await firebase.getDocs(userCollections);
-    let userExists = false;
-
-    for (const doc of userSnapshot.docs) {
-      const userData = doc?.data() as CollectionInterface;
-      const userEmail = userData?.email;
-      const emailExist = userEmail === fetchedData?.user.email;
-      if (emailExist) {
-        userExists = true;
-        break;
-      }
-    }
+    const email = fetchedData.user.email ?? '';
+    const displayName = fetchedData.user.displayName ?? '';
+    const userExists = await checkIfUserExists(email, displayName);
 
     if (!userExists) {
-      const email = fetchedData.user.email;
-      const newUserData = {
-        userId: fetchedData.user.uid,
-        email,
-        role: 'Subscriber',
-        joined: new Date().toString(),
-        userName: fetchedData.user.displayName,
-        photos: [fetchedData.user.photoURL],
-        phoneNumber: fetchedData.user.phoneNumber,
-        bio: '',
-        age: null,
-        friends: [],
-        comments: [],
-        city: '',
-        country: '',
-      };
-      await firebase.addDoc(userCollections, newUserData);
+      await newUserData(fetchedData.user);
     }
-    navigate(previousRoute);
+    navigate(route);
 
     setLoading(false);
   } catch (error) {
     setLoading(false);
     Alert.alert('Failed to authenticate with google auth');
   }
+}
+
+export async function signInWithGithub({
+  navigate,
+  route,
+  setLoading,
+}: OAuthProps) {
+  try {
+    setLoading(true);
+    const result = await authorize(githubConfig);
+    const {accessToken} = result;
+
+    if (!accessToken) {
+      setLoading(false);
+      return Alert.alert('Error fetching GitHub OAuth access token');
+    }
+    const credential = firebase.GithubAuthProvider.credential(accessToken);
+
+    if (!credential) {
+      return Alert.alert('Error fetching github credentials');
+    }
+    const fetchedData = await firebase.signInWithCredential(
+      firebase.auth,
+      credential,
+    );
+
+    const email = fetchedData.user.email ?? '';
+    const displayName = fetchedData.user.displayName ?? '';
+    const userExists = await checkIfUserExists(email, displayName);
+
+    if (!userExists) {
+      await newUserData(fetchedData.user);
+    }
+    navigate(route);
+    setLoading(false);
+  } catch (error) {
+    setLoading(false);
+    Alert.alert('Failed to authenticate with github');
+  }
+}
+
+async function checkIfUserExists(email: string, displayName: string) {
+  const userCollections = firebase.collection(firebase.firestore, usersRoute);
+  const userSnapshot = await firebase.getDocs(userCollections);
+  let userExists = false;
+
+  for (const doc of userSnapshot.docs) {
+    const userData = doc?.data() as CollectionInterface;
+    const userEmail = userData?.email;
+    const userName = userData?.userName;
+
+    if (userEmail === email || userName === displayName) {
+      userExists = true;
+      break;
+    }
+  }
+  return userExists;
+}
+
+async function newUserData(user: any) {
+  const data = {
+    userId: user.uid,
+    email: user.email,
+    role: 'Subscriber',
+    joined: new Date().toString(),
+    userName: user.displayName,
+    photos: [user.photoURL],
+    phoneNumber: user.phoneNumber,
+    bio: '',
+    age: null,
+    friends: [],
+    comments: [],
+    city: '',
+    country: '',
+  };
+  await createInDatabase(usersRoute, data);
 }

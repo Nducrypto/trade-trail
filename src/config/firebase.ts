@@ -11,6 +11,7 @@ import {
   getReactNativePersistence,
   signInWithCredential,
   GoogleAuthProvider,
+  GithubAuthProvider,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -95,4 +96,5 @@ export {
   signInWithCredential,
   GoogleAuthProvider,
   FirebaseError,
+  GithubAuthProvider,
 };

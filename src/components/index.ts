@@ -1,4 +1,5 @@
 import Albums from './Albums/Albums';
+import ForgotPassword from './Authentication/ForgotPassword/ForgotPassword';
 import SignIn from './Authentication/SignIn/SignIn';
 import SignUp from './Authentication/SignUp/SignUp';
 import BackButton from './BackButton/BackButton';
@@ -51,4 +52,5 @@ export {
   SearchResult,
   Albums,
   BackButton,
+  ForgotPassword,
 };

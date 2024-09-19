@@ -16,7 +16,7 @@ import {AuthInput, circles} from '../AuthInput';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {DynamicNavigationProps} from '../../../screen';
 import themes from '../../../config/themes';
-import {signInWithGoogle} from '../../../utils/firebaseUtils';
+import {signInWithGithub, signInWithGoogle} from '../../../utils/firebaseUtils';
 import {hp, wp} from '../../../config/appConfig';
 import {CheckBox} from '@rneui/themed';
 import {useGlobalState} from '../../../hook/useGlobal';
@@ -91,7 +91,10 @@ const SignUp = () => {
   };
 
   function handleSignInWithGoogle() {
-    signInWithGoogle({navigate, previousRoute, setLoading});
+    signInWithGoogle({navigate, route: previousRoute, setLoading});
+  }
+  function handleSignInWithGithub() {
+    signInWithGithub({navigate, route: previousRoute, setLoading});
   }
 
   const passwordStrength = !password.length
@@ -125,7 +128,9 @@ const SignUp = () => {
           <View style={styles.headerAndIconCont}>
             <Text style={styles.header}>Sign up with</Text>
             <View style={styles.iconsCon}>
-              <TouchableOpacity style={styles.iconBtn}>
+              <TouchableOpacity
+                style={styles.iconBtn}
+                onPress={handleSignInWithGithub}>
                 <AntDesign
                   name="github"
                   color={themes.COLORS.BLACK}

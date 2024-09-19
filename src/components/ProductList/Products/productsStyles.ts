@@ -10,7 +10,7 @@ export const productsStyles = StyleSheet.create({
     paddingBottom: 10,
   },
   inputCon: {
-    height: hp('7%'),
+    height: hp('6%'),
     width: wp('95.4%'),
     marginHorizontal: 10,
     borderWidth: 1,

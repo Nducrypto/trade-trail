@@ -1,22 +1,17 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 import 'react-native-gesture-handler';
 import 'react-native-safe-area-context';
 import 'react-native-reanimated';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {StatusBar, useColorScheme} from 'react-native';
+import {StatusBar, LogBox, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {screenNames} from './screen';
 import {CustomDrawerContent, HomeStack, CustomToast} from './components';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {wp} from './config/appConfig';
 import themes from './config/themes';
+LogBox.ignoreAllLogs();
 
 const Drawer = createDrawerNavigator();
 

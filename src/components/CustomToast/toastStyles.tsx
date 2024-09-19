@@ -4,14 +4,14 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   successCon: {
-    height: hp('9%'),
+    height: hp('7%'),
     width: wp('95%'),
     padding: 10,
     borderRadius: 5,
     backgroundColor: themes.COLORS.SUCCESS,
   },
   errorCon: {
-    height: hp('9%'),
+    height: hp('7.4%'),
     width: wp('95%'),
     padding: 10,
     borderRadius: 5,

@@ -88,16 +88,13 @@ export const updateProduct = async (
   }
 };
 
-export const removeProduct = async (
-  productId: string,
-  state: AllProductState,
-) => {
+export const removeProduct = async (id: string, state: AllProductState) => {
   state.updateProductLoading(true);
 
   try {
-    const success = await removeInDatabase(productRoute, productId);
+    const success = await removeInDatabase(productRoute, id);
     if (success) {
-      state.deleteArticle(productId);
+      state.deleteArticle(id);
     }
   } catch (error) {
     throw new Error('Failed to delete product');
