@@ -14,8 +14,9 @@ import {
 } from '@react-navigation/drawer';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {auth, signOut} from '../../../config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -67,7 +68,6 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     name: string;
     screen: string;
     Icon: any;
-    // Icon: Partial<{}>;
     color: string;
   };
 
@@ -80,33 +80,26 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       color: 'grey',
     },
 
-    {
-      label: 'Article',
-      name: 'users',
-      screen: screenNames.homeStack,
-      Icon: Feather,
-      color: 'blue',
-    },
     ...(currentUser && currentUser.email
       ? [
           {
             label: 'Profile',
-            name: 'user',
+            name: 'user-circle-o',
             screen: screenNames.profile,
-            Icon: EvilIcons,
+            Icon: FontAwesome,
             color: 'purple',
           },
+
           {
-            label: 'Account',
-            name: 'cog',
-            screen: screenNames.settingsStack,
-            Icon: Entypo,
-            color: 'indigo',
+            label: 'Order',
+            name: 'inventory',
+            screen: screenNames.order,
+            Icon: MaterialIcons,
+            color: 'blue',
           },
         ]
       : []),
   ];
-
   const authScreens = [
     ...(currentUser && currentUser.email
       ? [
@@ -122,15 +115,15 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           {
             label: screenNames.signIn,
             screen: screenNames.signIn,
-            color: 'gray',
+            color: themes.COLORS.BUTTON_COLOR,
             Icon: MaterialCommunityIcons,
-            name: 'import',
+            name: 'application-import',
           },
           {
             label: screenNames.signUp,
             screen: screenNames.signUp,
             color: themes.COLORS.BUTTON_COLOR,
-            Icon: Feather,
+            Icon: FontAwesome,
             name: 'user-plus',
           },
         ]),

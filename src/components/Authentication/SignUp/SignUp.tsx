@@ -16,7 +16,7 @@ import {AuthInput, circles} from '../AuthInput';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {DynamicNavigationProps} from '../../../screen';
 import themes from '../../../config/themes';
-import {signInWithGoogle} from '../../../utils/firebaseUtils';
+import {signInWithGithub, signInWithGoogle} from '../../../utils/firebaseUtils';
 import {hp, wp} from '../../../config/appConfig';
 import {CheckBox} from '@rneui/themed';
 import {useGlobalState} from '../../../hook/useGlobal';
@@ -40,33 +40,29 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const userCollections = firebase.collection(
-        firebase.firestore,
-        usersRoute,
-      );
-      const getDocs = firebase.getDocs(userCollections);
-      const isUserNameExist = (await getDocs).docs.find(
+      const users = firebase.collection(firebase.firestore, usersRoute);
+      const getDocs = firebase.getDocs(users);
+      const nameExist = (await getDocs).docs.find(
         user => user.data().userName === userName,
       );
 
-      if (isUserNameExist) {
+      if (nameExist) {
         setLoading(false);
         return Alert.alert('Username already in use');
       }
-      const fetchedUserCredential =
-        await firebase.createUserWithEmailAndPassword(
-          firebase.auth,
-          email,
-          password,
-        );
-      if (!fetchedUserCredential) {
+      const credential = await firebase.createUserWithEmailAndPassword(
+        firebase.auth,
+        email,
+        password,
+      );
+      if (!credential) {
         setLoading(false);
         return Alert.alert('User creation failed');
       }
 
       const userData = {
-        userId: fetchedUserCredential.user.uid,
-        email: fetchedUserCredential.user.email,
+        userId: credential.user.uid,
+        email: credential.user.email,
         role: 'Subscriber',
         joined: new Date().toString(),
         bio: '',
@@ -80,7 +76,7 @@ const SignUp = () => {
         country: '',
       };
 
-      await firebase.addDoc(userCollections, userData);
+      await firebase.addDoc(users, userData);
 
       navigation.navigate(previousRoute);
       setLoading(false);
@@ -95,7 +91,10 @@ const SignUp = () => {
   };
 
   function handleSignInWithGoogle() {
-    signInWithGoogle({navigate, previousRoute, setLoading});
+    signInWithGoogle({navigate, route: previousRoute, setLoading});
+  }
+  function handleSignInWithGithub() {
+    signInWithGithub({navigate, route: previousRoute, setLoading});
   }
 
   const passwordStrength = !password.length
@@ -129,7 +128,9 @@ const SignUp = () => {
           <View style={styles.headerAndIconCont}>
             <Text style={styles.header}>Sign up with</Text>
             <View style={styles.iconsCon}>
-              <TouchableOpacity style={styles.iconBtn}>
+              <TouchableOpacity
+                style={styles.iconBtn}
+                onPress={handleSignInWithGithub}>
                 <AntDesign
                   name="github"
                   color={themes.COLORS.BLACK}

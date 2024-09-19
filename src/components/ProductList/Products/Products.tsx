@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -33,6 +35,9 @@ const Products = () => {
   const email = currentUser?.email;
   const navigation = useNavigation<NavigationProps>();
 
+  const dismissKeyBoard = () => {
+    Keyboard.dismiss();
+  };
   const handleSearch = () => {
     const filtered = allArticles.filter(item =>
       item.type.toLowerCase().includes(searchType.toLowerCase()),
@@ -147,28 +152,30 @@ const Products = () => {
   };
 
   return (
-    <View style={productsStyles.home} testID={email}>
-      <StatusBar barStyle="dark-content" backgroundColor="black" />
+    <TouchableWithoutFeedback onPress={dismissKeyBoard}>
+      <View style={productsStyles.home} testID={email}>
+        <StatusBar barStyle="dark-content" backgroundColor="black" />
 
-      <ProductCard minHeight={100} maxWidth={wp('100%')}>
-        {renderSearchInput()}
+        <ProductCard minHeight={100} maxWidth={wp('100%')}>
+          {renderSearchInput()}
+          {renderTabs()}
+        </ProductCard>
 
-        {renderTabs()}
-      </ProductCard>
-      {isProductLoading ? (
-        <ActivityIndicator
-          color="gray"
-          size="small"
-          style={productsStyles.emptyText}
-        />
-      ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
-        <Text style={productsStyles.emptyText}>Empty</Text>
-      ) : (
-        <ScrollView showsVerticalScrollIndicator={false} testID="scrollView">
-          {renderProducts()}
-        </ScrollView>
-      )}
-    </View>
+        {isProductLoading ? (
+          <ActivityIndicator
+            color="gray"
+            size="large"
+            style={productsStyles.emptyText}
+          />
+        ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
+          <Text style={productsStyles.emptyText}>Empty</Text>
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false} testID="scrollView">
+            {renderProducts()}
+          </ScrollView>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

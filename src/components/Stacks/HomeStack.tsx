@@ -20,6 +20,7 @@ import {
   SearchResult,
   Albums,
   BackButton,
+  ForgotPassword,
 } from '../index';
 import {useGetStarted} from '../../hook/useGetStarted';
 import {screenNames} from '../../screen';
@@ -156,6 +157,19 @@ const HomeStack = () => {
       options: {
         title: '',
         headerLeft: () => <BackButton testID="signIn" white />,
+        headerTransparent: true,
+        headerStyle: {
+          backgroundColor: 'transparent',
+        },
+        headerTintColor: 'white',
+      },
+    },
+    {
+      name: screenNames.forgotPassword,
+      component: ForgotPassword,
+      options: {
+        title: '',
+        headerLeft: () => <BackButton testID="forgotPassword" white />,
         headerTransparent: true,
         headerStyle: {
           backgroundColor: 'transparent',

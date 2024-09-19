@@ -13,10 +13,13 @@ const BackButton = ({testID, white}: Props) => {
   const navigation = useNavigation();
   const isIos = Platform.OS === 'ios';
   return (
-    <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.9}>
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      activeOpacity={0.9}
+      style={{marginLeft: wp('3.2%')}}>
       <Ionicons
         name={isIos ? 'chevron-back-outline' : 'arrow-back'}
-        size={isIos ? wp('9%') : wp('8%')}
+        size={isIos ? wp('9%') : wp('5.1%')}
         color={white ? themes.COLORS.WHITE : themes.COLORS.BLACK}
         testID={`${testID}-Back-btn`}
       />

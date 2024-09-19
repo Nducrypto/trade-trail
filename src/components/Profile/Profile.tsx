@@ -50,19 +50,21 @@ const Profile = () => {
   );
 
   const navigateToScreen = (screenName: keyof RootStackParamList) => {
-    if (screenName === screenNames.albums) {
-      goToAlbums();
-      return;
+    switch (screenName) {
+      case screenNames.albums:
+        goToAlbums();
+        return;
+      case screenNames.chatScreen:
+        goToChatScreen();
+        return;
+      case screenNames.signIn:
+        goToSignIn();
+        return;
+
+      default:
+        navigation.navigate(screenName);
+        return;
     }
-    if (screenName === screenNames.chatScreen) {
-      goToChatScreen();
-      return;
-    }
-    if (screenName === screenNames.signIn) {
-      goToSignIn();
-      return;
-    }
-    navigation.navigate(screenName);
   };
   const goToAlbums = () => {
     updateUtilityTitle(viewedUser.userName);

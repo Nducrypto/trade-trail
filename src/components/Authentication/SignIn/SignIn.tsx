@@ -13,7 +13,7 @@ import {AuthInput, circles} from '../AuthInput';
 import CustomButton from '../../CustomButton/CustomButton';
 import {styles} from '../authStyles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {signInWithGoogle} from '../../../utils/firebaseUtils';
+import {signInWithGithub, signInWithGoogle} from '../../../utils/firebaseUtils';
 import {hp, wp} from '../../../config/appConfig';
 import {DynamicNavigationProps, screenNames} from '../../../screen';
 import themes from '../../../config/themes';
@@ -60,7 +60,10 @@ const SignIn = () => {
     }
   };
   function handleSignInWithGoogle() {
-    signInWithGoogle({navigate, previousRoute, setLoading});
+    signInWithGoogle({navigate, route: previousRoute, setLoading});
+  }
+  function handleSignInWithGithub() {
+    signInWithGithub({navigate, route: previousRoute, setLoading});
   }
 
   useEffect(() => {
@@ -93,7 +96,9 @@ const SignIn = () => {
         <View style={styles.headerAndIconCont}>
           <Text style={styles.header}>Sign in with</Text>
           <View style={styles.iconsCon}>
-            <TouchableOpacity style={styles.iconBtn}>
+            <TouchableOpacity
+              style={styles.iconBtn}
+              onPress={handleSignInWithGithub}>
               <AntDesign
                 name="github"
                 color={themes.COLORS.BLACK}
@@ -134,7 +139,9 @@ const SignIn = () => {
           />
 
           <View>
-            <Text style={styles.forgPass} onPress={() => {}}>
+            <Text
+              style={styles.forgPass}
+              onPress={() => navigation.navigate(screenNames.forgotPassword)}>
               Forgot your password ?
             </Text>
           </View>

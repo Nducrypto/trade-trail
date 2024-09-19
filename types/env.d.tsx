@@ -19,6 +19,10 @@ declare module '@env' {
   export const CHITESTEMAIL: string;
   export const CHITESTPASS: string;
   export const CHITESTUSERNAME: string;
+  export const GITHUB_CLIENTID: string;
+  export const GITHUB_SECRET: string;
+  export const RIDIRECT_URL: string;
+  export const ROUTE: string;
 }
 
 declare module 'react-native-modal-dropdown';

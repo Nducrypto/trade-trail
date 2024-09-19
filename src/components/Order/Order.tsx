@@ -50,6 +50,7 @@ const Order = () => {
             <View style={orderStyles.itemsList}>
               <View style={orderStyles.items}>
                 <FlatList
+                  testID="order-flatlist"
                   data={order.items}
                   renderItem={({item, index}) => {
                     return (
@@ -57,7 +58,6 @@ const Order = () => {
                         <Text style={orderStyles.itemText}>
                           Item {index + 1}
                         </Text>
-                        <Text style={orderStyles.sharedText}>{item.brand}</Text>
                         <Text style={orderStyles.sharedText}>{item.title}</Text>
                         <Text style={orderStyles.itemPrice}>
                           &#8358; {Intl.NumberFormat().format(item.price)}
