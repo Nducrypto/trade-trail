@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
+  StatusBar,
 } from 'react-native';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {useProducts} from '../../hook/useProducts';
@@ -136,6 +137,10 @@ const Profile = () => {
 
   return (
     <View style={profileStyles.container}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={themes.COLORS.GRADIENT_START}
+      />
       <View style={profileStyles.headerSection}></View>
       <View style={profileStyles.profileDetailsSection}>
         <View style={profileStyles.profileCard}>

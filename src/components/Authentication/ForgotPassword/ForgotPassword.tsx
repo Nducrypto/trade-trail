@@ -15,6 +15,7 @@ import * as firebase from '../../../config/firebase';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, screenNames} from '../../../screen';
 import {forgotPasswordStyles} from './forgotPasswordStyles.ts';
+import themes from '../../../config/themes.ts';
 
 const ForgotPassword = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +42,10 @@ const ForgotPassword = () => {
   }
   return (
     <View style={styles.signupContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={themes.COLORS.GRADIENT_START}
+      />
       {circles.map((circle, index) => (
         <View
           key={index}

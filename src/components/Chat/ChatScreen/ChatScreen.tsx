@@ -5,6 +5,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {
   createChatKey,
@@ -96,87 +97,87 @@ const ChatScreen = () => {
   function isUserMessage(id: string) {
     return id === currentUser?.userId;
   }
-  if (!currentUser?.email) {
-    return (
-      <TouchableOpacity
-        testID="sign-in-btn"
-        style={chatStyles.signInCon}
-        onPress={() => navigation.navigate(screenNames.signIn)}>
-        <Text style={chatStyles.signInText}>Sign in to continue</Text>
-      </TouchableOpacity>
-    );
-  }
 
   return (
     <View style={chatStyles.container}>
-      <View style={chatStyles.content}>
-        <ScrollView
-          ref={scrollViewRef}
-          style={chatStyles.messages}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={chatStyles.messagesContainer}>
-          {sortedDialogueByTime.map((data: any) => (
-            <View key={data.chatId} style={chatStyles.item}>
-              <View
-                style={{
-                  ...chatStyles.messageCon,
-                  ...(isUserMessage(data.senderId) && {
-                    justifyContent: 'flex-end',
-                  }),
-                }}>
-                <View>
-                  <View
-                    style={{
-                      ...chatStyles.message,
-                      ...(isUserMessage(data.senderId) && {
-                        backgroundColor: themes.COLORS.BUTTON_COLOR,
-                      }),
-                    }}>
-                    <Text
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      {!currentUser?.email ? (
+        <TouchableOpacity
+          testID="sign-in-btn"
+          style={chatStyles.signInCon}
+          onPress={() => navigation.navigate(screenNames.signIn)}>
+          <Text style={chatStyles.signInText}>Sign in to continue</Text>
+        </TouchableOpacity>
+      ) : (
+        <View style={chatStyles.content}>
+          <ScrollView
+            ref={scrollViewRef}
+            style={chatStyles.messages}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={chatStyles.messagesContainer}>
+            {sortedDialogueByTime.map((data: any) => (
+              <View key={data.chatId} style={chatStyles.item}>
+                <View
+                  style={{
+                    ...chatStyles.messageCon,
+                    ...(isUserMessage(data.senderId) && {
+                      justifyContent: 'flex-end',
+                    }),
+                  }}>
+                  <View>
+                    <View
                       style={{
-                        ...chatStyles.messageText,
+                        ...chatStyles.message,
                         ...(isUserMessage(data.senderId) && {
-                          color: themes.COLORS.WHITE,
+                          backgroundColor: themes.COLORS.BUTTON_COLOR,
                         }),
                       }}>
-                      {data.message}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={chatStyles.messageDate}>
-                      {moment(new Date(data.timestamp).toISOString()).format(
-                        'h:mm A',
-                      )}
-                    </Text>
+                      <Text
+                        style={{
+                          ...chatStyles.messageText,
+                          ...(isUserMessage(data.senderId) && {
+                            color: themes.COLORS.WHITE,
+                          }),
+                        }}>
+                        {data.message}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={chatStyles.messageDate}>
+                        {moment(new Date(data.timestamp).toISOString()).format(
+                          'h:mm A',
+                        )}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          ))}
-        </ScrollView>
+            ))}
+          </ScrollView>
 
-        <View style={chatStyles.messageInput}>
-          <TouchableOpacity
-            onPress={handleSendMessage}
-            testID="button"
-            disabled={!message}>
-            <Entypo
-              size={16}
-              name="camera"
-              style={{paddingRight: 8, color: themes.COLORS.MUTED}}
+          <View style={chatStyles.messageInput}>
+            <TouchableOpacity
+              onPress={handleSendMessage}
+              testID="button"
+              disabled={!message}>
+              <Entypo
+                size={16}
+                name="camera"
+                style={{paddingRight: 8, color: themes.COLORS.MUTED}}
+              />
+            </TouchableOpacity>
+
+            <TextInput
+              value={message}
+              onChangeText={text => setMessage(text)}
+              placeholder="Message"
+              style={chatStyles.input}
+              placeholderTextColor="grey"
+              testID="chat-input"
             />
-          </TouchableOpacity>
-
-          <TextInput
-            value={message}
-            onChangeText={text => setMessage(text)}
-            placeholder="Message"
-            style={chatStyles.input}
-            placeholderTextColor="grey"
-            testID="chat-input"
-          />
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };

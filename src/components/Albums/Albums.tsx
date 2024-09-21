@@ -1,4 +1,4 @@
-import {FlatList, Image, View} from 'react-native';
+import {FlatList, Image, StatusBar, View} from 'react-native';
 import React from 'react';
 import {albumStyles} from './albumStyles';
 import {useProducts} from '../../hook/useProducts';
@@ -33,6 +33,9 @@ const Albums = () => {
       removeClippedSubviews={true}
       showsVerticalScrollIndicator={false}
       testID="albums-flatlist"
+      ListHeaderComponent={
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+      }
     />
   );
 };

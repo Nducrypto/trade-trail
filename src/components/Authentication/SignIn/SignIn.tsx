@@ -74,7 +74,10 @@ const SignIn = () => {
 
   return (
     <View style={styles.signupContainer}>
-      <StatusBar barStyle="light-content" backgroundColor="black" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={themes.COLORS.GRADIENT_START}
+      />
       {circles.map((circle, index) => (
         <View
           key={index}
