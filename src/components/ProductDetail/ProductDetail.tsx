@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity, Alert, Image} from 'react-native';
 import {hp, wp} from '../../config/appConfig';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {CustomButton} from '../index';
-import {ProductInterface} from '../../hook/useProducts';
-import {screenNames} from '../../screen';
+import {RootStackParamList, screenNames} from '../../screen';
 import {productDetailStyles} from './productDetailStyles';
 import {NavigationProps} from '../..//screen';
 import themes from '../../config/themes';
@@ -19,8 +18,8 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string>('M');
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const navigation = useNavigation<NavigationProps>();
-  const {params} = useRoute();
-  const product = params as ProductInterface;
+  const {params} = useRoute<RouteProp<RootStackParamList, 'ProductDetail'>>();
+  const product = params;
   const {savedForLaterItems, items, storeItemToCart} = useCart();
   const {allUsers} = useUser();
   const cartItems = Object.values(items);

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   FlatList,
+  StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {cartStyles} from './cartStyles.ts';
@@ -201,6 +202,9 @@ const Cart = () => {
       scrollEnabled={length >= 3}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={cartStyles.itemCon}
+      ListHeaderComponent={
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+      }
       ListFooterComponent={
         <View>
           {length > 0 && (

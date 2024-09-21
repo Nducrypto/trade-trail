@@ -8,7 +8,6 @@ import {
   TextInput,
   ActivityIndicator,
   Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -43,6 +42,7 @@ const Products = () => {
       item.type.toLowerCase().includes(searchType.toLowerCase()),
     );
     setfilteredArticlesArray(filtered);
+    dismissKeyBoard();
   };
   useEffect(() => {
     if (!searchType) {
@@ -117,9 +117,7 @@ const Products = () => {
     const otherRow = filteredArticlesArray.slice(5, allArticles.length - 2);
     const lastRow = filteredArticlesArray.slice(allArticles.length - 2);
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={productsStyles.products}>
+      <View>
         {firstRow.map((product, index) => (
           <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
@@ -147,35 +145,34 @@ const Products = () => {
         {lastRow.map((product, index) => (
           <Product product={product} full key={index} style={{top: 10}} />
         ))}
-      </ScrollView>
+      </View>
     );
   };
 
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyBoard}>
-      <View style={productsStyles.home} testID={email}>
-        <StatusBar barStyle="dark-content" backgroundColor="black" />
-
-        <ProductCard minHeight={100} maxWidth={wp('100%')}>
-          {renderSearchInput()}
-          {renderTabs()}
-        </ProductCard>
-
-        {isProductLoading ? (
-          <ActivityIndicator
-            color="gray"
-            size="large"
-            style={productsStyles.emptyText}
-          />
-        ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
-          <Text style={productsStyles.emptyText}>Empty</Text>
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false} testID="scrollView">
-            {renderProducts()}
-          </ScrollView>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={productsStyles.home} testID={email}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      <ProductCard minHeight={100} maxWidth={wp('100%')}>
+        {renderSearchInput()}
+        {renderTabs()}
+      </ProductCard>
+      {isProductLoading ? (
+        <ActivityIndicator
+          color="gray"
+          size="large"
+          style={productsStyles.emptyText}
+        />
+      ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
+        <Text style={productsStyles.emptyText}>Empty</Text>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          testID="scrollView"
+          contentContainerStyle={productsStyles.products}>
+          {renderProducts()}
+        </ScrollView>
+      )}
+    </View>
   );
 };
 

@@ -1,4 +1,4 @@
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {notificationStyles} from './notificationStyles';
 import {useUser} from '../../hook/useUser';
@@ -34,13 +34,15 @@ const Notification = () => {
   const length = followersNotifications.length;
   if (!currentUser?.userId) {
     return (
-      <TouchableOpacity
-        testID="sign-in-btn"
-        activeOpacity={0.7}
-        style={notificationStyles.signInCon}
-        onPress={() => navigation.navigate(screenNames.signIn)}>
-        <Text style={notificationStyles.signInText}>Sign in to continue</Text>
-      </TouchableOpacity>
+      <View style={notificationStyles.signInCon}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <TouchableOpacity
+          testID="sign-in-btn"
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate(screenNames.signIn)}>
+          <Text style={notificationStyles.signInText}>Sign in to continue</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
   return (
@@ -95,6 +97,9 @@ const Notification = () => {
         <Text style={notificationStyles.noNotificationLabel}>
           No notification at the moment
         </Text>
+      }
+      ListHeaderComponent={
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
       }
     />
   );

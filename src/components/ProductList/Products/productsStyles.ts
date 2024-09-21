@@ -64,6 +64,7 @@ export const productsStyles = StyleSheet.create({
   products: {
     width: wp('95%'),
     paddingVertical: 16,
+    alignItems: 'center',
   },
   rowItemCon: {
     flexDirection: 'row',

@@ -35,7 +35,7 @@ const Product = ({product, horizontal, full, style}: Props) => {
     <View style={productStyles.container}>
       <ProductCard
         minHeight={120}
-        maxWidth={horizontal || full ? wp('95%') : wp('46%')}
+        maxWidth={horizontal || full ? wp('93%') : wp('45%')}
         paddingLeft={0}>
         <View
           testID={product.title}
@@ -61,7 +61,7 @@ const Product = ({product, horizontal, full, style}: Props) => {
                     marginTop: style.top,
                   }),
                 }}
-                numberOfLines={2}>
+                numberOfLines={1}>
                 {product?.title}
               </Text>
               <Text

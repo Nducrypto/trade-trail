@@ -24,11 +24,7 @@ function App(): React.JSX.Element {
 
   return (
     <SafeAreaProvider style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={props => <CustomDrawerContent {...props} />}
