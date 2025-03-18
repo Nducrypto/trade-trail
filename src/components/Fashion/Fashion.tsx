@@ -42,7 +42,7 @@ const Fashion = () => {
       />
       <FlatList
         testID="flatlist"
-        initialNumToRender={5}
+        initialNumToRender={6}
         data={filteredBySelectedType}
         renderItem={({item}) => (
           <View style={fashionStyles.item}>
