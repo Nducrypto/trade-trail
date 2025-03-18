@@ -6,15 +6,15 @@ export const profileStyles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  sectionOne: {
+  headerSection: {
     height: hp('50%'),
     backgroundColor: 'indigo',
   },
-  sectionTwo: {
+  profileDetailsSection: {
     height: hp('50%'),
     backgroundColor: themes.COLORS.WHITE,
   },
-  card: {
+  profileCard: {
     ...themes.SHADOW.LIGHT,
     position: 'absolute',
     marginTop: hp('-30%'),
@@ -26,84 +26,87 @@ export const profileStyles = StyleSheet.create({
     padding: 16,
     height: hp('100%'),
   },
-  image: {
-    height: hp('13%'),
-    width: wp('23%'),
+  avatar: {
     alignSelf: 'center',
-    borderRadius: 50,
-    marginTop: hp('-9%'),
+    marginTop: hp('-7%'),
+    backgroundColor: 'gray',
   },
-  buttonCon: {
+  actionButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: wp('7%'),
     marginTop: hp('2%'),
   },
-  button: {
+  actionButton: {
     backgroundColor: themes.COLORS.PURPLE,
-    padding: wp('2%'),
+    width: wp('23%'),
+    height: hp('3.5%'),
     borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonText: {
+  actionButtonText: {
     color: themes.COLORS.WHITE,
     fontWeight: '700',
     fontSize: themes.FONT_SIZES.SMALL,
   },
-  labelSection: {
+  statsSection: {
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: hp('0.5%'),
   },
-  value: {
+  statsValue: {
     textAlign: 'center',
     color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.MEDIUM,
     fontWeight: '700',
   },
-  label: {
+  statsLabel: {
     color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.SMALL,
   },
-  name: {
+  profileName: {
     textAlign: 'center',
     color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.LARGE,
     fontWeight: 'bold',
   },
-  locationCon: {
+  locationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  location: {
+  locationText: {
     color: 'gray',
     fontSize: themes.FONT_SIZES.SMALL,
     fontWeight: '500',
     marginTop: hp('0.9%'),
   },
-  bio: {
+  bioText: {
     marginTop: 15,
     color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.MEDIUM,
     fontWeight: '300',
     paddingHorizontal: wp('3%'),
     textAlign: 'center',
+    height: hp('6%'),
   },
   showMoreBtn: {
     alignSelf: 'center',
     marginTop: 5,
   },
-  showMoreText: {
+  showMoreBtnText: {
     color: themes.COLORS.BUTTON_COLOR,
     fontSize: themes.FONT_SIZES.MEDIUM,
   },
 
-  albumLabel: {
+  albumsLabel: {
     marginTop: 10,
     color: themes.COLORS.BLACK,
-    fontWeight: '700',
+    fontWeight: '600',
+    fontSize: themes.FONT_SIZES.MEDIUM,
   },
-  viewBtnCon: {
+  viewAllBtnContainer: {
     alignSelf: 'flex-end',
   },
   viewAllBtnText: {
@@ -111,7 +114,7 @@ export const profileStyles = StyleSheet.create({
     fontSize: themes.FONT_SIZES.SMALL,
     fontWeight: '300',
   },
-  thumb: {
+  thumbnail: {
     borderRadius: 4,
     marginVertical: 4,
     width: wp('26%'),
@@ -119,12 +122,12 @@ export const profileStyles = StyleSheet.create({
     marginRight: wp('4%'),
   },
 
-  albumsCon: {
+  albumListContainer: {
     marginTop: 5,
     paddingBottom: 20,
   },
 
-  emptyText: {
+  emptyListText: {
     color: themes.COLORS.BLACK,
     fontSize: themes.FONT_SIZES.SMALL,
     fontWeight: '500',

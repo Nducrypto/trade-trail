@@ -3,23 +3,23 @@ import {
   doc,
   collection,
   updateDoc,
-  onSnapshot,
+  getDocs,
 } from '../config/firebase';
 import {useEffect} from 'react';
 import {AllProductState, ProductInterface} from '../hook/useProducts';
 import {removeInDatabase, createInDatabase} from '../utils/firebaseUtils';
 import {PRODUCTS} from '@env';
 import {useProducts} from '../hook/useProducts';
+import {GlobalStateProps} from '../hook/useGlobal';
 
 const productRoute = PRODUCTS;
 
 export const addProduct = async (
   newProduct: ProductInterface,
-  state: AllProductState,
-  setToast: any,
-  // setToast,
+  productState: AllProductState,
+  globalState: GlobalStateProps,
 ) => {
-  state.updateProductLoading(true);
+  productState.updateProductLoading(true);
 
   try {
     const productId = await createInDatabase(productRoute, newProduct);
@@ -29,48 +29,43 @@ export const addProduct = async (
         ...newProduct,
         productId,
       };
-      state.addProductToState(newProduct);
-      //    toastSuccess('New product added successfully', 'success', setSnackBar);
+      productState.addProductToState(data);
+      globalState.toastSuccess('New product added successfully');
     }
   } catch (error) {
-    state.updateProductLoading(false);
-
-    // toastFailure('Failed To Create Product', 'error', setSnackBar);
-    throw new Error();
+    productState.updateProductLoading(false);
+    globalState.toastError('Failed To Create Product');
+    throw new Error('Failed To Create Product');
   }
 };
-
 export const fetchAllProducts = () => {
   const state = useProducts();
 
   useEffect(() => {
     state.updateProductLoading(true);
-    const unsubscribe = onSnapshot(
-      collection(firestore, productRoute),
-      snapshot => {
-        const fetchedData: ProductInterface[] = [];
-        const groupByCategories: Record<string, ProductInterface[]> = {};
+    const getAll = async () => {
+      const userCollections = collection(firestore, productRoute);
+      const getDoc = getDocs(userCollections);
 
-        snapshot.forEach(doc => {
-          const product = {
-            ...(doc.data() as ProductInterface),
-            productId: doc.id,
-          };
-          fetchedData.push(product);
-          if (!groupByCategories[product.category]) {
-            groupByCategories[product.category] = [];
-          }
-          groupByCategories[product.subCategory].push(product);
-        });
+      const fetchedData: ProductInterface[] = [];
+      const groupByCategories: Record<string, ProductInterface[]> = {};
 
-        state.storeAllArticles(fetchedData);
-        state.updateUniqueCategory(groupByCategories);
-      },
-    );
+      (await getDoc).forEach(doc => {
+        const product = {
+          ...(doc.data() as ProductInterface),
+          productId: doc.id,
+        };
+        fetchedData.push(product);
+        if (!groupByCategories[product.category]) {
+          groupByCategories[product.category] = [];
+        }
+        groupByCategories[product.category].push(product);
+      });
 
-    return () => {
-      unsubscribe();
+      state.storeAllArticles(fetchedData);
+      state.updateUniqueCategory(groupByCategories);
     };
+    getAll();
   }, []);
 };
 
@@ -80,7 +75,6 @@ export const updateProduct = async (
   productId: string,
   newProduct: ProductUpdateFields,
   state: AllProductState,
-  // setToast,
 ) => {
   state.updateProductLoading(true);
 
@@ -89,30 +83,46 @@ export const updateProduct = async (
   try {
     await updateDoc(productIdRef, newProduct);
     state.updateProductLoading(false);
-
-    // toastSuccess('Product updated successfully', 'success', setToast);
   } catch (error) {
-    // toastFailure('Failed To update Product', 'error', setToast);
-    throw new Error();
+    throw new Error('Failed To update Product');
   }
 };
 
 export const removeProduct = async (
   productId: string,
   state: AllProductState,
-  // setToast,
 ) => {
   state.updateProductLoading(true);
 
   try {
     const success = await removeInDatabase(productRoute, productId);
-
     if (success) {
       state.deleteArticle(productId);
-      // toastSuccess('Product deleted successfully', 'success', setSnackBar);
     }
   } catch (error) {
-    // toastFailure('Failed to delete product', 'error', setSnackBar);
-    throw new Error();
+    throw new Error('Failed to delete product');
   }
+};
+
+export const getUniqueSubCategory = (
+  categoryArray: ProductInterface[],
+  selectedTitle: string,
+) => {
+  const uniqueSubCategory = new Set(['POPULAR']);
+  const uniqueTypeArray = [] as ProductInterface[];
+  for (const item of categoryArray) {
+    uniqueSubCategory.add(item.subCategory);
+
+    if (!uniqueTypeArray.some(i => i.type === item.type)) {
+      uniqueTypeArray.push(item);
+    }
+  }
+  const titleArray = Array.from(uniqueSubCategory);
+  const isPopular = selectedTitle === 'POPULAR';
+
+  const filteredBySelectedType = isPopular
+    ? uniqueTypeArray
+    : uniqueTypeArray.filter(item => item.subCategory === selectedTitle);
+
+  return {filteredBySelectedType, titleArray};
 };

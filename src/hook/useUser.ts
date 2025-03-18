@@ -1,5 +1,16 @@
 import {create} from 'zustand';
-import {RootStackParamList, screenNames} from '../screen';
+import {screenNames} from '../screen';
+
+export interface FriendsProp {
+  userName: string;
+  status: string;
+  date: string;
+  userId: string;
+}
+
+export interface CommentsProp extends Omit<FriendsProp, 'status'> {
+  comment: string;
+}
 
 export interface CollectionInterface {
   role: string;
@@ -13,28 +24,44 @@ export interface CollectionInterface {
   phoneNumber: string;
   bio: string;
   age: null | number;
-  friends: string[];
+  friends: FriendsProp[];
   photos: string[];
-  comments: {userId: string; userName: string}[];
+  comments: CommentsProp[];
   city: string;
   country: string;
 }
 
 interface AllUserStateProps {
   allUsers: Record<string, CollectionInterface>;
-  currentUser: CollectionInterface | null;
+  currentUser: CollectionInterface;
   isUserLoading: boolean;
   isAuthError: boolean | string;
-  previousRoute: keyof RootStackParamList;
   storeAllUsers: (value: Record<string, CollectionInterface>) => void;
   updateCurrentUser: (value: CollectionInterface) => void;
   setUserLoading: (value: boolean) => void;
   setUserError: (value: boolean | string) => void;
 }
-
+export const initialState = {
+  role: '',
+  email: '',
+  userId: '',
+  joined: '',
+  docId: '',
+  location: '',
+  userName: '',
+  profilePic: '',
+  phoneNumber: '',
+  bio: '',
+  age: null,
+  friends: [],
+  photos: [],
+  comments: [],
+  city: '',
+  country: '',
+};
 const useUserStore = create<AllUserStateProps>(set => ({
   allUsers: {},
-  currentUser: null,
+  currentUser: initialState,
   isUserLoading: false,
   isAuthError: false,
   previousRoute: screenNames.productList,
@@ -72,7 +99,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,
@@ -84,7 +110,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,

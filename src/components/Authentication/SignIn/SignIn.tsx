@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -18,15 +18,16 @@ import {hp, wp} from '../../../config/appConfig';
 import {DynamicNavigationProps, screenNames} from '../../../screen';
 import themes from '../../../config/themes';
 import {useUser} from '../../../hook/useUser';
+import {useGlobalState} from '../../../hook/useGlobal';
 
 const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const {previousRoute, currentUser, isUserLoading} = useUser();
-
+  const {currentUser, isUserLoading} = useUser();
+  const {previousRoute, utilityProfileId} = useGlobalState();
   const navigation = useNavigation<DynamicNavigationProps>();
-
+  const {navigate} = navigation;
   const handleLoginWithEmail = async () => {
     setLoading(true);
     try {
@@ -37,36 +38,36 @@ const SignIn = () => {
       );
 
       if (userCredential) {
+        if (utilityProfileId === screenNames.profile) {
+          navigation.navigate(previousRoute, {
+            profileId: utilityProfileId,
+          });
+          setLoading(false);
+          return;
+        }
         navigation.navigate(previousRoute);
       }
       setLoading(false);
     } catch (error) {
       if (error instanceof firebase.FirebaseError) {
-        if (error.code === 'auth/wrong-password') {
-          Alert.alert('Wrong password');
-        } else if (error.code === 'auth/user-not-found') {
+        if (error.code === 'auth/invalid-credential') {
           Alert.alert('User not found');
         } else {
-          Alert.alert('An unknown error occurred');
+          Alert.alert('An error occurred');
         }
-      } else {
-        Alert.alert('An unexpected error occurred');
       }
       setLoading(false);
     }
   };
   function handleSignInWithGoogle() {
-    signInWithGoogle(
-      navigation.navigate,
-      previousRoute,
-      setLoading,
-      screenNames.signIn,
-    );
+    signInWithGoogle({navigate, previousRoute, setLoading});
   }
 
-  if (currentUser && currentUser?.email && !isUserLoading) {
-    navigation.navigate(screenNames.homeStack);
-  }
+  useEffect(() => {
+    if (currentUser && currentUser?.email && !isUserLoading) {
+      navigation.navigate(screenNames.homeStack);
+    }
+  }, [currentUser, isUserLoading, navigation]);
 
   return (
     <View style={styles.signupContainer}>
@@ -122,17 +123,19 @@ const SignIn = () => {
             placeholder="Email"
             value={email}
             onChangeText={value => setEmail(value)}
+            testID="email-text-field"
           />
           <AuthInput
             iconName="password"
             placeholder="Password"
             value={password}
             onChangeText={value => setPassword(value)}
+            testID="password-text-field"
           />
 
           <View>
             <Text style={styles.forgPass} onPress={() => {}}>
-              Forgot your password ?{' '}
+              Forgot your password ?
             </Text>
           </View>
           <View>
@@ -146,7 +149,14 @@ const SignIn = () => {
           <View style={styles.authBtnCon}>
             <CustomButton
               title={
-                loading ? <ActivityIndicator color="#ffffff" /> : 'SIGN IN'
+                loading ? (
+                  <ActivityIndicator
+                    color="#ffffff"
+                    testID="activity-indicator"
+                  />
+                ) : (
+                  'SIGN IN'
+                )
               }
               width={wp('50%')}
               onPress={() => handleLoginWithEmail()}

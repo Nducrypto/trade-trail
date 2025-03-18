@@ -11,28 +11,9 @@ export const productDetailStyles = StyleSheet.create({
   profileImage: {
     width: wp('100%'),
     height: hp('50%'),
-  },
-  profileContainer: {
-    width: wp('100%'),
-    height: hp('50%'),
+    alignSelf: 'center',
   },
 
-  carouselCon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 2,
-    textAlign: 'center',
-    top: hp('40%'),
-    flexDirection: 'row',
-    gap: 10,
-  },
-  carousel: {
-    paddingBottom: 8,
-    color: 'red',
-    backgroundColor: 'red',
-    height: hp('1.2%'),
-    width: wp('3%'),
-  },
   optionsCon: {
     width: wp('100%'),
     alignItems: 'center',
@@ -50,7 +31,7 @@ export const productDetailStyles = StyleSheet.create({
     shadowRadius: 8,
     shadowOpacity: 0.2,
     zIndex: 2,
-    width: wp('95%'),
+    width: wp('100%'),
     height: hp('100%'),
   },
 
@@ -59,7 +40,6 @@ export const productDetailStyles = StyleSheet.create({
     fontSize: themes.FONT_SIZES.LARGE,
     fontWeight: '500',
     color: themes.COLORS.BLACK,
-    width: wp('50%'),
   },
   imgAndTextCon: {
     flexDirection: 'row',
@@ -103,6 +83,7 @@ export const productDetailStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'lightgray',
     marginTop: 20,
+    alignSelf: 'center',
   },
   sizeCell: {
     width: wp('28.8%'),
@@ -114,4 +95,5 @@ export const productDetailStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnCon: {alignItems: 'center'},
 });

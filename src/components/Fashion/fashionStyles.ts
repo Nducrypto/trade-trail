@@ -9,7 +9,6 @@ export const fashionStyles = StyleSheet.create({
   itemCon: {
     gap: 20,
     paddingVertical: hp('3%'),
-    paddingHorizontal: 10,
   },
 
   background: {
@@ -17,6 +16,9 @@ export const fashionStyles = StyleSheet.create({
     resizeMode: 'cover',
   },
   item: {
+    alignItems: 'center',
+  },
+  button: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

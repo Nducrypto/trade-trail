@@ -14,6 +14,11 @@ declare module '@env' {
   export const ORDERS: string;
   export const GOOGLEWEBCLIENTID: string;
   export const GOOGLEIOSCLIENTID: string;
+  export const NDUTESTEMAIL: string;
+  export const NDUTESTPASS: string;
+  export const CHITESTEMAIL: string;
+  export const CHITESTPASS: string;
+  export const CHITESTUSERNAME: string;
 }
 
 declare module 'react-native-modal-dropdown';

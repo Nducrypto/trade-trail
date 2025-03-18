@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {hp} from '../../../config/appConfig';
+import {hp, wp} from '../../../config/appConfig';
 import themes from '../../../config/themes';
 
 export const productStyles = StyleSheet.create({
@@ -16,9 +16,10 @@ export const productStyles = StyleSheet.create({
     fontSize: themes.FONT_SIZES.SMALL,
     color: themes.COLORS.BLACK,
   },
-  price: {
+  viewArticle: {
     fontSize: themes.FONT_SIZES.SMALL,
     color: themes.COLORS.GRADIENT_START,
+    fontWeight: '500',
   },
   productDescription: {
     paddingHorizontal: 8,
@@ -36,7 +37,7 @@ export const productStyles = StyleSheet.create({
   },
   horizontalImage: {
     height: hp('17.5%'),
-    width: 'auto',
+    width: wp('42%'),
   },
   fullImage: {
     height: hp('25%'),

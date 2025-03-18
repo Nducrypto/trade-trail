@@ -1,37 +1,41 @@
 import React, {useEffect, useState} from 'react';
-import {addProduct, updateProduct} from '../../../controller/product';
+import {addProduct, updateProduct} from '../../../controller/product.ts';
 import {View, Text, TextInput, ScrollView} from 'react-native';
-import {ProductInterface, useProducts} from '../../../hook/useProducts';
+import {ProductInterface, useProducts} from '../../../hook/useProducts.ts';
 import {CustomButton, Product} from '../../index.ts';
 import {wp} from '../../../config/appConfig.ts';
 import {addProductStyles} from './productFormStyles.ts';
+import {GlobalStateProps, useGlobalState} from '../../../hook/useGlobal.ts';
+import {useUser} from '../../../hook/useUser.ts';
 
 interface NewProduct {
   title: string;
-  brand: string;
   price: number | string;
   image: string[];
   category: string;
   subCategory: string;
   type: string;
+  gender: string;
 }
 const initialState: NewProduct = {
   title: '',
-  brand: '',
   price: '',
   image: [],
   category: '',
   subCategory: '',
   type: '',
+  gender: '',
 };
 
 const ProductForm = () => {
   const [productForm, setProductForm] = useState<NewProduct | ProductInterface>(
     initialState,
   );
-  const state = useProducts();
-  const productToUpdate = state.allArticles.find(
-    item => item.productId === state.currentId,
+  const products = useProducts();
+  const {currentUser} = useUser();
+  const globalState = useGlobalState() as GlobalStateProps;
+  const productToUpdate = products.allArticles.find(
+    item => item.productId === products.currentId,
   );
 
   function handleNewProductChange(name: string, value: string) {
@@ -49,20 +53,22 @@ const ProductForm = () => {
   }
 
   useEffect(() => {
-    if (state.currentId && productToUpdate !== undefined) {
+    if (products.currentId && productToUpdate !== undefined) {
       setProductForm(productToUpdate);
     }
-  }, [state.currentId]);
+  }, [products.currentId]);
 
   function createProductHandler() {
     const data = {
       ...productForm,
       price: Number(productForm.price),
+
+      creatorId: currentUser.userId,
     } as ProductInterface;
-    if (state.currentId.length < 1) {
-      addProduct(data as ProductInterface, state, '');
+    if (products.currentId.length < 1) {
+      addProduct(data as ProductInterface, products, globalState);
     } else {
-      updateProduct(state.currentId, data as ProductInterface, state);
+      updateProduct(products.currentId, data as ProductInterface, products);
     }
     setProductForm(initialState);
   }
@@ -74,23 +80,16 @@ const ProductForm = () => {
           horizontal
           contentContainerStyle={addProductStyles.itemCon}
           showsHorizontalScrollIndicator={false}>
-          {state.allArticles.map(product => (
+          {products.allArticles.map(product => (
             <View key={product.productId} style={addProductStyles.item}>
               <Product product={product} />
             </View>
           ))}
         </ScrollView>
         <Text style={{...addProductStyles.label, textAlign: 'center'}}>
-          You have {state.allArticles.length} products in Stock
+          You have {products.allArticles.length} products in Stock
         </Text>
         <View style={{margin: 20}}>
-          <Text style={addProductStyles.label}>Add New Product</Text>
-          <Text style={addProductStyles.label}>Title:</Text>
-          <TextInput
-            style={addProductStyles.input}
-            value={productForm.title}
-            onChangeText={text => handleNewProductChange('title', text)}
-          />
           <Text style={addProductStyles.label}>Category:</Text>
           <TextInput
             style={addProductStyles.input}
@@ -109,19 +108,24 @@ const ProductForm = () => {
             value={productForm.type}
             onChangeText={text => handleNewProductChange('type', text)}
           />
-          <Text style={addProductStyles.label}>Brand:</Text>
-          <TextInput
-            style={addProductStyles.input}
-            value={productForm.brand}
-            onChangeText={text => handleNewProductChange('brand', text)}
-          />
-
           <Text style={addProductStyles.label}>Price:</Text>
           <TextInput
             style={addProductStyles.input}
             value={productForm.price.toString()}
             onChangeText={value => handleNewProductChange('price', value)}
             keyboardType="numeric"
+          />
+          <Text style={addProductStyles.label}>Title:</Text>
+          <TextInput
+            style={addProductStyles.input}
+            value={productForm.title}
+            onChangeText={text => handleNewProductChange('title', text)}
+          />
+          <Text style={addProductStyles.label}>Gender:</Text>
+          <TextInput
+            style={addProductStyles.input}
+            value={productForm.gender}
+            onChangeText={text => handleNewProductChange('gender', text)}
           />
 
           <Text style={addProductStyles.label}>Image URL:</Text>
