@@ -166,7 +166,7 @@ const Cart = () => {
                   </Text>
                   <View style={cartStyles.inStockCon}>
                     <Text style={cartStyles.price}>
-                      ${Intl.NumberFormat().format(item.price)}
+                      ₦{Intl.NumberFormat().format(item.price)}
                     </Text>
                   </View>
                 </View>
