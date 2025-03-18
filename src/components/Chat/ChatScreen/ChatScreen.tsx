@@ -32,17 +32,17 @@ const ChatScreen = () => {
   fetchAllChatFromDatabase();
   const {params} = useRoute<RouteProp<RootStackParamList, 'ChatScreen'>>();
   const reciepient = params;
-  const [message, setMessage] = useState('');
   const scrollViewRef = useRef<ScrollView | null>(null);
+  const [message, setMessage] = useState('');
   const navigation = useNavigation<NavigationProps>();
   const {toastError} = useGlobalState();
-  const {currentUser} = useUser();
   const {allChats} = useChat();
+  const {currentUser} = useUser();
   const currentUserId = currentUser.userId;
   const reciepientId = reciepient.profileId;
 
-  const currentUserName = currentUser.userName;
   const reciepientName = reciepient.profileName;
+  const currentUserName = currentUser.userName;
 
   const chatIdKey = createChatKey(currentUserId, reciepientId);
   const chatNameKey = createChatKey(currentUserName, reciepientName);

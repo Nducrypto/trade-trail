@@ -16,9 +16,9 @@ import {getUniqueSubCategory} from '../../controller/product';
 import {useGlobalState} from '../../hook/useGlobal';
 
 const Fashion = () => {
-  const [selectedTitle, setSelectedTitle] = useState<string>('POPULAR');
   const navigation = useNavigation<NavigationProps>();
   const {uniqueCategory} = useProducts();
+  const [selectedTitle, setSelectedTitle] = useState<string>('POPULAR');
   const {updateUtilityTitle} = useGlobalState();
   const category = 'Fashion';
   const fashionArray = uniqueCategory[category] ?? [];
