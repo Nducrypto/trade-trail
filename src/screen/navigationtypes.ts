@@ -13,12 +13,15 @@ export type RootStackParamList = {
   Fashion: undefined;
   Beauty: undefined;
   ProductDetail: ProductInterface;
-  Chat: undefined;
+  ChatScreen: {profileId: string; profileName: string};
+  ChatList: undefined;
   Cart: undefined;
+  Order: undefined;
   Albums: {creatorId: string};
-  Profile: undefined;
+  Profile: {profileId: string};
   Settings: undefined;
   Notifications: undefined;
+  SearchResult: {type: string; category: string};
 };
 
 export type NavigationProps = StackNavigationProp<RootStackParamList>;

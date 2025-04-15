@@ -67,7 +67,7 @@ yarn-error.log
 
 #  env
 .env
-.env.backup
+# .env.backup
 
 
 # Yarn

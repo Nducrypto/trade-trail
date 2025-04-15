@@ -10,7 +10,13 @@ interface Props {
 }
 const ProductCard = ({children, maxWidth, minHeight, paddingLeft}: Props) => {
   return (
-    <View style={{...productCardStyles.card, maxWidth, minHeight, paddingLeft}}>
+    <View
+      style={{
+        ...productCardStyles.card,
+        width: maxWidth,
+        minHeight,
+        paddingLeft,
+      }}>
       {children}
     </View>
   );

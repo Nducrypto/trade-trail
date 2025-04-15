@@ -1,5 +1,16 @@
 import {create} from 'zustand';
-import {RootStackParamList, screenNames} from '../screen';
+import {screenNames} from '../screen';
+
+export interface FriendsProp {
+  userName: string;
+  status: string;
+  date: string;
+  userId: string;
+}
+
+export interface CommentsProp extends Omit<FriendsProp, 'status'> {
+  comment: string;
+}
 
 export interface CollectionInterface {
   role: string;
@@ -11,38 +22,55 @@ export interface CollectionInterface {
   userName: string;
   profilePic: string;
   phoneNumber: string;
+  bio: string;
   age: null | number;
-  friends: string[];
+  friends: FriendsProp[];
   photos: string[];
-  comments: {userId: string; userName: string}[];
+  comments: CommentsProp[];
   city: string;
   country: string;
 }
 
 interface AllUserStateProps {
-  allUsers: CollectionInterface[];
-  currentUser: CollectionInterface | null;
+  allUsers: Record<string, CollectionInterface>;
+  currentUser: CollectionInterface;
   isUserLoading: boolean;
   isAuthError: boolean | string;
-  previousRoute: keyof RootStackParamList;
-  storeAllUsers: (value: CollectionInterface[]) => void;
+  storeAllUsers: (value: Record<string, CollectionInterface>) => void;
   updateCurrentUser: (value: CollectionInterface) => void;
   setUserLoading: (value: boolean) => void;
   setUserError: (value: boolean | string) => void;
 }
-
+export const initialState = {
+  role: '',
+  email: '',
+  userId: '',
+  joined: '',
+  docId: '',
+  location: '',
+  userName: '',
+  profilePic: '',
+  phoneNumber: '',
+  bio: '',
+  age: null,
+  friends: [],
+  photos: [],
+  comments: [],
+  city: '',
+  country: '',
+};
 const useUserStore = create<AllUserStateProps>(set => ({
-  allUsers: [],
-  currentUser: null,
+  allUsers: {},
+  currentUser: initialState,
   isUserLoading: false,
   isAuthError: false,
   previousRoute: screenNames.productList,
-  storeAllUsers: (value: CollectionInterface[]) =>
+  storeAllUsers: (value: Record<string, CollectionInterface>) =>
     set(state => ({
       ...state,
       isUserLoading: false,
       isAuthError: false,
-      allUsers: [...value],
+      allUsers: value,
     })),
   updateCurrentUser: (value: CollectionInterface) =>
     set(state => ({
@@ -64,6 +92,7 @@ const useUserStore = create<AllUserStateProps>(set => ({
       isAuthError: value,
     })),
 }));
+// this hook is for user
 
 export const useUser = () => {
   const {
@@ -71,7 +100,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,
@@ -83,7 +111,6 @@ export const useUser = () => {
     currentUser,
     isAuthError,
     isUserLoading,
-    previousRoute,
     updateCurrentUser,
     setUserError,
     setUserLoading,

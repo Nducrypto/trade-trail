@@ -9,31 +9,45 @@ import {navbarStyles} from './navbarStyles';
 import themes from '../../config/themes';
 import {wp} from '../../config/appConfig';
 import {useGlobalState} from '../../hook/useGlobal';
+import {useAuthentication} from '../../controller/user';
+import {useUser} from '../../hook/useUser';
+import {useCart} from '../../hook/useCart';
+import {useChat} from '../../hook/useChat';
+import {countUnreadMessages} from '../../controller/chats';
+import {Badge} from '@rneui/base';
 
-const Navbar = ({color}: {color?: boolean}) => {
+interface Props {
+  color?: boolean;
+  chat?: boolean;
+  testID?: string;
+}
+const Navbar = ({color, chat, testID}: Props) => {
+  useAuthentication();
   const navigation = useNavigation<NavigationProps>();
   const {COLORS} = themes;
   const {updatePreviousRoute} = useGlobalState();
+  const {currentUser, isUserLoading} = useUser();
+  const {userId, email, friends} = currentUser;
+  const {items} = useCart();
+  const {allChats} = useChat();
 
-  const isUserLoading = false;
-  const currentUser = {email: 'test@gmail.com,', role: 'Admin'};
-  const cartItems = [{email: 'test@gmail.com,', role: 'Admin'}];
+  const cartItems = Object.values(items);
   const validRouteNames: (keyof RootStackParamList)[] = [
     screenNames.productDetail,
     screenNames.cart,
     screenNames.productList,
+    screenNames.profile,
+    screenNames.chatList,
+    screenNames.notifications,
   ];
 
   useEffect(() => {
-    if (!currentUser?.email && !isUserLoading) {
+    if (!email && !isUserLoading) {
       const unsubscribe = navigation.addListener('state', event => {
         const currentState = event.data.state;
-
         const getCurrentScreen = event.data.state.routes[currentState.index];
-
         if (getCurrentScreen) {
           const screenName = getCurrentScreen.name;
-
           if (validRouteNames.includes(screenName)) {
             updatePreviousRoute(screenName);
           }
@@ -46,25 +60,55 @@ const Navbar = ({color}: {color?: boolean}) => {
         }
       };
     }
-  }, [navigation, currentUser, isUserLoading]);
+  }, [navigation, email, isUserLoading]);
 
-  const hasNewMessage = true;
-  const cartHasItems = cartItems.length > 0;
+  const unviewedNotifications = friends.filter(
+    item => item.status === 'unViewed',
+  );
+  const notificationLength = unviewedNotifications.length;
+  const newMessageLength = countUnreadMessages(userId, allChats);
+  const cartLength = cartItems.length;
 
   return (
     <View style={navbarStyles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate(screenNames.chat)}
-        style={navbarStyles.button}>
-        <Ionicons
-          name="notifications"
-          size={wp('5.5%')}
-          color={color ? COLORS.WHITE : COLORS.BLACK}
-        />
-        {hasNewMessage && <View style={navbarStyles.indicator} />}
-      </TouchableOpacity>
+      {chat ? (
+        <TouchableOpacity
+          testID={`${testID}-chat-icon`}
+          onPress={() => navigation.navigate(screenNames.chatList)}
+          style={{...navbarStyles.button, width: wp('7%')}}>
+          <Ionicons
+            name="chatbubble-ellipses-sharp"
+            size={wp('5.5%')}
+            color={color ? COLORS.WHITE : COLORS.BLACK}
+          />
+          {newMessageLength > 0 && (
+            <Badge
+              badgeStyle={navbarStyles.indicator}
+              value={newMessageLength}
+            />
+          )}
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          testID={`${testID}-notification-icon`}
+          onPress={() => navigation.navigate(screenNames.notifications)}
+          style={{...navbarStyles.button, width: wp('7%')}}>
+          <Ionicons
+            name="notifications"
+            size={wp('5.5%')}
+            color={color ? COLORS.WHITE : COLORS.BLACK}
+          />
+          {notificationLength > 0 && (
+            <Badge
+              badgeStyle={navbarStyles.indicator}
+              value={notificationLength}
+            />
+          )}
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
+        testID={`${testID}-cart-icon`}
         onPress={() => navigation.navigate(screenNames.cart)}
         style={navbarStyles.button}>
         <MaterialIcons
@@ -72,7 +116,10 @@ const Navbar = ({color}: {color?: boolean}) => {
           size={wp('5.5%')}
           color={color ? COLORS.WHITE : COLORS.BLACK}
         />
-        {cartHasItems && <View style={navbarStyles.indicator} />}
+
+        {cartLength > 0 && (
+          <Badge badgeStyle={navbarStyles.indicator} value={cartLength} />
+        )}
       </TouchableOpacity>
     </View>
   );

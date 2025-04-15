@@ -6,8 +6,16 @@ import {
   auth,
   onSnapshot,
   getDocs,
+  updateDoc,
+  doc,
+  getDoc,
 } from '../config/firebase';
-import {CollectionInterface, useUser} from '../hook/useUser';
+import {
+  CollectionInterface,
+  FriendsProp,
+  initialState,
+  useUser,
+} from '../hook/useUser';
 
 import {USERS} from '@env';
 
@@ -24,16 +32,15 @@ export const useAuthentication = () => {
         const usersCollectionRef = collection(firestore, usersRoute);
         const userSnapshot = await getDocs(usersCollectionRef);
         for (const doc of userSnapshot.docs) {
-          const data = doc?.data();
+          const data = {...doc?.data(), docId: doc.id} as CollectionInterface;
 
           if (data?.email === user?.email) {
-            state.updateCurrentUser(data as CollectionInterface);
-
+            state.updateCurrentUser(data);
             return;
           }
         }
       } else {
-        state.updateCurrentUser({} as CollectionInterface);
+        state.updateCurrentUser(initialState);
       }
     });
 
@@ -48,19 +55,72 @@ export const fetchAllUsers = () => {
     const listenForChangeUsers = onSnapshot(
       collection(firestore, usersRoute),
       snapshot => {
-        const allUsers: CollectionInterface[] = [];
+        const groupedUserById: Record<string, CollectionInterface> = {};
         snapshot.forEach(doc => {
           const data = doc.data() as CollectionInterface;
-          allUsers.push({
+          if (!groupedUserById[data.userId]) {
+            groupedUserById[data.userId] = {} as CollectionInterface;
+          }
+          groupedUserById[data.userId] = {
             ...data,
             docId: doc.id,
-          });
+          };
         });
-        state.storeAllUsers(allUsers);
+        state.storeAllUsers(groupedUserById);
       },
     );
     return () => {
       listenForChangeUsers();
     };
   }, []);
+};
+
+export const updateFriendsList = async (
+  data: FriendsProp,
+  docId: string,
+  userLoading: (value: boolean) => void,
+) => {
+  try {
+    userLoading(true);
+    const docRef = doc(firestore, usersRoute, docId);
+    const docSnapshot = await getDoc(docRef);
+
+    if (docSnapshot.exists()) {
+      const friendsArray: FriendsProp[] = docSnapshot.data().friends || [];
+      const friendsMap = new Map(
+        friendsArray.map(friend => [friend.userId, friend]),
+      );
+
+      if (friendsMap.has(data.userId)) {
+        friendsMap.delete(data.userId);
+      } else {
+        friendsMap.set(data.userId, data);
+      }
+      const updatedFriendsArray = Array.from(friendsMap.values());
+      await updateDoc(docRef, {friends: updatedFriendsArray});
+      userLoading(false);
+    }
+  } catch (error) {
+    userLoading(false);
+    throw new Error('Failed to update friends list');
+  }
+};
+
+export const markFollowersAsViewed = async (docId: string) => {
+  try {
+    const docRef = doc(firestore, usersRoute, docId);
+    const docSnapshot = await getDoc(docRef);
+    if (docSnapshot.exists()) {
+      const updatedFriends = await docSnapshot
+        .data()
+        .friends.map((friend: FriendsProp) => ({
+          ...friend,
+          status: 'viewed',
+        }));
+
+      await updateDoc(docRef, {friends: updatedFriends});
+    }
+  } catch (error) {
+    throw Error('failed to update notifications status to read');
+  }
 };

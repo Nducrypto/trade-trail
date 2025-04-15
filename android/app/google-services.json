@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "196832293772",
+    "project_id": "urban-article",
+    "storage_bucket": "urban-article.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196832293772:android:4ef5afe6dbe80c0789dca9",
+        "android_client_info": {
+          "package_name": "com.tradetrail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196832293772-l9msr7svvj0ikt1ojaq0oc4vorb3u6bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tradetrail",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "196832293772-jk4g2gu8elovnpjgsf9069ko8k6u9iof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUv-tlzHQaKTHD0M2Xm_T_Qf6t-4O3y9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196832293772-jk4g2gu8elovnpjgsf9069ko8k6u9iof.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "196832293772-op0oc8mjj8rfvm03t586d8hbqau7295r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.urbanArticles"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

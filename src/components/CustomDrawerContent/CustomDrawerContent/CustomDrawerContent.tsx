@@ -36,6 +36,12 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       handleSignOut();
       return;
     }
+    if (screenName === screenNames.profile) {
+      props.navigation.navigate(screenName, {
+        profileId: currentUser?.userId,
+      });
+      return;
+    }
     props.navigation.navigate(screenName);
     setSelectedLabel('Home');
   }
@@ -47,7 +53,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
       updateHasVisitedBefore(false);
       setSelectedLabel('Home');
       props.navigation.navigate(screenNames.homeStack);
-    } catch (error) {}
+    } catch (error) {
+      throw Error('Error login out');
+    }
   };
 
   const isSelectedLabel = (label: string): boolean => {
@@ -158,6 +166,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             fontSize: themes.FONT_SIZES.MEDIUM,
             color: selectedLabel ? themes.COLORS.WHITE : themes.COLORS.BLACK,
           }}
+          testID={`${item.label}`}
         />
       </View>
     );

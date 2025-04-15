@@ -16,17 +16,21 @@ import {ProductInterface, useProducts} from '../../../hook/useProducts';
 import {Product, ProductCard} from '../../index';
 import {NavigationProps, screenNames} from '../../../screen';
 import {productsStyles} from './productsStyles';
-import {wp} from '../../../config/appConfig';
+import {hp, wp} from '../../../config/appConfig';
 import {useAuthentication} from '../../../controller/user';
+import {fetchAllProducts} from '../../../controller/product';
+import {useUser} from '../../../hook/useUser';
 
 const Products = () => {
   useAuthentication();
-  //   fetchAllProducts();
+  fetchAllProducts();
   const [searchType, setSearchType] = useState<string>('');
   const [filteredArticlesArray, setfilteredArticlesArray] = useState<
     ProductInterface[]
   >([]);
   const {allArticles, isProductLoading} = useProducts();
+  const {currentUser} = useUser();
+  const email = currentUser?.email;
   const navigation = useNavigation<NavigationProps>();
 
   const handleSearch = () => {
@@ -57,6 +61,7 @@ const Products = () => {
           name="search-plus"
           disabled={!searchType}
           onPress={handleSearch}
+          testID="search-icon"
         />
       </View>
     );
@@ -67,7 +72,8 @@ const Products = () => {
       <View style={productsStyles.tabs}>
         <TouchableOpacity
           style={[productsStyles.tab, productsStyles.divider]}
-          onPress={() => navigation.navigate(screenNames.beauty)}>
+          onPress={() => navigation.navigate(screenNames.beauty)}
+          testID="beauty-btn">
           <View style={productsStyles.tabContent}>
             <Entypo
               size={themes.SIZES.MEDIUM}
@@ -76,12 +82,15 @@ const Products = () => {
               style={productsStyles.icon}
             />
 
-            <Text style={productsStyles.tabTitle}>Beauty</Text>
+            <Text style={{...productsStyles.tabTitle, top: hp('0.2%')}}>
+              Beauty
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={productsStyles.tab}
-          onPress={() => navigation.navigate(screenNames.fashion)}>
+          onPress={() => navigation.navigate(screenNames.fashion)}
+          testID="fashion-btn">
           <View style={{flexDirection: 'row'}}>
             <Entypo
               size={themes.SIZES.SMALL}
@@ -107,20 +116,16 @@ const Products = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={productsStyles.products}>
         {firstRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-          }}>
+        <View style={productsStyles.rowItemCon}>
           {secondRow.map((product, index) => (
             <Product product={product} style={{top: 10}} key={index} />
           ))}
         </View>
 
         {thirdRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
 
         {fourthRow.map((product, index) => (
@@ -132,22 +137,17 @@ const Products = () => {
           />
         ))}
         {otherRow.map((product, index) => (
-          <Product product={product} horizontal key={index} />
+          <Product product={product} horizontal key={index} style={{top: 7}} />
         ))}
         {lastRow.map((product, index) => (
-          <Product
-            product={product}
-            full={true}
-            key={index}
-            style={{top: 10}}
-          />
+          <Product product={product} full key={index} style={{top: 10}} />
         ))}
       </ScrollView>
     );
   };
 
   return (
-    <View style={productsStyles.home}>
+    <View style={productsStyles.home} testID={email}>
       <StatusBar barStyle="dark-content" backgroundColor="black" />
 
       <ProductCard minHeight={100} maxWidth={wp('100%')}>
@@ -164,7 +164,7 @@ const Products = () => {
       ) : !isProductLoading && filteredArticlesArray.length < 1 ? (
         <Text style={productsStyles.emptyText}>Empty</Text>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} testID="scrollView">
           {renderProducts()}
         </ScrollView>
       )}

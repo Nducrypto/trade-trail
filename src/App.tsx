@@ -13,7 +13,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {screenNames} from './screen';
-import {CustomDrawerContent, HomeStack} from './components';
+import {CustomDrawerContent, HomeStack, CustomToast} from './components';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {wp} from './config/appConfig';
 import themes from './config/themes';
@@ -33,6 +33,7 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+
       <NavigationContainer>
         <Drawer.Navigator
           drawerContent={props => <CustomDrawerContent {...props} />}
@@ -52,6 +53,7 @@ function App(): React.JSX.Element {
           />
         </Drawer.Navigator>
       </NavigationContainer>
+      <CustomToast />
     </SafeAreaProvider>
   );
 }
