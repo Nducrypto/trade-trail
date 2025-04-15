@@ -92,6 +92,7 @@ const useUserStore = create<AllUserStateProps>(set => ({
       isAuthError: value,
     })),
 }));
+// this hook is for user
 
 export const useUser = () => {
   const {
